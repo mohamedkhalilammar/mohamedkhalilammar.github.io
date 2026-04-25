@@ -230,7 +230,7 @@ export default function Home() {
                     </AnimatePresence>
                   </h2>
 
-                  <p className="text-base md:text-lg leading-[1.8] text-zinc-400 max-w-lg mb-8">
+                  <p className="text-xl md:text-2xl lg:text-3xl font-semibold leading-[1.6] text-zinc-100 max-w-4xl mb-12 drop-shadow-md tracking-tight">
                     {profile.about}
                   </p>
  
@@ -271,10 +271,7 @@ export default function Home() {
                 <div className="w-full flex justify-center lg:justify-end css-stagger-item relative">
                   <ParallaxPhotoColumn scrollYProgress={scrollYProgress} />
  
-                  {/* Supporting Terminal Module */}
-                  <div className="mt-16 hidden lg:block w-full max-w-[500px] transform hover:scale-[1.02] transition-transform duration-500 absolute top-[100%] right-0">
-                    <LiveTerminal />
-                  </div>
+
                 </div>
 
               </div>
@@ -286,7 +283,7 @@ export default function Home() {
             <SectionShell id="projects" eyebrow="Work" title="">
               <div className="mb-12">
                 <h2 className="font-sans text-6xl md:text-8xl font-black uppercase tracking-tighter mb-2 leading-none">
-                  Critical <span className="text-amber-500">Projects</span>
+                  Featured <span className="text-amber-500">Projects</span>
                 </h2>
                 <div className="h-1 w-24 bg-amber-500" />
               </div>
@@ -306,25 +303,11 @@ export default function Home() {
                     Browse selected notes and challenge breakdowns.
                   </p>
  
-                  {/* Stats Bar */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-                    <div className="p-6 rounded-2xl bg-zinc-900/50 border border-white/5 backdrop-blur-sm">
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-amber-500/60 mb-2">Events Entered</p>
-                      <p className="text-3xl font-black text-white">{ctfIdentity.stats.eventsEntered}</p>
-                    </div>
-                    <div className="p-6 rounded-2xl bg-zinc-900/50 border border-white/5 backdrop-blur-sm">
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-amber-500/60 mb-2">Challenges Solved</p>
-                      <p className="text-3xl font-black text-white">{ctfIdentity.stats.challengesSolved}</p>
-                    </div>
-                    <div className="p-6 rounded-2xl bg-zinc-900/50 border border-white/5 backdrop-blur-sm">
-                      <p className="font-mono text-[10px] uppercase tracking-widest text-amber-500/60 mb-2">Peak Placement</p>
-                      <p className="text-3xl font-black text-white">{ctfIdentity.stats.topPlacement}</p>
-                    </div>
-                    <div className="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/20 backdrop-blur-sm flex items-center justify-center">
-                       <a className="btn-secondary w-full text-center py-4" href="#writeups">
-                        View All Writeups
-                      </a>
-                    </div>
+                  {/* CTA */}
+                  <div className="mb-16">
+                     <a className="btn-secondary py-4 inline-block px-10 border-2 border-amber-500/50 hover:bg-amber-500/10 transition-colors" href="#writeups">
+                      View All Writeups
+                    </a>
                   </div>
                 </div>
               </div>

@@ -211,33 +211,7 @@ export function CreativeEntrance4D() {
             Cybersecurity Enthusiast &amp; 3rd Year Network and Telecommunication Engineering Student at INSAT.
           </motion.p>
 
-          {/* Stats Row */}
-          <motion.div variants={childVariants} style={{
-            display: "flex", gap: "clamp(1.5rem, 4vw, 3rem)", flexWrap: "wrap",
-            marginBottom: "3rem",
-          }}>
-            {STATS.map((stat) => (
-              <div key={stat.label} style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                <span style={{
-                  fontFamily: "var(--font-heading), sans-serif",
-                  fontSize: "clamp(1.5rem, 3vw, 2.2rem)",
-                  fontWeight: 800,
-                  color: "var(--foreground)", lineHeight: 1,
-                }}>
-                  {stat.value}
-                </span>
-                <span style={{
-                  fontFamily: "var(--font-mono), monospace",
-                  fontSize: "0.65rem",
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  color: "var(--accent)", opacity: 0.7,
-                }}>
-                  {stat.label}
-                </span>
-              </div>
-            ))}
-          </motion.div>
+
 
 
         </motion.div>
