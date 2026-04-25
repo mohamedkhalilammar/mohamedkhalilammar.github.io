@@ -70,6 +70,8 @@
    =============================== */
 html {
   scroll-behavior: smooth;
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -902,7 +904,12 @@ a:hover {
 .section-flow {
   position: relative;
   background: transparent;
-  border-top: 1px solid rgba(126, 184, 164, 0.1);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.hero-section {
+  scroll-snap-align: start;
 }
 
 .section-shell {
