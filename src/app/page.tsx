@@ -179,7 +179,7 @@ export default function Home() {
   };
   return (
     <MotionConfig reducedMotion="user">
-      <ScatteredArtefacts />
+      {/* <ScatteredArtefacts /> */}
       <div className="page-shell">
         <Sidebar />
         <div className="page-noise" aria-hidden />
@@ -203,18 +203,31 @@ export default function Home() {
             </div>
  
             <div className="hero-content reveal-stagger w-full max-w-7xl mx-auto px-6 relative z-10 py-20">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
 
                 {/* Text Column (Moved to Left for Better UX) */}
-                <div className="w-full flex-col css-stagger-item text-left">
+                <div className="w-full flex-col css-stagger-item text-left lg:col-span-8">
 
 
-                  <h1 className="font-sans text-7xl md:text-9xl font-black text-white/10 uppercase tracking-tighter mb-0 leading-[0.8]">
-                    MEET
-                  </h1>
-                  <h1 className="font-sans text-8xl md:text-9xl lg:text-[10rem] font-black text-amber-500 uppercase tracking-tighter mb-6 leading-[0.8] drop-shadow-[0_0_30px_rgba(245,158,11,0.3)]">
-                    Khalil
-                  </h1>
+                  <div className="relative mb-8 pb-4 pl-1 mt-10">
+                    <motion.div 
+                      initial={{ opacity: 0, x: -40, filter: "blur(12px)" }}
+                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                      transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
+                      className="absolute -top-12 md:-top-16 left-0 font-mono text-[5rem] md:text-[9rem] font-black text-white/[0.12] uppercase tracking-tighter leading-[0.8] select-none pointer-events-none"
+                    >
+                      MEET
+                    </motion.div>
+                    
+                    <motion.h1 
+                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ duration: 1, type: "spring", bounce: 0.4, delay: 0.2 }}
+                      className="relative z-10 font-sans text-7xl md:text-9xl lg:text-[11rem] font-black uppercase tracking-tighter leading-[0.8] text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-300 to-orange-600 filter drop-shadow-[0_10px_50px_rgba(245,158,11,0.45)]"
+                    >
+                      Khalil
+                    </motion.h1>
+                  </div>
 
                   <h2 className="text-xl md:text-2xl font-mono text-zinc-300 mb-8 uppercase tracking-widest border-b border-amber-500/20 pb-4 inline-block min-h-[1.5em]">
                     <AnimatePresence mode="wait">
@@ -230,32 +243,101 @@ export default function Home() {
                     </AnimatePresence>
                   </h2>
 
-                  <p className="text-xl md:text-2xl lg:text-3xl font-semibold leading-[1.6] text-zinc-100 max-w-4xl mb-12 drop-shadow-md tracking-tight">
-                    {profile.about}
-                  </p>
- 
-                  {/* Inline philosophy quotes */}
-                  <div className="mb-10 space-y-4 max-w-lg border-l-2 border-amber-500/10 pl-6">
-                    <blockquote className="group">
-                      <p className="text-xs md:text-sm text-zinc-500 italic leading-relaxed group-hover:text-zinc-400 transition-colors">
-                        "You won't lose your job to AI — you'll lose it to{" "}
-                        <span className="text-amber-500/60 not-italic font-medium">someone who uses AI.</span>"
-                      </p>
-                      <cite className="block not-italic font-mono text-[9px] uppercase tracking-widest text-zinc-600 mt-1.5 opacity-60">
-                        — Jensen Huang, NVIDIA
-                      </cite>
-                    </blockquote>
- 
-                    <blockquote className="group">
-                      <p className="text-xs md:text-sm text-zinc-500 italic leading-relaxed group-hover:text-zinc-400 transition-colors">
-                        "AI is not a substitute for human intelligence — it's a{" "}
-                        <span className="text-amber-500/60 not-italic font-medium">tool to amplify it.</span>"
-                      </p>
-                      <cite className="block not-italic font-mono text-[9px] uppercase tracking-widest text-zinc-600 mt-1.5 opacity-60">
-                        — Dr. Fei-Fei Li, Stanford
-                      </cite>
-                    </blockquote>
-                  </div>
+                  {/* Terminal-Style Profile Block */}
+                  {/* Terminal-Style Profile Block */}
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="w-full mb-12 rounded-xl overflow-hidden bg-[#09090b]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+                  >
+                    {/* Mac Terminal Header */}
+                    <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.03] border-b border-white/5">
+                      <div className="w-3 h-3 rounded-full bg-red-500/90 shadow-sm" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-500/90 shadow-sm" />
+                      <div className="w-3 h-3 rounded-full bg-green-500/90 shadow-sm" />
+                    </div>
+                    
+                    {/* Terminal Body */}
+                    <div className="p-6 md:p-8 font-mono text-sm md:text-[15px] leading-relaxed text-zinc-100 font-medium">
+                      
+                      {/* Authentic Bash Command Line */}
+                      <motion.div 
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2 }}
+                        className="mb-6 flex items-center gap-2 text-[13px] md:text-sm"
+                      >
+                        <span className="text-emerald-400 font-bold">root@khalil</span>
+                        <span className="text-zinc-500">:</span>
+                        <span className="text-blue-400 font-bold">~/system</span>
+                        <span className="text-zinc-400">$</span>
+                        <span className="text-zinc-200 ml-1">cat whoami.txt</span>
+                      </motion.div>
+
+                      {profile.about.split('\n\n').map((paragraph, index) => (
+                        <motion.p 
+                          key={index}
+                          initial={{ opacity: 0, filter: "blur(4px)", y: 5 }}
+                          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.6 + (index * 0.3) }}
+                          className="mb-8 last:mb-0 drop-shadow-sm flex"
+                        >
+                          <span className="text-zinc-600 mr-4 select-none drop-shadow-none flex-shrink-0">
+                            {String(index + 1).padStart(2, '0')}
+                          </span>
+                          <span 
+                            dangerouslySetInnerHTML={{ __html: paragraph
+                              .replace(/cybersecurity/gi, '<span class="text-amber-400 font-bold drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]">cybersecurity</span>')
+                              .replace(/reverse engineering/gi, '<span class="text-emerald-400 font-bold">reverse engineering</span>')
+                              .replace(/binary analysis/gi, '<span class="text-emerald-400 font-bold">binary analysis</span>')
+                              .replace(/Android security/gi, '<span class="text-emerald-400 font-bold">Android security</span>')
+                              .replace(/Android application reversing/gi, '<span class="text-emerald-400 font-bold">Android application reversing</span>')
+                              .replace(/exploitation/gi, '<span class="text-rose-400 font-bold drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]">exploitation</span>')
+                              .replace(/penetration testing/gi, '<span class="text-rose-400 font-bold">penetration testing</span>')
+                              .replace(/CTF competitions/gi, '<span class="text-indigo-400 font-bold">CTF competitions</span>')
+                            }}
+                          />
+                        </motion.p>
+                      ))}
+
+                      {/* Philosophy Quotes Inside Terminal */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 1.5 }}
+                        className="mt-8 pt-6 border-t border-white/10 space-y-4"
+                      >
+                        <blockquote className="group">
+                          <p className="text-xs md:text-sm text-zinc-300 italic leading-relaxed group-hover:text-white transition-colors">
+                            "You won't lose your job to AI — you'll lose it to{" "}
+                            <span className="text-amber-500/80 not-italic font-medium">someone who uses AI.</span>"
+                          </p>
+                          <cite className="block not-italic font-mono text-[9px] uppercase tracking-widest text-zinc-500 mt-1.5 opacity-80">
+                            — Jensen Huang, NVIDIA
+                          </cite>
+                        </blockquote>
+    
+                        <blockquote className="group">
+                          <p className="text-xs md:text-sm text-zinc-400 italic leading-relaxed group-hover:text-zinc-300 transition-colors mb-2">
+                            "AI is not a substitute for human intelligence — it's a{" "}
+                            <span className="text-amber-500/80 not-italic font-medium">tool to amplify it.</span>"
+                          </p>
+                          <cite className="block not-italic font-mono text-[9px] uppercase tracking-widest text-zinc-500 mt-1.5 opacity-80">
+                            — Dr. Fei-Fei Li, Stanford
+                          </cite>
+                        </blockquote>
+                      </motion.div>
+                      
+                      {/* Blinking Cursor */}
+                      <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: [0, 1, 0] }} 
+                        transition={{ repeat: Infinity, duration: 1, ease: "linear", delay: 2 }}
+                        className="w-2.5 h-5 bg-amber-500 inline-block mt-4 shadow-[0_0_8px_rgba(245,158,11,0.6)]"
+                      />
+                    </div>
+                  </motion.div>
 
                   <div className="flex flex-wrap items-center gap-4">
                     <a className="btn-primary" href="#projects">
@@ -268,7 +350,7 @@ export default function Home() {
                 </div>
 
                 {/* Photo Column (Interactive Symmetric Overlap with Parallax) */}
-                <div className="w-full flex justify-center lg:justify-end css-stagger-item relative">
+                <div className="w-full flex justify-center lg:justify-end css-stagger-item relative lg:col-span-4">
                   <ParallaxPhotoColumn scrollYProgress={scrollYProgress} />
  
 
@@ -331,8 +413,8 @@ export default function Home() {
                       key={"photo-" + idx}
                       initial={{ opacity: 0, scale: 0.95 }}
                       whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true, margin: "-100px" }}
-                      transition={{ duration: 0.8, delay: idx * 0.1 }}
+                      viewport={{ once: true, amount: 0.1 }}
+                      transition={{ duration: 0.5 }}
                       className="relative w-full rounded-2xl overflow-hidden border-2 border-primary-500/30 shadow-[0_0_30px_rgba(var(--primary-rgb),0.15)] group aspect-[4/3] lg:aspect-video"
                     >
                       <div className="absolute inset-0 bg-primary-900/10 mix-blend-overlay group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none" />
@@ -354,10 +436,10 @@ export default function Home() {
                     <motion.div
                       key={achievement.title}
                       className="relative group perspective-1000"
-                      initial={{ opacity: 0, x: -50, rotateY: 30 }}
+                      initial={{ opacity: 0, x: -50, rotateY: 20 }}
                       whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-                      viewport={{ once: true, margin: "-100px" }}
-                      transition={{ duration: 0.8, ease: "easeOut", delay: idx * 0.15 }}
+                      viewport={{ once: true, margin: "0px", amount: 0.1 }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
                     >
                       {/* Timeline Node */}
                       <div
