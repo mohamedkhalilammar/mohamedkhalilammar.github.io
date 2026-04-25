@@ -25,16 +25,7 @@ export default async function WriteupPage({
     notFound();
   }
 
-  let markdownContent = null;
-  if (writeup.localFilePath) {
-    try {
-      const filePath = path.join(process.cwd(), writeup.localFilePath);
-      markdownContent = fs.readFileSync(filePath, "utf8");
-    } catch (e) {
-      console.error("Failed to read local markdown file:", e);
-    }
-  }
-
+  const markdownContent = null;
   const contentBlocks = writeup.content
     .split("\n")
     .map((line) => line.trim())
