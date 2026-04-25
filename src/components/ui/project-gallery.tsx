@@ -28,7 +28,7 @@ export function ProjectGallery({ name, screenshots, screenshotCaptions }: Projec
 
         <div className="absolute top-4 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/60 border border-primary-500/30 rounded text-[9px] sm:text-[10px] font-mono text-primary-500/80 tracking-widest z-20 flex items-center gap-2 backdrop-blur-sm">
           <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse shadow-[0_0_5px_red]" />
-          {name.toUpperCase().substring(0, 24)} // SYS.ARCHIVE
+          {name.toUpperCase().substring(0, 24)} {"// SYS.ARCHIVE"}
         </div>
 
         {/* Hardware Scanline Animation */}

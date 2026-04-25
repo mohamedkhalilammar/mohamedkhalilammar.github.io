@@ -29,7 +29,7 @@ export function MiniGamesSection() {
         </div>
         <h2 className="section-title">MINI GAMES</h2>
         <p style={{ color: "rgba(255,255,255,0.7)", marginBottom: "2.5rem", fontFamily: "monospace", fontSize: "0.95rem" }}>
-          Take a break. Play something. High scores don't persist — skill does.
+          Take a break. Play something. High scores don&apos;t persist &mdash; skill does.
         </p>
 
         {/* Tab Bar */}

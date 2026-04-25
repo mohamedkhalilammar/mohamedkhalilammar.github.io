@@ -354,6 +354,20 @@ export function RunnerGame() {
     rafRef.current = requestAnimationFrame(draw);
   }, []);
 
+  const spawnDust = useCallback((x: number, y: number, color: string, count = 8) => {
+    const s = stateRef.current;
+    for (let i = 0; i < count; i++) {
+      s.particles.push({
+        x: x + (Math.random() - 0.5) * 10,
+        y: y,
+        vx: (Math.random() - 0.5) * 2,
+        vy: -Math.random() * 1.5,
+        life: 0.6,
+        color,
+      });
+    }
+  }, []);
+
   const gameLoop = useCallback(() => {
     const s = stateRef.current;
     if (!s.running) return;
@@ -478,19 +492,7 @@ export function RunnerGame() {
     }
   }, []);
 
-  function spawnDust(x: number, y: number, color: string, count = 8) {
-    const s = stateRef.current;
-    for (let i = 0; i < count; i++) {
-      s.particles.push({
-        x: x + (Math.random() - 0.5) * 10,
-        y,
-        vx: (Math.random() - 0.5) * 2,
-        vy: -Math.random() * 1.5,
-        life: 0.6,
-        color,
-      });
-    }
-  }
+
 
   const start = useCallback(() => {
     const s = stateRef.current;
@@ -508,8 +510,8 @@ export function RunnerGame() {
     let logicInterval: ReturnType<typeof setInterval>;
 
     const startLoops = () => {
-      rafRef.current = requestAnimationFrame(draw);
-      logicInterval = setInterval(gameLoop, 16);
+      rafRef.current = requestAnimationFrame(() => draw());
+      logicInterval = setInterval(() => gameLoop(), 16);
     };
 
     startLoops();

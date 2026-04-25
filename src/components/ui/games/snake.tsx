@@ -228,7 +228,7 @@ export function SnakeGame() {
       .map(t => ({ ...t, alpha: t.alpha - 0.08 }))
       .filter(t => t.alpha > 0);
 
-    rafRef.current = requestAnimationFrame(draw);
+    rafRef.current = requestAnimationFrame(() => draw());
   }, []);
 
   const spawnFood = useCallback(() => {
@@ -293,11 +293,11 @@ export function SnakeGame() {
     setScore(0); setStatus("running");
     spawnFood();
     if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(tick, TICK);
+    timerRef.current = setInterval(() => tick(), TICK);
   }, [tick, spawnFood]);
 
   useEffect(() => {
-    rafRef.current = requestAnimationFrame(draw);
+    rafRef.current = requestAnimationFrame(() => draw());
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);

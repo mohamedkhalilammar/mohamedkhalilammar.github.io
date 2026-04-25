@@ -18,17 +18,14 @@ const PHOTOS = [
 ];
 
 export function PageIntro() {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [complete, setComplete] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const seen = sessionStorage.getItem("intro_seen_v1");
-    if (seen) {
-        setComplete(true);
-        return;
-    } else {
-        setComplete(false);
-    }
+    if (seen) return;
+    
+    setComplete(false);
     
     const interval = setInterval(() => {
         setCurrentIndex(prev => {

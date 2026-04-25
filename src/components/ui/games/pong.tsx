@@ -185,7 +185,7 @@ export function Pong() {
       .filter(p => p.life > 0);
 
     draw();
-    rafRef.current = requestAnimationFrame(loop);
+    rafRef.current = requestAnimationFrame(() => loop());
   }, [draw]);
 
   function resetBall(s: typeof stateRef.current, dir: number) {
@@ -204,7 +204,7 @@ export function Pong() {
     s.particles = [];
     setPs(0); setAs(0); setStatus("running");
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    rafRef.current = requestAnimationFrame(loop);
+    rafRef.current = requestAnimationFrame(() => loop());
   }, [loop]);
 
   useEffect(() => {

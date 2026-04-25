@@ -236,7 +236,7 @@ export function TetrisGame() {
     if (timerRef.current) clearInterval(timerRef.current);
     if (status === "running") {
       const speed = Math.max(100, 500 - stateRef.current.level * 40);
-      timerRef.current = setInterval(drop, speed);
+      timerRef.current = setInterval(() => drop(), speed);
     }
   }, [lines, status, drop]);
 

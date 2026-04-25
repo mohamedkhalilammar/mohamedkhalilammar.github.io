@@ -143,7 +143,7 @@ export function MemoryGame() {
               setStatus("won");
               setIsAiTurn(false);
             } else {
-              timerRef.current = setTimeout(doAiTurn, 700);
+              timerRef.current = setTimeout(() => doAiTurn(), 700);
             }
           } else {
             timerRef.current = setTimeout(() => {
@@ -214,7 +214,7 @@ export function MemoryGame() {
           flippedRef.current = [];
           setLocked(false);
           setIsAiTurn(true);
-          timerRef.current = setTimeout(doAiTurn, 400);
+          timerRef.current = setTimeout(() => doAiTurn(), 400);
         }, 900);
       }
     }
