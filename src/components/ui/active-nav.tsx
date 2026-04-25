@@ -50,6 +50,7 @@ const NAV_LINKS = [
   { label: "CTF",            href: "#ctf" },
   { label: "Skills",         href: "#skills" },
   { label: "Arcade",         href: "/arcade", isExternal: true },
+  { label: "CV",             href: "/media/CV.pdf", isFile: true },
   { label: "Contact",        href: "#contact" },
 ];
 
@@ -75,7 +76,16 @@ export function ActiveNav() {
           const isActive = activeSection === sectionId;
           return (
             <li key={item.label}>
-              {(item as any).isExternal ? (
+              {(item as any).isFile ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="nav-link-btn text-amber-500 hover:text-amber-400 font-bold"
+                >
+                  {item.label}
+                </a>
+              ) : (item as any).isExternal ? (
                 <Link
                   href={item.href}
                   className="nav-link-btn"

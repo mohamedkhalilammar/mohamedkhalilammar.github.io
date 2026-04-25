@@ -10,6 +10,8 @@ const navigationLinks = [
   { label: "Projects", href: "#projects" },
   { label: "CTF", href: "#ctf" },
   { label: "Skills", href: "#skills" },
+  { label: "Arcade", href: "/arcade", target: "_self" },
+  { label: "CV", href: "/media/CV.pdf", target: "_blank", rel: "noopener noreferrer" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -69,7 +71,13 @@ export function Sidebar() {
                         animate={{ opacity: 1, rotateX: 0, y: 0 }}
                         transition={{ delay: 0.1 + i * 0.08, type: "spring", stiffness: 80, damping: 15 }}
                       >
-                        <a href={item.href} onClick={() => setIsOpen(false)} className="nav-smooth-btn group">
+                        <a 
+                          href={item.href} 
+                          onClick={() => setIsOpen(false)} 
+                          target={(item as any).target || "_self"}
+                          rel={(item as any).rel || ""}
+                          className="nav-smooth-btn group"
+                        >
                           <div className="nav-btn-text">
                             <div className="flex items-center gap-3">
                               <span className="nav-icon-sweep font-bold">»</span>
