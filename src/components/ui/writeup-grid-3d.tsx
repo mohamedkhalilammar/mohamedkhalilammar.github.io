@@ -8,9 +8,9 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
   // Simple, clean entry stagger without heavy 3D math
   const entryVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
+    visible: {
+      opacity: 1,
+      y: 0,
       transition: { duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] as const }
     }
   };
@@ -24,12 +24,12 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
       className="group h-full"
     >
       <div className="flex flex-col h-full bg-black/40 backdrop-blur-sm border border-primary-500/20 rounded-xl overflow-hidden hover:border-primary-500/50 hover:bg-black/60 transition-all duration-300 hover:-translate-y-2 shadow-sm hover:shadow-[0_15px_30px_rgba(var(--primary-rgb),0.1)] relative">
-        
+
         {/* Subtle background image header if available */}
         {writeup.mediaUrl && (
           <div className="h-32 w-full overflow-hidden relative border-b border-primary-500/10">
             <div className="absolute inset-0 bg-primary-900/40 mix-blend-multiply z-10 group-hover:bg-primary-900/20 transition-colors" />
-            <img 
+            <img
               src={writeup.mediaUrl}
               alt={writeup.title}
               className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
@@ -55,7 +55,7 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
             {writeup.summary}
           </p>
 
-          <Link 
+          <Link
             href={`/writeups/${writeup.id}`}
             className="inline-flex items-center justify-between font-mono text-[0.8rem] font-bold tracking-widest uppercase text-primary mt-auto pt-5 border-t border-primary-500/10 group-hover:border-primary-500/30 transition-all no-underline"
           >
