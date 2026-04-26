@@ -11,7 +11,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
   if (!projects || projects.length === 0) return null;
 
   const current = projects[currentIdx];
-  const slug = current.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  const slug = current.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
 
   return (
     <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-[color:var(--line-strong)]" style={{ minHeight: "750px", background: "rgba(var(--primary-rgb), 0.03)" }}>

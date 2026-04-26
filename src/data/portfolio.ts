@@ -41,6 +41,7 @@ export type Certification = {
   certificateId?: string;
   verifyUrl?: string;
   localFile: string;
+  logo?: string;
 };
 
 export type LearningPath = {
@@ -51,6 +52,7 @@ export type LearningPath = {
   summary: string;
   modules: string[];
   localFile: string;
+  logo?: string;
 };
 
 export type Writeup = {
@@ -140,19 +142,19 @@ export const projects: Project[] = [
     icon: "Honeypot",
     summary:
       "Built a deception platform as a layered pipeline: Cowrie/FastAPI collect attacker input, a policy-gated LLM generates realistic responses, and Wazuh ingests normalized telemetry. The key value was not only trapping attackers longer, but learning how to turn noisy interaction logs into structured intelligence we could act on.",
-    stack: ["Cowrie", "FastAPI", "Ollama", "Wazuh", "Docker", "Python"],
+    stack: ["Cowrie", "FastAPI", "Wazuh", "Docker", "Python"],
     context: "Academic & Personal Threat Intelligence Research",
     role: "Sole Architect & Security Engineer",
     duration: "6 Weeks",
-    architecture: "We implemented the system as independent services with clear boundaries: containerized honeypot frontends, a Python orchestration layer, and SIEM ingestion. Inputs were transformed into structured events, enriched by the LLM, then forwarded to Wazuh as normalized artifacts. This service separation made prompt tuning, logging, and incident triage iterative instead of brittle.",
+    architecture: "The platform consists of containerized honeypot services (Cowrie, custom FastAPI endpoints) that forward raw attacker input to a centralized Python orchestration layer. This layer performs policy-based filtering and prompts an LLM via API to generate context-aware SSH/HTTP responses. Telemetry is normalized and ingested into a Wazuh SIEM for real-time analysis.",
     features: [
-      "Dynamic LLM-powered responses to attacker SSH & HTTP inputs",
-      "Policy-gating mechanism to control and sanitize AI outputs",
-      "Real-time monitoring & alerting via Wazuh SIEM integration",
-      "High-fidelity threat intelligence collection architecture"
+      "Dynamic LLM-driven SSH and HTTP interaction modules",
+      "Policy-guided output sanitization and model gating",
+      "Centralized event normalization and Wazuh SIEM integration",
+      "Automated IoC extraction from adversarial sessions"
     ],
-    challenges: "The hardest part was balancing realism with control. We introduced strict output filters, schema validation, and fallback responses to prevent model leakage while preserving believable interaction. We also refined event correlation rules so command traces remained useful even during noisy or repetitive attacker sessions.",
-    impact: "We gained a reusable blueprint for AI-assisted deception: better attacker dwell time, cleaner IoC extraction, and a practical understanding of how to operationalize LLM output inside a SOC workflow.",
+    challenges: "Implementation involved developing custom Cowrie handlers to intercept and relay terminal input, building a high-performance orchestration layer to manage LLM latency, and configuring fine-grained Wazuh decoders for non-standard honeypot logs.",
+    impact: "Provides a scalable architecture for AI-assisted deception, demonstrating improved attacker dwell time and systematic ingestion of structured threat intelligence into security operations.",
     mediaUrl: "https://www.youtube.com/embed/LI0ZJp8XiFg",
     screenshots: [],
     githubUrl: "https://github.com/khalilammarr/LLM_Honeypot",
@@ -167,36 +169,43 @@ export const projects: Project[] = [
     context: "Personal Lab & Skills Development",
     role: "SOC Architect & Analyst",
     duration: "Ongoing",
-    architecture: "We designed the lab around realistic network roles and attack paths: segmented VMs, Wazuh as central analysis, and Sysmon-rich Windows telemetry paired with Linux audit logs. Rules were iteratively tuned using replayed attack scenarios, then validated against false-positive baselines to keep signal quality high.",
+    architecture: "The environment is structured as a multi-zone network featuring virtualized Windows and Linux endpoints. It utilizes Sysmon and Windows Event logs for host-based monitoring, with all telemetry forwarded to a central Wazuh manager. Network segmentation ensures isolation between attack nodes and the monitoring infrastructure.",
     features: [
-      "Multi-VM Wazuh SIEM deployment & configuration",
-      "Custom alerting rules for targeted threat scenarios",
-      "Attack simulation for log correlation & detection testing",
-      "Full incident analysis & alert triaging workflows"
+      "Virtualized SIEM deployment with multi-os telemtry collection",
+      "Custom detection rule engineering for common attack techniques",
+      "Automated attack simulation for alert validation",
+      "Integrated incident response playbooks and alert triage workflows"
     ],
-    challenges: "Main challenges were realism and noise control. We built controlled attack scripts, measured rule precision/recall manually, and adjusted thresholding and field mapping to reduce alert fatigue without losing coverage for high-risk behaviors.",
-    impact: "This project improved our incident-thinking maturity: we now reason in terms of detection quality, investigation speed, and response playbooks rather than raw alert volume.",
+    challenges: "Configuring cross-platform log normalization, tuning Wazuh Decors/Rules for high-fidelity alerts, and maintaining secure isolation for malicious activity testing.",
+    impact: "Established a repeatable detection engineering pipeline focusing on log correlation, rule precision, and incident analysis maturity.",
     screenshots: []
   },
   {
     name: "GreenGuard — Smart Greenhouse",
     icon: "IoT",
     summary:
-      "Engineered a resilient IoT control loop for greenhouse automation, prioritizing reliability over demo-only behavior. We built firmware, broker, and backend as coordinated layers, then validated behavior under intermittent connectivity to ensure safe autonomous operation.",
+      "Engineered a resilient IoT control loop for greenhouse automation, prioritizing reliability over demo-only behavior. I built firmware, broker, and backend as coordinated layers, then validated behavior under intermittent connectivity to ensure safe autonomous operation.",
     stack: ["ESP32", "MQTT (Mosquitto)", "FastAPI", "WebSocket", "C++"],
     context: "IoT Automation & Edge Computing",
     role: "Embedded & Backend Engineer",
     duration: "Academic Project",
-    architecture: "The architecture combined MQTT device messaging, FastAPI orchestration, and WebSocket dashboard streaming. Control logic was split between cloud-assisted decisions and local edge fallback rules on ESP32 nodes. This hybrid model ensured continuity when broker or network latency increased.",
+    architecture: "The system utilizes MQTT for device communication, a FastAPI server for orchestration, and WebSockets for real-time dashboard updates. Control logic is distributed between the C++ firmware (ESP32) for local resilience and the server layer for complex decision-making.",
     features: [
-      "Real-time sensor telemetry & actuator commands via MQTT",
-      "Async multitask firmware on ESP32",
-      "Live remote dashboard with FastAPI & WebSockets",
-      "Fail-safe offline operation leveraging edge-computing logic"
+      "Real-time sensor data ingestion (Temp, Humidity, Soil, Light)",
+      "Multi-tasking ESP32 firmware with persistent MQTT state",
+      "WebSocket-driven monitoring dashboard for sub-second latency",
+      "Local edge fallback logic for autonomous operation during outages"
     ],
-    challenges: "We had to harden reconnection logic, deduplicate stale packets, and protect actuator state from oscillation during reconnect storms. Iterative field testing revealed edge cases that only appeared in real deployment timing, not in local mocks.",
-    impact: "We gained strong embedded/backend integration practice and produced a dependable automation pattern that can scale to more sensors and crop strategies without sacrificing safety.",
-    screenshots: []
+    challenges: "Implementing asynchronous MQTT client logic on embedded hardware and synchronizing actuator states across distributed layers.",
+    impact: "A deployable IoT automation blueprint integrating embedded systems with modern web backends for reliable agricultural monitoring.",
+    screenshots: [
+      "/media/schema_wokwi.png",
+      "/media/web_dashboard.png"
+    ],
+    screenshotCaptions: [
+      "Wokwi circuit simulation and logical wiring.",
+      "Web dashboard for real-time telemetry and control."
+    ]
   },
   {
     name: "Haniny – AI Driver Assistant",
@@ -207,16 +216,16 @@ export const projects: Project[] = [
     context: "Hackathon — Lloyd Assurances Partnership",
     role: "Lead Mobile & IoT Developer",
     duration: "48-Hour Hackathon",
-    architecture: "We built a dual-stream pipeline where interior and exterior feeds were processed asynchronously, fused in a shared event model, then pushed to a mobile interface through WebSockets. YOLOv8 handled road objects while MediaPipe captured driver-state signals, and a scoring layer converted these into interpretable risk outputs.",
+    architecture: "Built a dual-stream processing pipeline where interior (driver) and exterior (road) camera feeds are ingested via OpenCV, processed by deep learning models, and fused in a shared event bus. Results are transmitted to a mobile frontend (Flutter) using high-frequency WebSocket messaging.",
     features: [
-      "Holistic Driver Biometry: Real-time Fatigue, Drowsiness, and Smoking detection",
-      "Perceptive Spatial Awareness: Automatic road hazard detection (Stop signs, Animals, Potholes)",
-      "Actuarial Behavioral Scoring: Live risk indexing based on driving telemetry",
-      "Automated SOS Orchestrator: Smart emergency protocol triggering for critical incidents",
-      "Sub-300ms Inference Loop: Optimized for high-speed vehicular environments"
+      "Real-time Fatigue, Drowsiness, and Distraction monitoring via MediaPipe",
+      "Object detection for road hazards (Stop signs, Pedestrians, Potholes) using YOLOv8",
+      "Dynamic risk scoring algorithm based on fused behavioral telemetry",
+      "Automated emergency protocol routing for critical safety incidents",
+      "Optimized inference loop for low-latency (<300ms) mobile performance"
     ],
-    challenges: "The key challenge was maintaining temporal consistency across streams while keeping inference responsive. We introduced lightweight buffering, message timestamps, and prioritization of critical events so alert latency stayed useful during burst traffic.",
-    impact: "Beyond the demo, we gained a practical architecture for safety-critical AI products: tighter model-to-product integration, better latency budgeting, and a clearer path from telemetry to insurance-facing risk intelligence.",
+    challenges: "Architecture involves integrating YOLOv8 and MediaPipe for simultaneous processing, optimizing model weights for mobile-compatible inference speeds, and building a low-latency state synchronization layer between the backend and hybrid app.",
+    impact: "Provides a functional prototype for safety-critical driver assistance, focusing on tight model-to-product integration and multi-sensor data fusion.",
     mediaUrl: "https://www.youtube.com/embed/_sgmKvNFUe8",
     screenshots: [
       "/media/haniny-preview.jpg",
@@ -228,12 +237,12 @@ export const projects: Project[] = [
       "/projects/haniny/final_branding.jpg"
     ],
     screenshotCaptions: [
-      "Master Interface: Unified telemetry and HUD overlay.",
-      "Data Analytics: Deep packet inspection and sensor stream visualization.",
-      "AI Inference: YOLOv8 and MediaPipe dual-frame synchronized processing.",
-      "Risk Indexing: Dynamic actuarial scoring based on behavior.",
-      "Biometric Monitoring: Fatigue and attentiveness tracking modules.",
-      "Project Identity: Official Branding for Lloyd Assurances partnership."
+      "Unified telemetry and HUD overlay.",
+      "Sensor stream visualization and data analysis.",
+      "Real-time YOLOv8 and MediaPipe processing.",
+      "Dynamic risk scoring based on driver behavior.",
+      "Fatigue and attentiveness tracking modules.",
+      "Official branding for Lloyd Assurances partnership."
     ]
   },
   {
@@ -245,19 +254,16 @@ export const projects: Project[] = [
     context: "Personal Research & Skill Development",
     role: "Malware Analyst & Researcher",
     duration: "Ongoing",
-    architecture: "The lab used segmented VMs, controlled networking, and snapshot orchestration to guarantee safe resets after execution. We paired static tools (IDA) with runtime tracing (x64dbg, Wireshark) and documented behavior in a standardized template for persistence, C2, and privilege activity.",
+    architecture: "Structured as a segmented virtual network with isolated Windows and Linux VMs. Host-level instrumentation includes Sysmon, x64dbg/IDA, and Wireshark, with snapshot-based recovery to ensure environment integrity. Internal logging is routed to an offline manager for artifact collection.",
     features: [
-      "Analysis of real-world RATs (VenomRAT, AsyncRAT)",
-      "Persistence mechanism & C2 communication pattern study",
-      "Static analysis with IDA Pro & dynamic analysis with x64dbg",
-      "Isolated environment with snapshot-based recovery"
+      "Dynamic analysis environment for RATs (VenomRAT, AsyncRAT, RedLine)",
+      "Standardized triage process for persistence and C2 pattern mapping",
+      "Integrated static and dynamic workflows using IDA Pro and x64dbg",
+      "Isolated network simulation (FakeNet/InetSim) for safe traffic capture"
     ],
-    challenges: "Anti-analysis defenses were the main blocker. We had to adjust VM fingerprints, timing behavior, and debugger strategy to observe true execution paths without contaminating the environment or losing telemetry.",
-    impact: "We improved both technical depth and analyst discipline: faster triage, clearer IoC reporting, and stronger confidence in translating malware behavior into defensive detections.",
-    screenshots: [
-      "/media/cybercampphoto.jpg",
-      "/media/darkesthours.jpg"
-    ]
+    challenges: "Implementation required hardening VM environments against sandbox detection, configuring internal network proxies to safely route malicious traffic, and building decoders for specialized C2 protocols.",
+    impact: "Established a repeatable analysis pipeline for documenting malware behavior and generating high-fidelity detection artifacts.",
+    screenshots: []
   },
   {
     name: "CTF Challenge Development",
@@ -268,19 +274,16 @@ export const projects: Project[] = [
     context: "International CTF Finals Content",
     role: "Challenge Author & Infrastructure Lead",
     duration: "3 Months (Seasonal)",
-    architecture: "Challenges were authored in C/C++ with intentional vulnerability surfaces and layered obfuscation, then deployed via Docker/xinetd for consistent remote interaction. We versioned build configs and solver validation scripts to guarantee determinism between local and live environments.",
+    architecture: "Challenges are authored in C/C++ and Assembly, utilizing custom obfuscation layers and system-level vulnerabilities. Deployment is containerized via Docker and exposed through xinetd to ensure process isolation and high availability on competition infrastructure.",
     features: [
-      "Custom RE challenges with progressive difficulty levels",
-      "Advanced obfuscation & anti-analysis techniques",
-      "Binary analysis, debugging & decryption concepts",
-      "Scalable Docker/xinetd infrastructure for live CTFs"
+      "Original Reverse Engineering and Binary Exploitation challenges",
+      "Multi-layered obfuscation and anti-debug protection implementation",
+      "Scalable deployment architecture using Docker and xinetd",
+      "Automated solver validation and infrastructure health monitoring"
     ],
-    challenges: "We continuously balanced fairness, novelty, and resilience. Difficulty tuning required iterative tester feedback, while infra hardening required rate control and process isolation to survive aggressive brute-force traffic during finals.",
-    impact: "We gained strong challenge-authoring and competition operations experience, and produced learning-oriented content that improved participant solve quality rather than only scoreboard speed.",
-    screenshots: [
-      "/media/photo.jpg",
-      "/media/cybercampphoto.jpg"
-    ]
+    challenges: "Designing non-trivial vulnerabilities that bypass automated solvers, optimizing challenge-side anti-debug logic for remote environments, and managing resource constraints on high-traffic CTF infrastructure.",
+    impact: "Produced original competition content for international security events, focusing on binary security research and pedagogical challenge design.",
+    screenshots: []
   },
   {
     name: "DroidHunt - Mobile Security Toolkit",
@@ -291,18 +294,16 @@ export const projects: Project[] = [
     context: "Offensive Toolkit for Mobile Auditing",
     role: "Reverse Engineer",
     duration: "Continuous Project",
-    architecture: "We organized the toolkit into modular components: ADB provisioning scripts, Frida hook packs, and Burp alignment helpers. Each module exposed predictable inputs/outputs so testers could compose flows quickly across emulator and physical-device setups.",
+    architecture: "Built as a modular framework of Python scripts and Frida hook bundles that automate ADB interactions, certificate injection, and runtime instrumentation. The toolkit integrates with Burp Suite for traffic inspection and ADB for environment provisioning.",
     features: [
-      "Automated SSL Pinning & Root Bypass",
-      "Memory Dumping & Heap Analysis via Frida",
-      "Rapid Burp Certificate Injection",
-      "Scripted ADB Deployment Environment"
+      "Automated SSL Pinning and Root Detection bypass modules",
+      "Memory dumping and JNI-level runtime tracing via Frida hooks",
+      "Transparent Burp Suite certificate proxying via ADB",
+      "Scripted environment setup for emulators and physical devices"
     ],
-    challenges: "Modern apps use obfuscation, native checks, and anti-root/anti-hook controls that break generic scripts. We addressed this with adaptive hooks, JNI-level inspection, and targeted Smali patch points validated per app behavior.",
-    impact: "We gained a production-ready mobile testing workflow that consistently cuts prep time and improves depth of dynamic analysis during audits.",
-    screenshots: [
-      "/media/cybercampphoto.jpg"
-    ]
+    challenges: "Developing adaptive Frida hooks to bypass native anti-hooking protections, building JNI tracers for encrypted database extraction, and automating Smali patching for apps with custom integrity checks.",
+    impact: "A functional assessment toolkit that automates Android environment setup and dynamic analysis routines for security audits.",
+    screenshots: []
   }
 ];
 
@@ -424,15 +425,17 @@ export const ctfIdentity = {
 export const certifications: Certification[] = [
   {
     name: "Certified Red Team Operations Management (CRTOM)",
-    issuer: "Hack & Fix",
+    issuer: "Red Team Leaders",
     description: "Advanced certification focusing on managing and executing complex Red Team operations, including planning multi-phase adversary simulations, leading red team engagements, and aligning offensive scenarios with real-world threat intelligence.",
-    localFile: "/certificates/crtom-certificate.pdf"
+    localFile: "/certificates/crtom-certificate.pdf",
+    logo: "/media/redteamtraininglogo.webp"
   },
   {
     name: "CPPS — Certified Phishing Prevention Specialist",
     issuer: "Hack & Fix",
     description: "Comprehensive certification covering the full spectrum of phishing attack methodologies, social engineering tactics, and organizational defenses. Covers email threat analysis, lure identification, user awareness program design, and technical countermeasures to protect against modern phishing campaigns.",
-    localFile: "/certificates/cpps-certificate.pdf"
+    localFile: "/certificates/cpps-certificate.pdf",
+    logo: "/media/hack&fix_logo.png"
   }
 ];
 
@@ -444,6 +447,7 @@ export const learningPath: LearningPath = {
   summary:
     "Practical path covering core offensive security skills for junior penetration testing across web applications and enterprise infrastructure.",
   localFile: "/certificates/thm-jr-penetration-tester.pdf",
+  logo: "/media/thmlogo.webp",
   modules: [
     "Introduction to Cyber Security",
     "Introduction to Pentesting",

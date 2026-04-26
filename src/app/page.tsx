@@ -10,7 +10,6 @@ import { LiveTerminal } from "@/components/ui/live-terminal";
 import { Sidebar } from "@/components/ui/sidebar";
 import { ProjectCarousel3D } from "@/components/ui/project-carousel-3d";
 import { WriteupGrid3D } from "@/components/ui/writeup-grid-3d";
-import { ScatteredArtefacts } from "@/components/ui/cyber-intro";
 import { CreativeEntrance4D } from "@/components/ui/entrance-4d";
 import { ActiveNav } from "@/components/ui/active-nav";
 import { AchievementPhotoStrip } from "@/components/ui/achievement-photo-strip";
@@ -41,151 +40,76 @@ const ACHIEVEMENT_PHOTOS = [
   "/media/teamm.jpeg"
 ];
 
+// Refined reveal config — tighter, more intentional
+const makeReveal = (reducedMotion: boolean) => ({
+  initial: reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 36, filter: "blur(8px)" },
+  whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+  transition: reducedMotion ? { duration: 0 } : { duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.08 },
+  viewport: { once: true, amount: 0.12 },
+});
+
 export default function Home() {
   const reducedMotion = useReducedMotion();
   const heroRef = useRef<HTMLElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const modalTriggerRef = useRef<HTMLElement | null>(null);
-  const projectRectsRef = useRef<WeakMap<HTMLElement, DOMRect>>(new WeakMap());
-  const pointerFrameRef = useRef<number | null>(null);
-  const pointerStateRef = useRef<{ card: HTMLElement; x: number; y: number } | null>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
 
   const allSkills = useMemo(
     () => skillGroups.flatMap((group) => group.items.map((item) => ({ ...item, group: group.title }))),
     []
   );
   const [selectedSkillName, setSelectedSkillName] = useState(allSkills[0]?.name ?? "");
-  const [activeAchievementIdx, setActiveAchievementIdx] = useState(0);
   const [roleIdx, setRoleIdx] = useState(0);
-  const roles = ["CTF Player", "Security Enthusiast", "Engineering Student", "Network Specialist"];
- 
+  const roles = ["CTF Player", "Cyber Security Enthusiast", "Engineering Student"];
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRoleIdx((prev) => (prev + 1) % roles.length);
-    }, 3000);
+    const interval = setInterval(() => setRoleIdx(p => (p + 1) % roles.length), 3200);
     return () => clearInterval(interval);
   }, []);
- 
-  const { scrollYProgress: photoScroll } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
- 
-  const y1 = useTransform(photoScroll, [0, 1], [0, -100]);
-  const y2 = useTransform(photoScroll, [0, 1], [0, 100]);
 
-
-
-  const selectedSkill =
-    allSkills.find((skill) => skill.name === selectedSkillName) ?? allSkills[0];
+  const selectedSkill = allSkills.find((s) => s.name === selectedSkillName) ?? allSkills[0];
   const [isSkillAlertVisible, setIsSkillAlertVisible] = useState(false);
-  
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSent, setFormSent] = useState(false);
- 
-  const handleContactSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setFormSent(true);
-      setTimeout(() => setFormSent(false), 5000);
-    }, 1500);
-  };
- 
   const { scrollY } = useScroll();
   const [showScrollTop, setShowScrollTop] = useState(false);
- 
-  useEffect(() => {
-    return scrollY.onChange((latest) => {
-      setShowScrollTop(latest > 1000);
-    });
-  }, [scrollY]);
+
+  useEffect(() => scrollY.onChange(v => setShowScrollTop(v > 1000)), [scrollY]);
 
   useEffect(() => {
-    if (!isSkillAlertVisible || !modalRef.current) {
-      return;
-    }
-
+    if (!isSkillAlertVisible || !modalRef.current) return;
     const dialog = modalRef.current;
     dialog.focus();
-
-    const focusableSelectors = [
-      "a[href]",
-      "button:not([disabled])",
-      "textarea:not([disabled])",
-      "input:not([disabled])",
-      "select:not([disabled])",
-      "[tabindex]:not([tabindex='-1'])",
+    const focusable = [
+      "a[href]", "button:not([disabled])", "textarea:not([disabled])",
+      "input:not([disabled])", "select:not([disabled])", "[tabindex]:not([tabindex='-1'])",
     ].join(",");
 
-    const handleDialogKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsSkillAlertVisible(false);
-        return;
-      }
-
-      if (event.key !== "Tab") {
-        return;
-      }
-
-      const focusableElements = Array.from(dialog.querySelectorAll<HTMLElement>(focusableSelectors));
-      if (focusableElements.length === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      const first = focusableElements[0];
-      const last = focusableElements[focusableElements.length - 1];
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { setIsSkillAlertVisible(false); return; }
+      if (e.key !== "Tab") return;
+      const els = Array.from(dialog.querySelectorAll<HTMLElement>(focusable));
+      if (!els.length) { e.preventDefault(); return; }
       const active = document.activeElement as HTMLElement | null;
-
-      if (!event.shiftKey && active === last) {
-        event.preventDefault();
-        first.focus();
-      } else if (event.shiftKey && active === first) {
-        event.preventDefault();
-        last.focus();
-      }
+      if (!e.shiftKey && active === els[els.length - 1]) { e.preventDefault(); els[0].focus(); }
+      else if (e.shiftKey && active === els[0]) { e.preventDefault(); els[els.length - 1].focus(); }
     };
-
-    document.addEventListener("keydown", handleDialogKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleDialogKeyDown);
-      modalTriggerRef.current?.focus();
-    };
+    document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("keydown", onKey); modalTriggerRef.current?.focus(); };
   }, [isSkillAlertVisible]);
 
-  useEffect(() => {
-    return () => {
-      if (pointerFrameRef.current !== null) {
-        cancelAnimationFrame(pointerFrameRef.current);
-      }
-    };
-  }, []);
+  const reveal = makeReveal(!!reducedMotion);
 
-  const reveal = {
-    initial: reducedMotion
-      ? { opacity: 1, y: 0, filter: "blur(0px)" }
-      : { opacity: 0, y: 50, filter: "blur(10px)" },
-    whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
-    transition: reducedMotion
-      ? { duration: 0 }
-      : { duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 },
-    viewport: { once: true, amount: 0.15 },
-  };
   return (
     <MotionConfig reducedMotion="user">
-      {/* <ScatteredArtefacts /> */}
       <div className="page-shell">
         <Sidebar />
         <div className="page-noise" aria-hidden />
 
-        <header className="top-nav">
-          <p className="brand-mark">{profile.name}</p>
+        {/* ── Header ── */}
+        <header className="top-nav" style={{ backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+          <p className="brand-mark" style={{ letterSpacing: "0.05em", fontWeight: 700 }}>{profile.name}</p>
           <ActiveNav />
         </header>
 
@@ -194,168 +118,139 @@ export default function Home() {
           <CreativeEntrance4D />
 
           {/* ===== HERO ===== */}
-          <section className="hero-section relative min-h-[90vh] flex items-center overflow-hidden" id="top" ref={heroRef}>
-            {/* Background Atmosphere */}
+          <section
+            className="hero-section relative min-h-[90vh] flex items-center overflow-hidden"
+            id="top"
+            ref={heroRef}
+          >
+            {/* Atmosphere */}
             <div className="absolute inset-0 z-0 pointer-events-none">
-              <div className="absolute top-1/2 -right-20 -translate-y-1/2 w-[600px] h-full opacity-30">
+              <div className="absolute top-1/2 -right-20 -translate-y-1/2 w-[600px] h-full opacity-25">
                 <CyberPulseScene />
               </div>
             </div>
- 
+
             <div className="hero-content reveal-stagger w-full max-w-7xl mx-auto px-6 relative z-10 py-20">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
 
-                {/* Text Column (Moved to Left for Better UX) */}
+                {/* ── Text column ── */}
                 <div className="w-full flex-col css-stagger-item text-left lg:col-span-8">
 
-
+                  {/* Ghost watermark */}
                   <div className="relative mb-8 pb-4 pl-1 mt-10">
-                    <motion.div 
-                      initial={{ opacity: 0, x: -40, filter: "blur(12px)" }}
+                    <motion.div
+                      initial={{ opacity: 0, x: -30, filter: "blur(8px)" }}
                       animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
-                      className="absolute -top-12 md:-top-16 left-0 font-mono text-[5rem] md:text-[9rem] font-black text-white/[0.12] uppercase tracking-tighter leading-[0.8] select-none pointer-events-none"
+                      transition={{ duration: 1.1, ease: "easeOut", delay: 0.1 }}
+                      className="absolute -top-12 md:-top-16 left-0 font-mono text-[5rem] md:text-[9rem] font-black text-white/[0.06] uppercase tracking-tighter leading-[0.8] select-none pointer-events-none"
                     >
                       MEET
                     </motion.div>
-                    
-                    <motion.h1 
-                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+
+                    <motion.h1
+                      initial={{ opacity: 0, scale: 0.92, y: 16 }}
                       animate={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ duration: 1, type: "spring", bounce: 0.4, delay: 0.2 }}
-                      className="relative z-10 font-sans text-7xl md:text-9xl lg:text-[11rem] font-black uppercase tracking-tighter leading-[0.8] text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-300 to-orange-600 filter drop-shadow-[0_10px_50px_rgba(245,158,11,0.45)]"
+                      transition={{ duration: 1.1, type: "spring", bounce: 0.35, delay: 0.2 }}
+                      className="relative z-10 font-sans text-7xl md:text-9xl lg:text-[11rem] font-black uppercase tracking-tighter leading-[0.82] text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-300 to-orange-600 filter drop-shadow-[0_8px_40px_rgba(245,158,11,0.35)]"
                     >
                       Khalil
                     </motion.h1>
                   </div>
 
-                  <h2 className="text-xl md:text-2xl font-mono text-zinc-300 mb-8 uppercase tracking-widest border-b border-amber-500/20 pb-4 inline-block min-h-[1.5em]">
+                  {/* Role rotator */}
+                  <h2 className="text-lg md:text-xl font-mono text-zinc-400 mb-10 uppercase tracking-[0.2em] border-b border-amber-500/15 pb-4 inline-flex items-center gap-3 min-h-[1.5em]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={roles[roleIdx]}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.5 }}
+                        initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
+                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
+                        transition={{ duration: 0.45, ease: "easeOut" }}
                       >
                         {roles[roleIdx]}
                       </motion.span>
                     </AnimatePresence>
                   </h2>
 
-                  {/* Terminal-Style Profile Block */}
-                  {/* Terminal-Style Profile Block */}
-                  <motion.div 
-                    initial={{ opacity: 0, scale: 0.98 }}
+                  {/* Terminal block */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.985 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className="w-full mb-12 rounded-xl overflow-hidden bg-[#09090b]/80 backdrop-blur-xl border border-white/10 shadow-[0_0_40px_rgba(0,0,0,0.5)]"
+                    transition={{ duration: 0.9, delay: 0.25 }}
+                    className="w-full mb-12 rounded-2xl overflow-hidden bg-[#08080a]/90 backdrop-blur-2xl border border-white/[0.07] shadow-[0_0_60px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.04)]"
                   >
-                    {/* Mac Terminal Header */}
-                    <div className="flex items-center gap-2 px-4 py-3 bg-white/[0.03] border-b border-white/5">
-                      <div className="w-3 h-3 rounded-full bg-red-500/90 shadow-sm" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-500/90 shadow-sm" />
-                      <div className="w-3 h-3 rounded-full bg-green-500/90 shadow-sm" />
+                    {/* Traffic lights */}
+                    <div className="flex items-center gap-2 px-5 py-3.5 bg-white/[0.02] border-b border-white/[0.04]">
+                      <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                      <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
+                      <div className="w-3 h-3 rounded-full bg-green-500/80" />
+                      <span className="ml-3 font-mono text-[10px] text-zinc-600 tracking-widest uppercase">khalil.sh — zsh</span>
                     </div>
-                    
-                    {/* Terminal Body */}
-                    <div className="p-6 md:p-8 font-mono text-sm md:text-[15px] leading-relaxed text-zinc-100 font-medium">
-                      
-                      {/* Authentic Bash Command Line */}
-                      <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                        className="mb-6 flex items-center gap-2 text-[13px] md:text-sm"
-                      >
-                        <span className="text-emerald-400 font-bold">root@khalil</span>
-                        <span className="text-zinc-500">:</span>
-                        <span className="text-blue-400 font-bold">~/system</span>
-                        <span className="text-zinc-400">$</span>
-                        <span className="text-zinc-200 ml-1">cat whoami.txt</span>
-                      </motion.div>
 
+                    <div className="p-7 md:p-9 font-mono text-[14px] md:text-[15px] leading-[1.9] text-zinc-100">
                       {profile.about.split('\n\n').map((paragraph, index) => (
-                        <motion.p 
+                        <motion.p
                           key={index}
-                          initial={{ opacity: 0, filter: "blur(4px)", y: 5 }}
+                          initial={{ opacity: 0, filter: "blur(3px)", y: 4 }}
                           animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.6 + (index * 0.3) }}
-                          className="mb-8 last:mb-0 drop-shadow-sm flex"
+                          transition={{ duration: 0.5, delay: 0.45 + index * 0.18 }}
+                          className="mb-6 last:mb-0 flex items-start"
                         >
-                          <span className="text-zinc-600 mr-4 select-none drop-shadow-none flex-shrink-0">
-                            {String(index + 1).padStart(2, '0')}
+                          <span className="text-zinc-700 mr-5 select-none font-bold w-5 text-right flex-shrink-0 text-[11px] mt-1.5">
+                            {String(index + 1).padStart(2, "0")}
                           </span>
-                          <span 
-                            dangerouslySetInnerHTML={{ __html: paragraph
-                              .replace(/cybersecurity/gi, '<span class="text-amber-400 font-bold drop-shadow-[0_0_8px_rgba(251,191,36,0.4)]">cybersecurity</span>')
-                              .replace(/reverse engineering/gi, '<span class="text-emerald-400 font-bold">reverse engineering</span>')
-                              .replace(/binary analysis/gi, '<span class="text-emerald-400 font-bold">binary analysis</span>')
-                              .replace(/Android security/gi, '<span class="text-emerald-400 font-bold">Android security</span>')
-                              .replace(/Android application reversing/gi, '<span class="text-emerald-400 font-bold">Android application reversing</span>')
-                              .replace(/exploitation/gi, '<span class="text-rose-400 font-bold drop-shadow-[0_0_8px_rgba(244,63,94,0.4)]">exploitation</span>')
-                              .replace(/penetration testing/gi, '<span class="text-rose-400 font-bold">penetration testing</span>')
-                              .replace(/CTF competitions/gi, '<span class="text-indigo-400 font-bold">CTF competitions</span>')
-                            }}
-                          />
+                          <span className="flex-1 text-zinc-200/90 leading-[1.85]">{paragraph}</span>
                         </motion.p>
                       ))}
 
-                      {/* Philosophy Quotes Inside Terminal */}
+                      {/* Quotes */}
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 1.5 }}
-                        className="mt-8 pt-6 border-t border-white/10 space-y-4"
+                        transition={{ duration: 0.6, delay: 1.4 }}
+                        className="mt-8 pt-6 border-t border-white/[0.06] space-y-5"
                       >
-                        <blockquote className="group">
-                          <p className="text-xs md:text-sm text-zinc-300 italic leading-relaxed group-hover:text-white transition-colors">
-                            "You won't lose your job to AI — you'll lose it to{" "}
-                            <span className="text-amber-500/80 not-italic font-medium">someone who uses AI.</span>"
-                          </p>
-                          <cite className="block not-italic font-mono text-[9px] uppercase tracking-widest text-zinc-500 mt-1.5 opacity-80">
-                            — Jensen Huang, NVIDIA
-                          </cite>
-                        </blockquote>
-    
-                        <blockquote className="group">
-                          <p className="text-xs md:text-sm text-zinc-400 italic leading-relaxed group-hover:text-zinc-300 transition-colors mb-2">
-                            "AI is not a substitute for human intelligence — it's a{" "}
-                            <span className="text-amber-500/80 not-italic font-medium">tool to amplify it.</span>"
-                          </p>
-                          <cite className="block not-italic font-mono text-[9px] uppercase tracking-widest text-zinc-500 mt-1.5 opacity-80">
-                            — Dr. Fei-Fei Li, Stanford
-                          </cite>
-                        </blockquote>
+                        {[
+                          {
+                            text: <>You won't lose your job to AI — you'll lose it to{" "}<span className="text-amber-400/90 not-italic font-medium">someone who uses AI.</span></>,
+                            cite: "Jensen Huang, NVIDIA",
+                          },
+                          {
+                            text: <>AI is not a substitute for human intelligence — it's a{" "}<span className="text-amber-400/90 not-italic font-medium">tool to amplify it.</span></>,
+                            cite: "Dr. Fei-Fei Li, Stanford",
+                          },
+                        ].map(({ text, cite }, i) => (
+                          <blockquote key={i} className="group pl-4 border-l border-amber-500/20 hover:border-amber-500/50 transition-colors duration-500">
+                            <p className="text-[13px] text-zinc-400 italic leading-relaxed group-hover:text-zinc-300 transition-colors duration-400">
+                              "{text}"
+                            </p>
+                            <cite className="block not-italic font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-600 mt-1.5">
+                              — {cite}
+                            </cite>
+                          </blockquote>
+                        ))}
                       </motion.div>
-                      
-                      {/* Blinking Cursor */}
-                      <motion.div 
-                        initial={{ opacity: 0 }} 
-                        animate={{ opacity: [0, 1, 0] }} 
-                        transition={{ repeat: Infinity, duration: 1, ease: "linear", delay: 2 }}
-                        className="w-2.5 h-5 bg-amber-500 inline-block mt-4 shadow-[0_0_8px_rgba(245,158,11,0.6)]"
+
+                      {/* Blinking cursor */}
+                      <motion.span
+                        animate={{ opacity: [0, 1, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.1, ease: "linear", delay: 2 }}
+                        className="inline-block w-2.5 h-[1.1em] bg-amber-500 ml-1 mt-3 align-middle shadow-[0_0_10px_rgba(245,158,11,0.5)]"
                       />
                     </div>
                   </motion.div>
 
                   <div className="flex flex-wrap items-center gap-4">
-                    <a className="btn-primary" href="#projects">
-                      {profile.cta.primary}
-                    </a>
-                    <a className="btn-secondary" href="#contact">
-                      {profile.cta.secondary}
-                    </a>
+                    <a className="btn-primary" href="#projects">{profile.cta.primary}</a>
+                    <a className="btn-secondary" href="#contact">{profile.cta.secondary}</a>
                   </div>
                 </div>
 
-                {/* Photo Column (Interactive Symmetric Overlap with Parallax) */}
+                {/* ── Photo column ── */}
                 <div className="w-full flex justify-center lg:justify-end css-stagger-item relative lg:col-span-4">
                   <ParallaxPhotoColumn scrollYProgress={scrollYProgress} />
- 
-
                 </div>
-
               </div>
             </div>
           </section>
@@ -364,35 +259,28 @@ export default function Home() {
           <motion.div {...(reveal as any)} className="section-flow">
             <SectionShell id="projects" eyebrow="Work" title="">
               <div className="mb-12">
-                <h2 className="font-sans text-6xl md:text-8xl font-black uppercase tracking-tighter mb-2 leading-none">
+                <h2 className="font-sans text-5xl md:text-7xl font-black uppercase tracking-tighter mb-3 leading-none">
                   Featured <span className="text-amber-500">Projects</span>
                 </h2>
-                <div className="h-1 w-24 bg-amber-500" />
+                <div className="h-[2px] w-20 bg-gradient-to-r from-amber-500 to-orange-600" />
               </div>
-              <div className="w-full mx-auto">
-                <ProjectCarousel3D projects={projects} />
-              </div>
+              <ProjectCarousel3D projects={projects} />
             </SectionShell>
           </motion.div>
 
           {/* ===== CTF ===== */}
           <motion.div {...(reveal as any)} className="section-flow">
             <SectionShell id="ctf" eyebrow="Community" title="CTF Challenges">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                <div className="lg:col-span-12">
-                  <p className="text-xl md:text-2xl text-zinc-400 max-w-3xl mb-12 leading-relaxed">
-                    I design and solve CTF challenges across reverse engineering, forensics, and exploitation.
-                    Browse selected notes and challenge breakdowns.
-                  </p>
- 
-                  {/* CTA */}
-                  <div className="mb-16">
-                     <a className="btn-secondary py-4 inline-block px-10 border-2 border-amber-500/50 hover:bg-amber-500/10 transition-colors" href="#writeups">
-                      View All Writeups
-                    </a>
-                  </div>
-                </div>
-              </div>
+              <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed">
+                I design and solve CTF challenges across reverse engineering, forensics, and exploitation.
+                Browse selected notes and challenge breakdowns.
+              </p>
+              <a
+                className="btn-secondary py-4 inline-block px-10 border-2 border-amber-500/40 hover:bg-amber-500/8 hover:border-amber-400 transition-all duration-300"
+                href="#writeups"
+              >
+                View All Writeups →
+              </a>
             </SectionShell>
           </motion.div>
 
@@ -401,77 +289,57 @@ export default function Home() {
             <SectionShell id="achievements" eyebrow="Milestones" title="Key Achievements">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
 
-
-
-                {/* Mobile Photo Strip */}
                 <AchievementPhotoStrip photos={ACHIEVEMENT_PHOTOS} />
- 
-                {/* Left side: Full-size Photo Stack */}
-                <div className="lg:col-span-4 hidden lg:flex flex-col gap-12 mt-2">
+
+                {/* Photo stack (desktop) */}
+                <div className="lg:col-span-4 hidden lg:flex flex-col gap-10 mt-2">
                   {ACHIEVEMENT_PHOTOS.map((src, idx) => (
                     <motion.div
-                      key={"photo-" + idx}
-                      initial={{ opacity: 0, scale: 0.95 }}
+                      key={idx}
+                      initial={{ opacity: 0, scale: 0.96 }}
                       whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true, amount: 0.1 }}
-                      transition={{ duration: 0.5 }}
-                      className="relative w-full rounded-2xl overflow-hidden border-2 border-primary-500/30 shadow-[0_0_30px_rgba(var(--primary-rgb),0.15)] group aspect-[4/3] lg:aspect-video"
+                      viewport={{ once: true, amount: 0.08 }}
+                      transition={{ duration: 0.6, delay: idx * 0.04 }}
+                      className="relative w-full rounded-xl overflow-hidden border border-primary-500/25 shadow-[0_0_24px_rgba(var(--primary-rgb),0.1)] group aspect-video"
                     >
-                      <div className="absolute inset-0 bg-primary-900/10 mix-blend-overlay group-hover:bg-transparent transition-colors duration-700 z-10 pointer-events-none" />
-                      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black via-black/40 to-transparent z-10 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10 pointer-events-none" />
                       <img
                         src={src}
-                        alt={`Strategic Milestone ${idx + 1}`}
-                        className="w-full h-full object-cover object-center filter group-hover:scale-105 transition-all duration-[1s] ease-out brightness-110"
+                        alt={`Milestone ${idx + 1}`}
+                        className="w-full h-full object-cover object-center group-hover:scale-[1.04] transition-transform duration-700 ease-out brightness-105"
                       />
                     </motion.div>
                   ))}
                 </div>
 
-                {/* Right side: Timeline */}
-                <div className="lg:col-span-8 relative border-l border-primary-500/30 ml-4 md:ml-8 pl-8 md:pl-12 space-y-12">
-
-
+                {/* Timeline */}
+                <div className="lg:col-span-8 relative border-l border-primary-500/25 ml-4 md:ml-8 pl-8 md:pl-12 space-y-10">
                   {achievements.map((achievement, idx) => (
                     <motion.div
                       key={achievement.title}
-                      className="relative group perspective-1000"
-                      initial={{ opacity: 0, x: -50, rotateY: 20 }}
-                      whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-                      viewport={{ once: true, margin: "0px", amount: 0.1 }}
-                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      className="relative group"
+                      initial={{ opacity: 0, x: -32 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, amount: 0.08 }}
+                      transition={{ duration: 0.5, ease: "easeOut", delay: idx * 0.05 }}
                     >
-                      {/* Timeline Node */}
+                      {/* Node */}
                       <div
-                        className="absolute w-4 h-4 rounded-full bg-black border-2 border-primary-500 -left-[2.1rem] md:-left-[3.1rem] top-2 transition-all duration-300"
-                        style={{ animation: 'pulseNode 3s infinite ease-in-out', animationDelay: `${idx * 0.2}s` }}
+                        className="absolute w-3.5 h-3.5 rounded-full bg-black border-2 border-primary-500 -left-[2rem] md:-left-[3rem] top-2.5 group-hover:border-amber-400 transition-colors duration-300"
                       />
 
-                      {/* Achievement Card */}
-                      <div
-                        className="relative bg-gradient-to-br from-primary-950/20 to-black/40 border-2 border-primary-500/20 rounded-xl p-6 md:p-8 overflow-hidden backdrop-blur-sm transform-gpu transition-all duration-500 ease-out group-hover:border-primary-500/60 group-hover:scale-[1.02] active:scale-95"
-                        style={{ animation: 'achievementGlow 4s infinite ease-in-out', animationDelay: `${idx * 0.3}s` }}
-                      >
-                        <div className="absolute inset-0 bg-primary-500/0 group-hover:bg-primary-500/5 transition-colors duration-500" />
-
-                        {/* Highlight Badge */}
-                        <span className="inline-block px-3 py-1 mb-4 text-xs font-mono font-bold uppercase tracking-widest text-black bg-primary-400 rounded-full shadow-[0_0_15px_rgba(var(--primary-rgb),0.6)]">
+                      {/* Card */}
+                      <div className="bg-gradient-to-br from-primary-950/15 to-black/50 border border-primary-500/15 rounded-xl p-6 md:p-7 relative overflow-hidden backdrop-blur-sm group-hover:border-primary-500/45 transition-all duration-400">
+                        <span className="inline-block px-3 py-1 mb-4 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-black bg-primary-400 rounded-full">
                           {achievement.highlight}
                         </span>
-
-                        <h3 className="text-xl md:text-2xl font-orbitron font-bold text-white mb-3 group-hover:text-primary-300 transition-colors drop-shadow-md">
+                        <h3 className="text-lg md:text-xl font-orbitron font-bold text-white mb-2.5 group-hover:text-primary-300 transition-colors leading-snug">
                           {achievement.title}
                         </h3>
-
-                        <p className="text-primary-100/70 font-mono text-sm md:text-base leading-relaxed">
+                        <p className="text-primary-100/65 font-mono text-sm leading-relaxed">
                           {achievement.detail}
                         </p>
-
-                        {/* Sci-Fi Decorative Grid */}
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(var(--primary-rgb),0.1)_0%,transparent_70%)] pointer-events-none" />
-                        <div className="absolute bottom-2 right-2 flex gap-1 pointer-events-none opacity-20 group-hover:opacity-50 transition-opacity">
-                          {[1, 2, 3].map(i => <div key={i} className="w-1 h-1 bg-primary-400 rounded-full" />)}
-                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 to-purple-500/0 group-hover:from-primary-500/4 group-hover:to-purple-500/4 transition-all duration-500 pointer-events-none rounded-xl" />
                       </div>
                     </motion.div>
                   ))}
@@ -483,31 +351,36 @@ export default function Home() {
           {/* ===== CERTIFICATIONS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
             <SectionShell id="certifications" eyebrow="Validation" title="Certifications">
-              <p className="projects-intro text-foreground mb-8">
+              <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-2xl">
                 Verified training and formal credentials that back the practical offensive-security work shown in this portfolio.
               </p>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
                 {certifications.map((cert, idx) => (
                   <article
                     key={cert.name}
-                    className="certification-card bg-black/40 border border-primary-500/20 rounded-xl p-6 backdrop-blur-sm hover:border-primary-500/50 transition-all duration-300"
+                    className="group bg-black/50 border border-primary-500/15 rounded-xl p-6 backdrop-blur-sm hover:border-primary-500/45 transition-all duration-300 hover:bg-black/60"
                     style={{ animationDelay: `${idx * 0.08}s` }}
                   >
-                    <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary-400 mb-3">
-                      {cert.issuer}
-                    </p>
-                    <h3 className="text-xl font-orbitron font-bold text-white mb-3 leading-snug">
+                    <div className="flex items-start justify-between mb-4 gap-3">
+                      <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-amber-500 mt-0.5">
+                        {cert.issuer}
+                      </p>
+                      {cert.logo && (
+                        <img src={cert.logo} alt={cert.issuer} className="h-8 object-contain rounded bg-white/5 p-1" />
+                      )}
+                    </div>
+                    <h3 className="text-lg font-orbitron font-bold text-white mb-3 leading-snug group-hover:text-primary-300 transition-colors">
                       {cert.name}
                     </h3>
-                    <p className="text-primary-100/75 text-sm leading-relaxed mb-5">
+                    <p className="text-zinc-500 text-[13px] leading-relaxed mb-5">
                       {cert.description}
                     </p>
                     <a
                       href={cert.verifyUrl || cert.localFile}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 border border-primary-500/40 text-primary-300 hover:text-white hover:border-primary-400 rounded-lg text-xs font-mono uppercase tracking-widest transition-all"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-primary-400 hover:text-white transition-colors border-b border-primary-500/20 hover:border-primary-400 pb-0.5"
                     >
                       View Certificate <span>→</span>
                     </a>
@@ -515,30 +388,33 @@ export default function Home() {
                 ))}
               </div>
 
-              <article className="learning-path-card bg-gradient-to-br from-primary-950/20 to-black/40 border border-primary-500/25 rounded-xl p-7 backdrop-blur-sm">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
-                  <div>
-                    <p className="text-[10px] font-mono uppercase tracking-[0.2em] text-primary-400 mb-2">Learning Path</p>
-                    <h3 className="text-2xl font-orbitron font-bold text-white">{learningPath.name}</h3>
-                    <p className="text-primary-100/70 text-sm mt-1">{learningPath.provider} • {learningPath.status} • {learningPath.progress}</p>
+              <article className="bg-gradient-to-br from-primary-950/15 to-black/50 border border-primary-500/20 rounded-xl p-7 backdrop-blur-sm hover:border-primary-500/40 transition-all duration-300">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-5">
+                  <div className="flex items-center gap-5">
+                    {learningPath.logo && (
+                      <img src={learningPath.logo} alt={learningPath.provider} className="h-14 object-contain rounded bg-white/5 p-1.5" />
+                    )}
+                    <div>
+                      <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-amber-500 mb-2">Learning Path</p>
+                      <h3 className="text-xl font-orbitron font-bold text-white">{learningPath.name}</h3>
+                      <p className="text-zinc-500 text-sm mt-1">{learningPath.provider} · {learningPath.status} · {learningPath.progress}</p>
+                    </div>
                   </div>
                   <a
                     href={learningPath.localFile}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-primary-500/40 text-primary-300 hover:text-white hover:border-primary-400 rounded-lg text-xs font-mono uppercase tracking-widest transition-all"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 border border-primary-500/35 text-primary-300 hover:text-white hover:border-primary-400 rounded-lg text-[11px] font-mono uppercase tracking-wider transition-all whitespace-nowrap"
                   >
-                    Open Proof <span>→</span>
+                    Open Proof →
                   </a>
                 </div>
-
-                <p className="text-primary-100/80 mb-5 leading-relaxed">{learningPath.summary}</p>
-
+                <p className="text-primary-100/75 mb-5 leading-relaxed text-sm">{learningPath.summary}</p>
                 <div className="flex flex-wrap gap-2">
                   {learningPath.modules.map((module) => (
                     <span
                       key={module}
-                      className="px-3 py-1 rounded-full border border-primary-500/35 text-xs font-mono uppercase tracking-wider text-primary-200 bg-primary-950/20"
+                      className="px-3 py-1 rounded-full border border-primary-500/30 text-[11px] font-mono uppercase tracking-wider text-primary-200/80 bg-primary-950/15"
                     >
                       {module}
                     </span>
@@ -549,33 +425,29 @@ export default function Home() {
           </motion.div>
 
           {/* ===== SKILLS ===== */}
-          <motion.div {...(reveal as any)} className="section-flow relative overflow-hidden rounded-3xl border border-primary-800/30">
-
+          <motion.div {...(reveal as any)} className="section-flow relative overflow-hidden rounded-3xl border border-primary-800/20">
             <SectionShell id="skills" eyebrow="Tooling" title="Core Skills">
-
               <div className="skills-grid relative z-10">
                 {skillGroups.map((group, groupIdx) => (
                   <article
                     key={group.title}
-                    className="skills-card bg-black/60 backdrop-blur-md border border-primary-500/20 hover:border-primary-500/60 transition-all duration-300 p-8 rounded-xl relative group overflow-hidden"
-                    style={{ animation: `skillCardEntry 0.5s ease-out ${groupIdx * 0.08}s both` }}
+                    className="skills-card bg-black/55 backdrop-blur-md border border-primary-500/15 hover:border-primary-500/50 transition-all duration-400 p-7 rounded-xl relative group overflow-hidden"
+                    style={{ animation: `skillCardEntry 0.5s ease-out ${groupIdx * 0.07}s both` }}
                   >
-                    <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary-500/0 to-purple-500/0 group-hover:from-primary-500/5 group-hover:to-purple-500/5 transition-colors duration-300 pointer-events-none" />
-                    <h3 className="font-sans text-primary-300 font-bold uppercase tracking-wider mb-4 relative z-10">{group.title}</h3>
-                    <div className="mt-3 flex flex-wrap gap-2 relative z-10">
+                    <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-400 bg-gradient-to-br from-primary-500/4 to-purple-500/4 pointer-events-none" />
+                    <h3 className="font-mono text-primary-300/90 font-semibold uppercase tracking-[0.15em] text-[11px] mb-4 relative z-10">
+                      {group.title}
+                    </h3>
+                    <div className="mt-2 flex flex-wrap gap-2 relative z-10">
                       {group.items.map((skill, idx) => (
                         <button
                           key={skill.name}
                           type="button"
-                          aria-pressed={selectedSkillName === skill.name}
-                          className={`rounded-full border px-4 py-1.5 text-sm font-mono transition-all cursor-pointer hover:scale-105 active:scale-95 ${selectedSkillName === skill.name && isSkillAlertVisible
-                            ? "bg-primary-500/30 text-primary-300 border-primary-400 shadow-[0_0_15px_rgba(var(--primary-rgb),0.5)]"
-                            : "bg-transparent text-primary-300/80 border-primary-600/40 hover:border-primary-400 hover:text-primary-200"
+                          aria-pressed={selectedSkillName === skill.name && isSkillAlertVisible}
+                          className={`rounded-full border px-3.5 py-1.5 text-[12px] font-mono transition-all cursor-pointer hover:scale-[1.03] active:scale-95 ${selectedSkillName === skill.name && isSkillAlertVisible
+                              ? "bg-primary-500/25 text-primary-200 border-primary-400/80 shadow-[0_0_12px_rgba(var(--primary-rgb),0.4)]"
+                              : "bg-transparent text-primary-300/70 border-primary-600/30 hover:border-primary-400/70 hover:text-primary-200"
                             }`}
-                          style={{
-                            animation: selectedSkillName === skill.name ? "glowPulse 2s ease-in-out infinite" : "none",
-                            animationDelay: `${idx * 0.05}s`,
-                          }}
                           onClick={(event) => {
                             modalTriggerRef.current = event.currentTarget;
                             setSelectedSkillName(skill.name);
@@ -595,9 +467,9 @@ export default function Home() {
           {/* ===== WRITEUPS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
             <SectionShell id="writeups" eyebrow="Knowledge" title="Writeups &amp; Breakdowns">
-              <p className="projects-intro text-foreground">
+              <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-2xl">
                 Technical breakdowns of CTF challenges, vulnerability research, and exploitation paths —
-                featuring reverse engineering, mobile security, and binary exploitation.
+                reverse engineering, mobile security, and binary exploitation.
               </p>
               <WriteupGrid3D writeups={ctfWriteups} />
             </SectionShell>
@@ -606,100 +478,113 @@ export default function Home() {
           {/* ===== CONTACT ===== */}
           <motion.div {...(reveal as any)} className="section-flow">
             <SectionShell id="contact" eyebrow="Connect" title="Contact">
-              <p style={{ marginBottom: "3rem" }} className="text-primary-300/80">
+              <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-xl">
                 Open to security internships, CTF collaboration, and network engineering opportunities.
-                Reach out to discuss projects via the channels below.
               </p>
 
-
-
               <div className="contact-grid">
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }} className="contact-cards-col flex flex-col justify-center">
+                {/* Contact cards */}
+                <div className="contact-cards-col flex flex-col gap-3.5">
                   {[
-                      {
-                        href: `mailto:${profile.socials?.email}`,
-                        icon: "✉",
-                        label: "Email",
-                        value: profile.socials?.email || "khalil.ammar@proton.me",
-                        delay: 0,
-                      },
+                    {
+                      href: `mailto:${profile.socials?.email}`,
+                      icon: (
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                        </svg>
+                      ),
+                      label: "Email",
+                      value: profile.socials?.email || "khalil.ammar@proton.me",
+                    },
                     {
                       href: profile.socials?.linkedin,
-                      icon: "in",
+                      icon: (
+                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                        </svg>
+                      ),
                       label: "LinkedIn",
                       value: "Connect Professionally",
-                      delay: 0.1,
                     },
                     {
                       href: profile.socials?.github,
-                      icon: "</>",
-                      label: "GitHub Source",
+                      icon: (
+                        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                      ),
+                      label: "GitHub",
                       value: "View Repositories",
-                      delay: 0.2,
                     },
                   ].map((contact, idx) => (
                     <a
                       key={contact.label}
-                      className="contact-card group relative p-6 border-2 border-primary-500/30 hover:border-primary-400 bg-gradient-to-br from-primary-950/20 to-black/30 rounded-lg transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
                       href={contact.href}
-                      target={contact.label !== "Secure Mail" ? "_blank" : undefined}
-                      rel={contact.label !== "Secure Mail" ? "noopener noreferrer" : undefined}
-                      style={{
-                        animation: `contactCardIn 0.5s ease-out ${contact.delay}s both`,
-                      }}
+                      target={contact.label !== "Email" ? "_blank" : undefined}
+                      rel={contact.label !== "Email" ? "noopener noreferrer" : undefined}
+                      className="contact-card group flex items-center gap-5 p-5 border border-primary-500/20 hover:border-primary-400/60 bg-black/35 hover:bg-black/55 rounded-xl transition-all duration-300"
+                      style={{ animation: `contactCardIn 0.5s ease-out ${idx * 0.08}s both` }}
                     >
-                      <span className="text-4xl mb-3 block opacity-70 group-hover:opacity-100 transition-opacity">{contact.icon}</span>
-                      <p className="text-primary-400 font-mono text-xs uppercase tracking-widest font-bold">{contact.label}</p>
-                      <p className="text-primary-300/60 text-sm mt-1 group-hover:text-primary-300 transition-colors">{contact.value}</p>
-                      <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary-500/0 via-transparent to-purple-500/0 group-hover:from-primary-500/5 group-hover:via-transparent group-hover:to-purple-500/5 pointer-events-none transition-all" />
+                      <span className="text-amber-500 opacity-70 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                        {contact.icon}
+                      </span>
+                      <div>
+                        <p className="text-primary-400 font-mono text-[10px] uppercase tracking-[0.2em] font-bold">{contact.label}</p>
+                        <p className="text-zinc-400 text-sm mt-0.5 group-hover:text-zinc-300 transition-colors">{contact.value}</p>
+                      </div>
+                      <span className="ml-auto text-zinc-600 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-300 text-sm">→</span>
                     </a>
                   ))}
                 </div>
 
-                <form onSubmit={handleContactSubmit} className="contact-form-ui flex flex-col gap-5 p-8 bg-gradient-to-br from-primary-950/20 to-black/30 border-2 border-primary-500/30 hover:border-primary-400/50 transition-all duration-300 rounded-lg shadow-2xl relative overflow-hidden"
-                  style={{
-                    animation: "contactCardIn 0.5s ease-out 0.3s both",
+                {/* Contact form */}
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setIsSubmitting(true);
+                    setTimeout(() => { setIsSubmitting(false); setFormSent(true); setTimeout(() => setFormSent(false), 5000); }, 1500);
                   }}
+                  className="contact-form-ui flex flex-col gap-5 p-7 bg-gradient-to-br from-primary-950/15 to-black/40 border border-primary-500/20 hover:border-primary-400/40 transition-all duration-300 rounded-xl shadow-xl relative overflow-hidden"
+                  style={{ animation: "contactCardIn 0.5s ease-out 0.24s both" }}
                 >
                   <AnimatePresence mode="wait">
                     {formSent ? (
-                      <motion.div 
-                        initial={{ opacity: 0, scale: 0.9 }}
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.92 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        className="flex flex-col items-center justify-center py-12 text-center h-full"
+                        className="flex flex-col items-center justify-center py-12 text-center"
                       >
-                        <div className="w-16 h-16 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center mb-6">
-                           <span className="text-2xl">✓</span>
+                        <div className="w-14 h-14 rounded-full bg-green-500/15 border-2 border-green-500/60 flex items-center justify-center mb-6">
+                          <span className="text-green-400 text-xl">✓</span>
                         </div>
-                        <h3 className="text-2xl font-bold text-white mb-2 uppercase tracking-widest">Transmission Sent</h3>
-                        <p className="text-zinc-400 text-sm max-w-[250px]">Your message has been encoded and dispatched. I'll get back to you shortly.</p>
+                        <h3 className="text-xl font-bold text-white mb-2 uppercase tracking-widest font-orbitron">Sent</h3>
+                        <p className="text-zinc-500 text-sm max-w-[220px]">I'll get back to you shortly.</p>
                       </motion.div>
                     ) : (
-                      <motion.div exit={{ opacity: 0, scale: 0.95 }} className="flex flex-col gap-5">
-                        <h3 className="text-xl font-bold uppercase text-primary-300 border-b border-primary-500/30 pb-4 font-orbitron tracking-widest">Connect Directly</h3>
-                        <div className="space-y-4">
-                          <input
-                            type="text"
-                            name="subject"
-                            placeholder="Connection Subject"
-                            className="w-full p-4 bg-black/40 border-2 border-primary-600/40 hover:border-primary-500 focus:border-primary-400 rounded text-primary-300 placeholder-primary-600/50 outline-none font-mono text-sm transition-all"
-                            required
-                          />
-                          <textarea
-                            name="body"
-                            placeholder="Message content..."
-                            rows={5}
-                            className="w-full p-4 bg-black/40 border-2 border-primary-600/40 hover:border-primary-500 focus:border-primary-400 rounded text-primary-300 placeholder-primary-600/50 outline-none font-mono text-sm transition-all resize-none"
-                            required
-                          />
-                        </div>
+                      <motion.div exit={{ opacity: 0, scale: 0.96 }} className="flex flex-col gap-5">
+                        <h3 className="text-base font-bold uppercase text-primary-300 border-b border-primary-500/20 pb-4 font-orbitron tracking-[0.15em]">
+                          Send a Message
+                        </h3>
+                        <input
+                          type="text"
+                          name="subject"
+                          placeholder="Subject"
+                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all"
+                          required
+                        />
+                        <textarea
+                          name="body"
+                          placeholder="Your message..."
+                          rows={5}
+                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all resize-none"
+                          required
+                        />
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="mt-2 px-6 py-4 bg-amber-500/10 border-2 border-amber-500 hover:bg-amber-500 hover:text-black text-amber-500 font-mono uppercase tracking-[0.2em] text-sm transition-all duration-300 rounded font-black flex items-center justify-center gap-2 disabled:opacity-50"
+                          className="mt-1 px-6 py-4 bg-amber-500/8 border-2 border-amber-500/80 hover:bg-amber-500 hover:text-black hover:border-amber-500 text-amber-400 font-mono uppercase tracking-[0.18em] text-sm transition-all duration-300 rounded-lg font-bold flex items-center justify-center gap-2 disabled:opacity-40"
                         >
-                          {isSubmitting ? "Dispatching..." : "Send Message"} 
-                          {!isSubmitting && <span className="text-lg">→</span>}
+                          {isSubmitting ? "Sending..." : <>Send Message <span>→</span></>}
                         </button>
                       </motion.div>
                     )}
@@ -709,11 +594,10 @@ export default function Home() {
             </SectionShell>
           </motion.div>
         </main>
- 
+
         <EnhancedFooter />
         <ScrollToTop />
- 
-        {/* ===== SKILL MODAL ===== */}
+
         {selectedSkill && (
           <EnhancedSkillModal
             skill={selectedSkill as any}
