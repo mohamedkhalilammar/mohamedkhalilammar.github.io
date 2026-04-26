@@ -49,7 +49,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <div className="page-shell bg-[#0d0d0d] min-h-screen">
+    <div className="page-shell bg-[#252526] min-h-screen">
       {/* Simplified Space */}
       <div className="fixed left-0 top-0 bottom-0 w-[1px] bg-white/[0.03] z-50" />
 
@@ -182,7 +182,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
           {/* SIDEBAR: System Specs */}
           <aside className="lg:col-span-3 lg:sticky lg:top-32 self-start space-y-10 css-stagger-item">
-            <div className="p-10 rounded-3xl bg-[#0a0a0a] border border-white/5 relative overflow-hidden">
+            <div className="p-10 rounded-3xl bg-[#333333] border border-white/10 relative overflow-hidden">
               {/* Background Grid Accent */}
               <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: "radial-gradient(var(--accent) 1px, transparent 0)", backgroundSize: "20px 20px" }} />
 
