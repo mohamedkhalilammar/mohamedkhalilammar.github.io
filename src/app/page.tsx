@@ -130,31 +130,27 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hero-content reveal-stagger w-full max-w-7xl mx-auto px-6 relative z-10 py-20">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
+            {/* ── BOLD TACTICAL DIVIDER (Synchronized with SectionShell) ── */}
+            <div className="absolute top-0 left-0 w-full h-px bg-white/10" />
+            <div className="absolute top-0 left-0 w-32 h-[3px] bg-white/20" />
+
+            <div className="hero-content reveal-stagger w-full max-w-7xl mx-auto px-6 relative z-10 py-20 mt-12">
+              {/* Background Index Watermark - Hero 00 */}
+              <div className="absolute top-10 left-6 font-sans text-[12rem] md:text-[20rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
+                00
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full relative z-10">
 
                 {/* ── Text column ── */}
                 <div className="w-full flex-col css-stagger-item text-left lg:col-span-8">
 
-                  {/* Ghost watermark */}
-                  <div className="relative mb-8 pb-4 pl-1 mt-10">
-                    <motion.div
-                      initial={{ opacity: 0, x: -30, filter: "blur(8px)" }}
-                      animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 1.1, ease: "easeOut", delay: 0.1 }}
-                      className="absolute -top-12 md:-top-16 left-0 font-mono text-[5rem] md:text-[9rem] font-black text-white/[0.06] uppercase tracking-tighter leading-[0.8] select-none pointer-events-none"
-                    >
-                      MEET
-                    </motion.div>
-
-                    <motion.h1
-                      initial={{ opacity: 0, scale: 0.92, y: 16 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ duration: 1.1, type: "spring", bounce: 0.35, delay: 0.2 }}
-                      className="relative z-10 font-sans text-7xl md:text-9xl lg:text-[11rem] font-black uppercase tracking-tighter leading-[0.82] text-transparent bg-clip-text bg-gradient-to-br from-white via-amber-300 to-orange-600 filter drop-shadow-[0_8px_40px_rgba(245,158,11,0.35)]"
-                    >
-                      Khalil
-                    </motion.h1>
+                  {/* Title Area */}
+                  <div className="relative mb-12 pb-4 pl-1 mt-10">
+                    <h1 className="font-sans text-5xl md:text-9xl lg:text-[10rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
+                      MEET KHALIL
+                    </h1>
+                    <div className="h-[2px] w-24 bg-gradient-to-r from-amber-500 to-orange-600" />
                   </div>
 
                   {/* Role rotator */}
@@ -253,10 +249,10 @@ export default function Home() {
 
           {/* ===== PROJECTS ===== */}
           <motion.div {...(reveal as any)} className="section-flow">
-            <SectionShell id="projects" eyebrow="Work" title="">
+            <SectionShell id="projects" eyebrow="Work" title="" index="01">
               <div className="mb-12">
-                <h2 className="font-sans text-5xl md:text-7xl font-black uppercase tracking-tighter mb-3 leading-none">
-                  Featured <span className="text-amber-500">Projects</span>
+                <h2 className="font-sans text-5xl md:text-7xl font-black uppercase tracking-tighter mb-3 leading-none text-white">
+                  Featured Projects
                 </h2>
                 <div className="h-[2px] w-20 bg-gradient-to-r from-amber-500 to-orange-600" />
               </div>
@@ -266,7 +262,7 @@ export default function Home() {
 
           {/* ===== ACHIEVEMENTS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
-            <SectionShell id="achievements" eyebrow="Milestones" title="Key Achievements">
+            <SectionShell id="achievements" eyebrow="Milestones" title="Key Achievements" index="02">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
                 <AchievementPhotoStrip photos={ACHIEVEMENT_PHOTOS} />
                 <div className="lg:col-span-4 hidden lg:flex flex-col gap-10 mt-2">
@@ -293,7 +289,7 @@ export default function Home() {
 
           {/* ===== WRITEUPS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
-            <SectionShell id="writeups" eyebrow="Knowledge" title="Writeups & Breakdowns">
+            <SectionShell id="writeups" eyebrow="Knowledge" title="Writeups & Breakdowns" index="03">
               <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-2xl">
                 I design and solve CTF challenges across reverse engineering, mobile security, and exploitation. 
                 Browse selected technical notes and systemic challenge breakdowns.
@@ -304,7 +300,7 @@ export default function Home() {
 
           {/* ===== CERTIFICATIONS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
-            <SectionShell id="certifications" eyebrow="Validation" title="Certifications">
+            <SectionShell id="certifications" eyebrow="Validation" title="Certifications" index="04">
               <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-2xl">
                 Verified training and formal credentials that back the practical offensive-security work shown in this portfolio.
               </p>
@@ -380,7 +376,7 @@ export default function Home() {
 
           {/* ===== SKILLS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative overflow-hidden rounded-3xl border border-primary-800/20">
-            <SectionShell id="skills" eyebrow="Tooling" title="Core Skills">
+            <SectionShell id="skills" eyebrow="Tooling" title="Core Skills" index="05">
               <div className="skills-grid relative z-10">
                 {skillGroups.map((group, groupIdx) => (
                   <article
@@ -420,7 +416,7 @@ export default function Home() {
 
           {/* ===== CONTACT ===== */}
           <motion.div {...(reveal as any)} className="section-flow">
-            <SectionShell id="contact" eyebrow="Connect" title="Contact">
+            <SectionShell id="contact" eyebrow="Connect" title="Contact" index="06">
               <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-xl">
                 Open to security internships, CTF collaboration, and network engineering opportunities.
               </p>
