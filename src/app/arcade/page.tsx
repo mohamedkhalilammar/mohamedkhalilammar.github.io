@@ -22,11 +22,7 @@ export default function ArcadePage() {
               <span className="text-amber-500 group-hover:-translate-x-1 transition-transform font-bold">←</span>
               <span className="font-orbitron font-black tracking-tighter text-xl text-white">KHALIL <span className="text-amber-500">AMMAR</span></span>
             </Link>
-            <div className="hidden md:flex gap-6 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
-              <span>System: Active</span>
-              <span>Status: Arcade Mode</span>
-              <span className="text-amber-500/60">Latency: 0.2ms</span>
-            </div>
+
           </div>
         </header>
 
