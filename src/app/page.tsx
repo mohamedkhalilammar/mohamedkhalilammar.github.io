@@ -21,10 +21,10 @@ import { achievements, certifications, ctfWriteups, ctfIdentity, learningPath, p
 
 const navigationLinks = [
   { label: "About", href: "#about" },
-  { label: "Achievements", href: "#achievements" },
-  { label: "Certifications", href: "#certifications" },
   { label: "Projects", href: "#projects" },
-  { label: "CTF", href: "#ctf" },
+  { label: "Achievements", href: "#achievements" },
+  { label: "Writeups", href: "#writeups" },
+  { label: "Certifications", href: "#certifications" },
   { label: "Skills", href: "#skills" },
   { label: "Arcade", href: "/arcade" },
   { label: "Contact", href: "#contact" },
@@ -213,10 +213,6 @@ export default function Home() {
                       >
                         {[
                           {
-                            text: <>You won't lose your job to AI — you'll lose it to{" "}<span className="text-amber-400/90 not-italic font-medium">someone who uses AI.</span></>,
-                            cite: "Jensen Huang, NVIDIA",
-                          },
-                          {
                             text: <>AI is not a substitute for human intelligence — it's a{" "}<span className="text-amber-400/90 not-italic font-medium">tool to amplify it.</span></>,
                             cite: "Dr. Fei-Fei Li, Stanford",
                           },
@@ -268,83 +264,41 @@ export default function Home() {
             </SectionShell>
           </motion.div>
 
-          {/* ===== CTF ===== */}
-          <motion.div {...(reveal as any)} className="section-flow">
-            <SectionShell id="ctf" eyebrow="Community" title="CTF Challenges">
-              <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed">
-                I design and solve CTF challenges across reverse engineering, forensics, and exploitation.
-                Browse selected notes and challenge breakdowns.
-              </p>
-              <a
-                className="btn-secondary py-4 inline-block px-10 border-2 border-amber-500/40 hover:bg-amber-500/8 hover:border-amber-400 transition-all duration-300"
-                href="#writeups"
-              >
-                View All Writeups →
-              </a>
-            </SectionShell>
-          </motion.div>
-
           {/* ===== ACHIEVEMENTS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
             <SectionShell id="achievements" eyebrow="Milestones" title="Key Achievements">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
-
                 <AchievementPhotoStrip photos={ACHIEVEMENT_PHOTOS} />
-
-                {/* Photo stack (desktop) */}
                 <div className="lg:col-span-4 hidden lg:flex flex-col gap-10 mt-2">
                   {ACHIEVEMENT_PHOTOS.map((src, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, scale: 0.96 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true, amount: 0.08 }}
-                      transition={{ duration: 0.6, delay: idx * 0.04 }}
-                      className="relative w-full rounded-xl overflow-hidden border border-primary-500/25 shadow-[0_0_24px_rgba(var(--primary-rgb),0.1)] group aspect-video"
-                    >
+                    <motion.div key={idx} className="relative w-full rounded-xl overflow-hidden border border-primary-500/25 shadow-lg group aspect-video">
                       <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10 pointer-events-none" />
-                      <img
-                        src={src}
-                        alt={`Milestone ${idx + 1}`}
-                        className="w-full h-full object-cover object-center group-hover:scale-[1.04] transition-transform duration-700 ease-out brightness-105"
-                      />
+                      <img src={src} alt="Achievement" className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" />
                     </motion.div>
                   ))}
                 </div>
-
-                {/* Timeline */}
                 <div className="lg:col-span-8 relative border-l border-primary-500/25 ml-4 md:ml-8 pl-8 md:pl-12 space-y-10">
                   {achievements.map((achievement, idx) => (
-                    <motion.div
-                      key={achievement.title}
-                      className="relative group"
-                      initial={{ opacity: 0, x: -32 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true, amount: 0.08 }}
-                      transition={{ duration: 0.5, ease: "easeOut", delay: idx * 0.05 }}
-                    >
-                      {/* Node */}
-                      <div
-                        className="absolute w-3.5 h-3.5 rounded-full bg-black border-2 border-primary-500 -left-[2rem] md:-left-[3rem] top-2.5 group-hover:border-amber-400 transition-colors duration-300"
-                      />
-
-                      {/* Card */}
-                      <div className="bg-gradient-to-br from-primary-950/15 to-black/50 border border-primary-500/15 rounded-xl p-6 md:p-7 relative overflow-hidden backdrop-blur-sm group-hover:border-primary-500/45 transition-all duration-400">
-                        <span className="inline-block px-3 py-1 mb-4 text-[10px] font-mono font-bold uppercase tracking-[0.2em] text-black bg-primary-400 rounded-full">
-                          {achievement.highlight}
-                        </span>
-                        <h3 className="text-lg md:text-xl font-orbitron font-bold text-white mb-2.5 group-hover:text-primary-300 transition-colors leading-snug">
-                          {achievement.title}
-                        </h3>
-                        <p className="text-primary-100/65 font-mono text-sm leading-relaxed">
-                          {achievement.detail}
-                        </p>
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary-500/0 to-purple-500/0 group-hover:from-primary-500/4 group-hover:to-purple-500/4 transition-all duration-500 pointer-events-none rounded-xl" />
-                      </div>
-                    </motion.div>
+                    <div key={idx} className="relative group p-6 rounded-xl border border-white/5 bg-white/[0.02]">
+                      <div className="absolute w-3 h-3 rounded-full bg-amber-500 -left-[2.35rem] md:-left-[3.35rem] top-8" />
+                      <span className="text-[10px] font-mono text-amber-500 uppercase tracking-widest mb-4 block">{achievement.highlight}</span>
+                      <h3 className="text-xl font-bold text-white mb-2">{achievement.title}</h3>
+                      <p className="text-zinc-400 text-sm">{achievement.detail}</p>
+                    </div>
                   ))}
                 </div>
               </div>
+            </SectionShell>
+          </motion.div>
+
+          {/* ===== WRITEUPS ===== */}
+          <motion.div {...(reveal as any)} className="section-flow relative">
+            <SectionShell id="writeups" eyebrow="Knowledge" title="Writeups & Breakdowns">
+              <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-2xl">
+                I design and solve CTF challenges across reverse engineering, mobile security, and exploitation. 
+                Browse selected technical notes and systemic challenge breakdowns.
+              </p>
+              <WriteupGrid3D writeups={ctfWriteups} />
             </SectionShell>
           </motion.div>
 
@@ -461,17 +415,6 @@ export default function Home() {
                   </article>
                 ))}
               </div>
-            </SectionShell>
-          </motion.div>
-
-          {/* ===== WRITEUPS ===== */}
-          <motion.div {...(reveal as any)} className="section-flow relative">
-            <SectionShell id="writeups" eyebrow="Knowledge" title="Writeups &amp; Breakdowns">
-              <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-2xl">
-                Technical breakdowns of CTF challenges, vulnerability research, and exploitation paths —
-                reverse engineering, mobile security, and binary exploitation.
-              </p>
-              <WriteupGrid3D writeups={ctfWriteups} />
             </SectionShell>
           </motion.div>
 
@@ -592,6 +535,35 @@ export default function Home() {
                 </form>
               </div>
             </SectionShell>
+          </motion.div>
+
+          {/* ===== ARCADE CTA ===== */}
+          <motion.div {...(reveal as any)} className="section-flow relative overflow-hidden mb-32">
+             <div className="max-w-[1200px] mx-auto px-6">
+                <div className="bg-white/[0.02] border border-white/5 rounded-xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative group hover:bg-white/[0.04] transition-colors">
+                   <div className="relative z-10">
+                      <h2 className="text-4xl font-sans font-black text-white uppercase tracking-tighter mb-2 italic">
+                         TAKE A <span className="text-amber-500">BREAK</span>
+                      </h2>
+                      <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">
+                         Visit the arcade for a quick game.
+                      </p>
+                   </div>
+
+                   <div className="flex items-center gap-6">
+                      <div className="hidden sm:flex gap-3">
+                         {["🐍", "🏃", "💣"].map((icon, i) => (
+                           <div key={i} className="w-12 h-12 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-xl">
+                              {icon}
+                           </div>
+                         ))}
+                      </div>
+                      <Link href="/arcade" className="btn-primary py-3 px-8 text-xs">
+                         PLAY NOW →
+                      </Link>
+                   </div>
+                </div>
+             </div>
           </motion.div>
         </main>
 

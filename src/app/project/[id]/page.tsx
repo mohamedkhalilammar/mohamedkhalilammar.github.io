@@ -154,7 +154,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                     <p className="text-xl leading-relaxed text-zinc-300 font-medium max-w-4xl">{project.challenges}</p>
                   </>
                 )}
-
                 {project.impact && (
                   <>
                     <h2 className="font-sans text-2xl font-black uppercase tracking-tighter text-amber-500/80">Technical Outcome</h2>

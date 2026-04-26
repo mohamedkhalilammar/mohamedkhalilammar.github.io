@@ -12,44 +12,30 @@ export default function ArcadePage() {
   return (
     <MotionConfig reducedMotion="user">
       <ScatteredArtefacts />
-      <div className="page-shell min-h-screen flex flex-col">
+      <div className="page-shell min-h-screen flex flex-col bg-[#050608]">
         <div className="page-noise" aria-hidden />
 
-        {/* Global Navigation Header (Simplified for Arcade) */}
-        <header className="top-nav" style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(0,0,0,0.4)", backdropFilter: "blur(12px)" }}>
-          <div className="flex items-center justify-between w-full max-w-7xl mx-auto px-6">
-            <Link href="/" className="brand-mark group flex items-center gap-2">
-              <span className="text-amber-500 group-hover:-translate-x-1 transition-transform">←</span>
-              <span>{profile.name}</span>
+        {/* Cinematic Header */}
+        <header className="top-nav" style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(20px)", margin: 0, borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}>
+          <div className="flex items-center justify-between w-full max-w-[1700px] mx-auto px-8 py-3">
+            <Link href="/" className="brand-mark group flex items-center gap-3">
+              <span className="text-amber-500 group-hover:-translate-x-1 transition-transform font-bold">←</span>
+              <span className="font-orbitron font-black tracking-tighter text-xl text-white">KHALIL <span className="text-amber-500">AMMAR</span></span>
             </Link>
-
+            <div className="hidden md:flex gap-6 font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+              <span>System: Active</span>
+              <span>Status: Arcade Mode</span>
+              <span className="text-amber-500/60">Latency: 0.2ms</span>
+            </div>
           </div>
         </header>
 
-        <main className="flex-grow">
-          <div className="pt-20 pb-12 px-6">
-             {/* Introduction breadcrumb / title */}
-             <div className="max-w-7xl mx-auto mb-12">
-                <nav className="flex items-center gap-2 font-mono text-[10px] mb-4 opacity-50 uppercase tracking-widest">
-                  <Link href="/" className="hover:text-amber-500 transition-colors">Home</Link>
-                  <span className="text-zinc-700">/</span>
-                  <span className="text-amber-500">Arcade</span>
-                </nav>
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                  <div>
-                    <h1 className="font-sans text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-4 leading-none">
-                      The <span className="text-amber-500">Arcade</span>
-                    </h1>
-                    <p className="text-zinc-400 max-w-xl font-mono text-xs md:text-sm leading-relaxed">
-                      A collection of terminal-themed mini-games designed for high-refresh rates and quick technical breaks. No persistent high scores — only pure deterministic output.
-                    </p>
-                  </div>
-
-                </div>
-             </div>
-
+        <main className="flex-grow flex flex-col">
+          <div className="pt-4 pb-20 px-4 md:px-10 max-w-[1700px] mx-auto w-full flex-grow flex flex-col">
              {/* The actual games section */}
-             <MiniGamesSection />
+             <div className="flex-grow flex flex-col">
+                <MiniGamesSection />
+             </div>
           </div>
         </main>
 
