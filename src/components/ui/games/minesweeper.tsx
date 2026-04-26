@@ -1,12 +1,47 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const ROWS = 10, COLS = 10, MINES = 15;
+const ROWS = 20, COLS = 20, MINES = 60;
 
-type Cell = {
-  mine: boolean; revealed: boolean; flagged: boolean; count: number;
+// --- Audio Utility ---
+const playSound = (type: 'click' | 'flag' | 'boom' | 'win') => {
+  if (typeof window === 'undefined') return;
+  const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  const now = ctx.currentTime;
+
+  if (type === 'click') {
+    osc.type = 'sine'; osc.frequency.setValueAtTime(600, now);
+    gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+    osc.start(now); osc.stop(now + 0.05);
+  } else if (type === 'flag') {
+    osc.type = 'square'; osc.frequency.setValueAtTime(300, now);
+    gain.gain.setValueAtTime(0.05, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.1);
+    osc.start(now); osc.stop(now + 0.1);
+  } else if (type === 'boom') {
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(100, now);
+    osc.frequency.linearRampToValueAtTime(20, now + 0.6);
+    gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.0001, now + 0.6);
+    osc.start(now); osc.stop(now + 0.6);
+  } else if (type === 'win') {
+    const osc2 = ctx.createOscillator();
+    const g2 = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(440, now);
+    osc2.type = 'sine'; osc2.frequency.setValueAtTime(660, now);
+    gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+    osc2.connect(g2); g2.connect(ctx.destination);
+    g2.gain.setValueAtTime(0.1, now); g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+    osc.start(now); osc.stop(now + 0.5);
+    osc2.start(now); osc2.stop(now + 0.5);
+  }
 };
+
+type Cell = { mine: boolean; revealed: boolean; flagged: boolean; count: number; };
 type Grid = Cell[][];
 type Status = "idle" | "playing" | "won" | "dead";
 
@@ -22,11 +57,10 @@ function placeMines(grid: Grid, skipR: number, skipC: number): Grid {
   while (placed < MINES) {
     const r = Math.floor(Math.random() * ROWS);
     const c = Math.floor(Math.random() * COLS);
-    if (!g[r][c].mine && !(r === skipR && c === skipC)) {
+    if (!g[r][c].mine && !(Math.abs(r - skipR) <= 1 && Math.abs(c - skipC) <= 1)) {
       g[r][c].mine = true; placed++;
     }
   }
-  // counts
   for (let r = 0; r < ROWS; r++)
     for (let c = 0; c < COLS; c++)
       if (!g[r][c].mine) {
@@ -57,26 +91,31 @@ function flood(grid: Grid, r: number, c: number): Grid {
   return g;
 }
 
-const COUNT_COLORS = ["", "#60a5fa", "#34d399", "#f87171", "#818cf8", "#fb923c", "#22d3ee", "#f472b6", "#94a3b8"];
+const COUNT_COLORS = ["", "#60a5fa", "#34d399", "#f87171", "#818cf8", "#fb923c", "#22d3ee", "#f472b6", "#ffffff"];
 
 export function Minesweeper() {
   const [grid, setGrid] = useState<Grid>(makeGrid);
   const [status, setStatus] = useState<Status>("idle");
   const [firstClick, setFirstClick] = useState(true);
   const [flags, setFlags] = useState(MINES);
+  const [timer, setTimer] = useState(0);
+
+  useEffect(() => {
+    let t: any;
+    if (status === "playing") t = setInterval(() => setTimer(s => s + 1), 1000);
+    return () => clearInterval(t);
+  }, [status]);
 
   const reset = useCallback(() => {
     setGrid(makeGrid());
     setStatus("idle");
     setFirstClick(true);
     setFlags(MINES);
+    setTimer(0);
   }, []);
 
-  const checkWin = (g: Grid) => {
-    return g.every(row => row.every(cell => cell.mine ? !cell.revealed : cell.revealed));
-  };
-
   const reveal = useCallback((r: number, c: number) => {
+    if (status === "dead" || status === "won") return;
     setGrid(prev => {
       let g = prev.map(row => row.map(cell => ({ ...cell })));
       if (g[r][c].revealed || g[r][c].flagged) return prev;
@@ -88,95 +127,63 @@ export function Minesweeper() {
       }
 
       if (g[r][c].mine) {
-        // Reveal all mines
+        playSound('boom');
         g = g.map(row => row.map(cell => cell.mine ? { ...cell, revealed: true } : cell));
         setStatus("dead");
         return g;
       }
 
+      playSound('click');
       g = flood(g, r, c);
-      if (checkWin(g)) setStatus("won");
+      if (g.every(row => row.every(cell => cell.mine ? !cell.revealed : cell.revealed))) {
+        playSound('win');
+        setStatus("won");
+      }
       return g;
     });
-  }, [firstClick]);
+  }, [firstClick, status]);
 
   const flag = useCallback((e: React.MouseEvent, r: number, c: number) => {
     e.preventDefault();
+    if (status === "dead" || status === "won") return;
     setGrid(prev => {
       const g = prev.map(row => row.map(cell => ({ ...cell })));
       if (g[r][c].revealed) return prev;
-      if (!g[r][c].flagged && flags === 0) return prev;
       const wasFlagged = g[r][c].flagged;
+      if (!wasFlagged && flags === 0) return prev;
+      playSound('flag');
       g[r][c].flagged = !wasFlagged;
       setFlags(f => wasFlagged ? f + 1 : f - 1);
       return g;
     });
-  }, [flags]);
+  }, [flags, status]);
 
   return (
-    <div className="game-panel">
-      <div className="game-hud" style={{ justifyContent: "space-between" }}>
-        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 16 }}>🚩</span>
-          <span className="game-score">{flags}</span>
-        </span>
-        <span className="game-label" style={{ fontSize: "0.65rem" }}>
-          {status === "won" ? "✓ CLEARED" : status === "dead" ? "✗ DETONATED" : "MINESWEEPER"}
-        </span>
-        <button
-          onClick={reset}
-          style={{
-            fontFamily: "monospace", fontSize: "0.65rem", textTransform: "uppercase",
-            letterSpacing: "0.1em", color: "rgba(245,158,11,0.7)", background: "none",
-            border: "1px solid rgba(245,158,11,0.2)", borderRadius: 4, padding: "2px 8px", cursor: "pointer"
-          }}
-        >
-          RESET
-        </button>
+    <div className="flex flex-col gap-6 w-full max-w-[900px] select-none">
+      <div className="flex justify-between items-center bg-black/40 border border-white/5 p-6 rounded-lg backdrop-blur-md">
+        <div className="flex flex-col"><span className="text-[10px] font-mono text-amber-500/50 uppercase tracking-[0.2em]">MINES</span><span className="text-3xl font-black text-amber-500 font-mono">{flags}</span></div>
+        <button onClick={reset} className="w-12 h-12 rounded-full border border-amber-500/30 flex items-center justify-center text-2xl">{status === "dead" ? "💀" : status === "won" ? "😎" : "🙂"}</button>
+        <div className="flex flex-col items-end"><span className="text-[10px] font-mono text-amber-500/50 uppercase tracking-[0.2em]">TIME</span><span className="text-3xl font-black text-white/60 font-mono">{timer}s</span></div>
       </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${COLS}, 1fr)`, gap: 2, userSelect: "none" }}>
-        {grid.map((row, r) =>
-          row.map((cell, c) => {
-            let bg = "rgba(245,158,11,0.06)";
-            let border = "1px solid rgba(245,158,11,0.12)";
-            let cursor = "pointer";
-            if (cell.revealed) {
-              bg = cell.mine ? "rgba(239,68,68,0.25)" : "rgba(0,0,0,0.4)";
-              border = "1px solid rgba(245,158,11,0.06)";
-              cursor = "default";
-            }
-            return (
-              <div
-                key={`${r}-${c}`}
-                onClick={() => !cell.revealed && status !== "dead" && status !== "won" && reveal(r, c)}
-                onContextMenu={e => status !== "dead" && status !== "won" && flag(e, r, c)}
-                style={{
-                  width: "100%", aspectRatio: "1", background: bg, border,
-                  borderRadius: 3, display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.65rem", fontWeight: 700, fontFamily: "monospace",
-                  cursor, transition: "background 0.1s",
-                  color: cell.revealed && !cell.mine && cell.count > 0 ? COUNT_COLORS[cell.count] : "transparent",
-                }}
-              >
-                {cell.revealed
-                  ? cell.mine ? "💣" : cell.count > 0 ? cell.count : ""
-                  : cell.flagged ? "🚩" : ""}
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      {(status === "won" || status === "dead") && (
-        <div style={{ textAlign: "center", marginTop: 12 }}>
-          <p style={{ fontFamily: "monospace", fontSize: "0.75rem", color: status === "won" ? "#34d399" : "#f87171", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.1em" }}>
-            {status === "won" ? "Field Cleared!" : "Mine Detonated!"}
-          </p>
-          <button className="game-btn" onClick={reset}>PLAY AGAIN</button>
+      <div className="relative">
+        <div className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-1 bg-white/5 p-1 rounded-lg border border-white/10 shadow-2xl">
+            {grid.map((row, r) => row.map((cell, c) => (
+                <div key={`${r}-${c}`} onClick={() => reveal(r, c)} onContextMenu={e => flag(e, r, c)}
+                    className={`aspect-square flex items-center justify-center text-sm font-black transition-all duration-75 ${cell.revealed ? (cell.mine ? "bg-red-500/40" : "bg-black/40") : "bg-zinc-800 hover:bg-zinc-700 cursor-pointer border border-white/5"}`}
+                    style={{ color: cell.revealed && !cell.mine && cell.count > 0 ? COUNT_COLORS[cell.count] : "transparent" }}>
+                    {cell.revealed ? (cell.mine ? "💣" : cell.count > 0 ? cell.count : "") : (cell.flagged ? "🚩" : "")}
+                </div>
+            )))}
         </div>
-      )}
-      <div className="game-controls-hint">Left click reveal · Right click flag</div>
+        <AnimatePresence>
+            {(status === "won" || status === "dead") && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-black/60 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 rounded-lg z-30">
+                    <h2 className={`text-5xl font-black uppercase tracking-tighter mb-4 italic ${status === "won" ? "text-green-500" : "text-red-500"}`}>{status === "won" ? "Complete" : "Failed"}</h2>
+                    <button onClick={reset} className="btn-primary px-10 py-4">Restart</button>
+                </motion.div>
+            )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
