@@ -55,7 +55,7 @@ export function ParallaxPhotoColumn({ scrollYProgress }: Props) {
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
           <img
-            src="/media/test.jpg"
+            src="/media/test.jpeg"
             alt="Khalil Ammar"
             className="w-full h-auto object-cover rounded-3xl border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)] transition-all duration-500"
           />
