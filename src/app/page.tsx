@@ -158,7 +158,7 @@ export default function Home() {
                   </div>
 
                   {/* Role rotator */}
-                  <h2 className="text-lg md:text-xl font-mono text-zinc-400 mb-10 uppercase tracking-[0.2em] border-b border-amber-500/15 pb-4 inline-flex items-center gap-3 min-h-[1.5em]">
+                  <h2 className="text-lg md:text-xl font-mono text-zinc-400 mb-10 uppercase tracking-[0.2em] pb-4 inline-flex items-center gap-3 min-h-[1.5em]">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
                     <AnimatePresence mode="wait">
                       <motion.span
@@ -217,7 +217,7 @@ export default function Home() {
                             cite: "Dr. Fei-Fei Li, Stanford",
                           },
                         ].map(({ text, cite }, i) => (
-                          <blockquote key={i} className="group pl-4 border-l border-amber-500/20 hover:border-amber-500/50 transition-colors duration-500">
+                          <blockquote key={i} className="group pl-4 transition-colors duration-500">
                             <p className="text-[13px] text-zinc-400 italic leading-relaxed group-hover:text-zinc-300 transition-colors duration-400">
                               "{text}"
                             </p>

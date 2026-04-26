@@ -50,8 +50,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
   return (
     <div className="page-shell bg-[#050505] min-h-screen">
-      {/* Cinematic Sidebar Indicator */}
-      <div className="fixed left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-amber-500/0 via-amber-500/20 to-amber-500/0 z-50" />
+      {/* Simplified Space */}
+      <div className="fixed left-0 top-0 bottom-0 w-[1px] bg-white/[0.03] z-50" />
 
       <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md border-b border-white/[0.03] px-6 py-4 flex justify-between items-center bg-black/20">
         <Link href="/#projects" className="group flex items-center gap-3 px-4 py-2 rounded-full border border-white/5 bg-white/[0.02] hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
@@ -77,7 +77,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
           <div className="flex flex-col gap-6">
             <div className="flex items-center gap-4">
-              <div className="px-3 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-[10px] font-mono font-bold text-amber-500 uppercase tracking-[0.3em]">
+              <div className="px-3 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-mono font-bold text-amber-500 uppercase tracking-[0.3em]">
                 Project Overview
               </div>
               <div className="h-px w-24 bg-white/10" />
