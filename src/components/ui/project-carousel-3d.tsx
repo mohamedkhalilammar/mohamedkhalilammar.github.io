@@ -14,7 +14,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
   const slug = current.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
 
   return (
-    <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-[color:var(--line-strong)]" style={{ minHeight: "750px", background: "rgba(var(--primary-rgb), 0.03)" }}>
+    <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-[color:var(--line-strong)]" style={{ minHeight: "750px", background: "rgba(255, 255, 255, 0.05)" }}>
       {/* ── SUBTLE BACKGROUND ── */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(var(--primary-rgb),0.12), transparent 50%, rgba(var(--primary-rgb),0.06))" }} />

@@ -49,7 +49,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
   }
 
   return (
-    <div className="page-shell bg-[#050505] min-h-screen">
+    <div className="page-shell bg-[#0d0d0d] min-h-screen">
       {/* Simplified Space */}
       <div className="fixed left-0 top-0 bottom-0 w-[1px] bg-white/[0.03] z-50" />
 
