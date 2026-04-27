@@ -6,6 +6,7 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 const commands = [
   { cmd: "whoami --profile", out: "Name: Khalil Ammar\nAge: 21\nRole: Offensive Security Engineer\nEducation: INSAT ICT 3rd-Year" },
   { cmd: "cat /etc/skills.conf", out: "[ok] Malware Analysis & Reverse Engineering\n[ok] Mobile Pentesting & Hardening Defeat\n[info] SOC & Threat Hunting Protocols Active" },
+  { cmd: "cat labs/ai_workflows.md", out: "In parallel, I’ve been diving deeper into the effective use of AI—focusing on prompt engineering, workflow optimization, and the integration of tools such as MCP servers—to better understand how to systematically leverage AI as a practical, reliable component within technical and security-focused workflows." },
   { cmd: "tail -f /var/log/syslog --lines=2", out: "Establishing secure reverse shell...\nAwaiting incoming challenges..." }
 ];
 

@@ -771,12 +771,16 @@ a:hover {
 }
 
 .hero-terminal {
-  border: 1px solid rgba(126, 184, 164, 0.18);
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(28px) saturate(1.8);
+  border: 1px solid rgba(129, 140, 248, 0.25);
   border-radius: var(--radius-xl);
-  height: 550px;
+  height: 580px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 60px -20px rgba(126, 184, 164, 0.12), inset 0 0 20px rgba(126, 184, 164, 0.03);
+  box-shadow: 
+    0 40px 100px -20px rgba(0, 0, 0, 0.5),
+    inset 0 0 40px rgba(129, 140, 248, 0.05);
   overflow: hidden;
   position: relative;
 }
@@ -790,11 +794,11 @@ a:hover {
 }
 
 .terminal-chrome {
-  background: rgba(8, 12, 16, 0.92);
-  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1.2rem 1.8rem;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid rgba(126, 184, 164, 0.14);
+  border-bottom: 1px solid rgba(129, 140, 248, 0.15);
   position: relative;
   z-index: 10;
 }
