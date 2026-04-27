@@ -453,7 +453,7 @@ export default function Home() {
                         </svg>
                       ),
                       label: "GitHub",
-                      value: "View Repositories",
+                      value: "View Source Code",
                     },
                   ].map((contact, idx) => (
                     <a

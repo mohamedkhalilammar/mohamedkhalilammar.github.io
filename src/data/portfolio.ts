@@ -83,7 +83,7 @@ export const profile = {
   },
   socials: {
     github: "https://github.com/khalilammarr",
-    linkedin: "https://engineerignlinkedin.com/in/khalilammarr",
+    linkedin: "https://www.linkedin.com/in/khalil-ammar-00665a334/",
     email: "mohamedkhalil.ammr@insat.ucar.tn"
   }
 };
