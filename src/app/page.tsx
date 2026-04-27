@@ -174,7 +174,7 @@ export default function Home() {
                     initial={{ opacity: 0, scale: 0.985 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.9, delay: 0.25 }}
-                    className="w-full mb-12 rounded-2xl overflow-hidden bg-[#08080a]/90 backdrop-blur-2xl border border-white/[0.07] shadow-[0_0_60px_rgba(0,0,0,0.6),inset_0_1px_0_rgba(255,255,255,0.04)]"
+                    className="w-full mb-12 rounded-2xl overflow-hidden bg-[#08080a]/40 backdrop-blur-2xl border border-white/[0.12] shadow-[0_0_80px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]"
                   >
                     {/* Traffic lights */}
                     <div className="flex items-center gap-2 px-5 py-3.5 bg-white/[0.02] border-b border-white/[0.04]">

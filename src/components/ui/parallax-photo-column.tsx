@@ -26,17 +26,32 @@ interface Props {
 
 export function ParallaxPhotoColumn({ scrollYProgress }: Props) {
   // Each photo moves at a different rate — creates depth
-  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "-18%"]); // back photo moves less
-  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "-28%"]); // front photo moves more
+  const y1 = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]); 
+  const y2 = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]); 
+  const y3 = useTransform(scrollYProgress, [0, 1], ["0%", "-45%"]); 
 
   return (
     <div className="w-full flex justify-center lg:justify-end css-stagger-item relative">
       <div className="relative w-full max-w-[550px] aspect-[4/5] md:aspect-square">
 
-        {/* Duo Photo — back layer, slower parallax */}
+        {/* Back Photo */}
         <motion.div
-          className="absolute top-0 left-0 w-[75%] md:w-[70%] cursor-pointer"
+          className="absolute top-[-10%] left-[-10%] w-[65%] cursor-pointer"
           style={{ zIndex: 0, y: y1 }}
+          whileHover={{ zIndex: 50, scale: 1.05 }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <img
+            src="/media/winners.jpeg"
+            alt="Achievement"
+            className="w-full h-auto object-cover rounded-3xl border border-white/5 shadow-2xl opacity-60 hover:opacity-100 transition-all duration-500"
+          />
+        </motion.div>
+
+        {/* Middle Photo */}
+        <motion.div
+          className="absolute top-[10%] left-[5%] w-[70%] cursor-pointer"
+          style={{ zIndex: 10, y: y2 }}
           whileHover={{ zIndex: 50, scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
@@ -47,17 +62,17 @@ export function ParallaxPhotoColumn({ scrollYProgress }: Props) {
           />
         </motion.div>
 
-        {/* Portrait Photo — front layer, faster parallax */}
+        {/* Front Photo */}
         <motion.div
-          className="absolute bottom-0 right-0 w-[75%] md:w-[70%] cursor-pointer"
-          style={{ zIndex: 10, y: y2 }}
+          className="absolute bottom-[-5%] right-[-5%] w-[75%] cursor-pointer"
+          style={{ zIndex: 20, y: y3 }}
           whileHover={{ zIndex: 50, scale: 1.05 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
         >
           <img
             src="/media/photo.jpg"
             alt="Khalil Ammar"
-            className="w-full h-auto object-cover rounded-3xl border border-white/10 shadow-[0_30px_60px_rgba(0,0,0,0.8)] transition-all duration-500"
+            className="w-full h-auto object-cover rounded-3xl border border-white/15 shadow-[0_40px_80px_rgba(0,0,0,0.9)] transition-all duration-500"
           />
         </motion.div>
 

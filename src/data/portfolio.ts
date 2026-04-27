@@ -76,7 +76,7 @@ export const profile = {
   subheadline:
     "Engineering Student specializing in Networks and Telecommunications at INSAT.",
   about:
-    "I’m an engineering student at INSAT specializing in Networks and Telecommunications, with a strong interest in cybersecurity. I enjoy exploring how systems work at a low level, especially through reverse engineering, binary analysis, and Android application reversing.\n\nOutside of my studies, I regularly take part in CTF competitions, work on personal projects, and occasionally create challenges of my own. These experiences have helped me develop practical skills in areas like Android security, exploitation, and debugging.\n\nI’m currently working on improving my skills in system and web penetration testing through hands-on labs on dedicated learning platforms. My goal is to build a solid understanding of systems and security, and to create tools and solutions that are both useful and reliable.",
+    "I’m an engineering student at INSAT specializing in Networks and Telecommunications, with a strong interest in cybersecurity. I enjoy exploring how systems work at a low level, especially through reverse engineering, binary analysis, and Android application reversing.\n\nOutside of my studies, I regularly take part in CTF competitions, work on personal projects, and occasionally create challenges of my own. These experiences have helped me develop practical skills in areas like Android security, exploitation, and debugging.\n\nI’m currently working on improving my skills in system and web penetration testing through hands-on labs on dedicated learning platforms. My goal is to build a solid understanding of systems and security, and to create tools and solutions that are both useful and reliable.\n\nIn parallel, I’ve been diving deeper into the effective use of AI—focusing on prompt engineering, workflow optimization, and the integration of tools such as MCP servers—to better understand how to systematically leverage AI as a practical, reliable component within technical and security-focused workflows. I am currently exploring the intersection of AI agents and offensive security automation.",
   cta: {
     primary: "Explore Projects",
     secondary: "Contact",
@@ -200,11 +200,13 @@ export const projects: Project[] = [
     impact: "A deployable IoT automation blueprint integrating embedded systems with modern web backends for reliable agricultural monitoring.",
     screenshots: [
       "/media/schema_wokwi.png",
-      "/media/web_dashboard.png"
+      "/media/web_dashboard.png",
+      "/media/greenhouse_final.png"
     ],
     screenshotCaptions: [
       "Wokwi circuit simulation and logical wiring.",
-      "Web dashboard for real-time telemetry and control."
+      "Web dashboard for real-time telemetry and control.",
+      "Final hardware deployment in the greenhouse."
     ]
   },
   {
