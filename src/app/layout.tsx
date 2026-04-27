@@ -39,6 +39,17 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${bricolage.variable} ${karla.variable} ${azeret.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                window.location.replace('https://' + window.location.hostname + window.location.pathname + window.location.search);
+              }
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-body">{children}</body>
     </html>
   );
