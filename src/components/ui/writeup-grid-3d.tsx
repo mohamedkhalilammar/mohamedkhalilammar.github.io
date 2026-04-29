@@ -37,7 +37,7 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
           </div>
         )}
 
-        <div className="p-7 flex flex-col flex-1 relative z-20">
+        <div className="p-5 flex flex-col flex-1 relative z-20">
           <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
             <span className="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-background bg-primary px-3 py-1 rounded shadow-sm">
               {writeup.category}
@@ -47,7 +47,7 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
             </span>
           </div>
 
-          <h3 className="font-sans text-xl font-bold text-foreground uppercase tracking-tight leading-snug mb-3 drop-shadow-sm group-hover:text-primary-300 transition-colors">
+          <h3 className="font-sans text-lg font-bold text-foreground uppercase tracking-tight leading-snug mb-3 drop-shadow-sm group-hover:text-primary-300 transition-colors">
             {writeup.title}
           </h3>
 
@@ -70,7 +70,7 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
 
 export function WriteupGrid3D({ writeups }: { writeups: Writeup[] }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10 mb-4 w-full">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 mb-4 w-full">
       {writeups.map((writeup, i) => (
         <WriteupCard key={writeup.id} writeup={writeup} index={i} />
       ))}

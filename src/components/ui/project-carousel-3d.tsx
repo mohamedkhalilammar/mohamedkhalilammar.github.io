@@ -14,7 +14,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
   const slug = current.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
 
   return (
-    <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-[color:var(--line-strong)]" style={{ minHeight: "750px", background: "rgba(255, 255, 255, 0.05)" }}>
+    <div className="relative w-full rounded-[2rem] overflow-hidden border border-[color:var(--line-strong)]" style={{ minHeight: "600px", background: "rgba(255, 255, 255, 0.05)" }}>
       {/* ── SUBTLE BACKGROUND ── */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(var(--primary-rgb),0.12), transparent 50%, rgba(var(--primary-rgb),0.06))" }} />
@@ -28,15 +28,15 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
       </div>
 
       {/* ── CONTENT ── */}
-      <div className="relative z-10 flex flex-col h-full p-10 md:p-16 lg:p-24" style={{ minHeight: "750px" }}>
+      <div className="relative z-10 flex flex-col h-full p-8 md:p-10 lg:p-12" style={{ minHeight: "600px" }}>
 
         {/* Header */}
-        <div className="flex items-center gap-6 mb-12">
-          <span className="font-mono text-[12px] uppercase tracking-[0.5em] text-amber-500 font-bold">
+        <div className="flex items-center gap-6 mb-8">
+          <span className="font-mono text-[10px] uppercase tracking-[0.4em] text-amber-500 font-bold">
             Project Architectures
           </span>
           <div className="flex-1 h-px bg-white/10" />
-          <span className="font-mono text-xs tracking-widest text-white/30">
+          <span className="font-mono text-[10px] tracking-widest text-white/30">
             PROJECT: {String(currentIdx + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
           </span>
         </div>
@@ -70,7 +70,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                 </div>
 
                 {/* Name */}
-                <h2 className="font-sans text-5xl md:text-7xl lg:text-8xl font-black uppercase leading-[0.85] tracking-tighter mb-10 text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                <h2 className="font-sans text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-[0.9] tracking-tighter mb-8 text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                   {current.name.split(" ").map((word, i) => (
                     <span key={i} className={i % 2 !== 0 ? "text-amber-500" : ""}>
                       {word}{" "}
@@ -163,11 +163,11 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
           <div className="flex items-center gap-6 w-full md:w-auto">
             <div className="flex gap-2">
               <button onClick={() => setCurrentIdx((p) => (p - 1 + projects.length) % projects.length)}
-                className="w-16 h-16 rounded-2xl border border-white/10 flex items-center justify-center text-xl text-white/50 hover:text-white hover:bg-white/5 transition-all active:scale-90">
+                className="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center text-lg text-white/50 hover:text-white hover:bg-white/5 transition-all active:scale-90">
                 ←
               </button>
               <button onClick={() => setCurrentIdx((p) => (p + 1) % projects.length)}
-                className="w-16 h-16 rounded-2xl border border-white/10 flex items-center justify-center text-xl text-white/50 hover:text-white hover:bg-white/5 transition-all active:scale-90">
+                className="w-12 h-12 rounded-xl border border-white/10 flex items-center justify-center text-lg text-white/50 hover:text-white hover:bg-white/5 transition-all active:scale-90">
                 →
               </button>
             </div>

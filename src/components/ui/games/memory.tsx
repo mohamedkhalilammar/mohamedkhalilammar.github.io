@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SYMBOLS = ["⚡", "🔥", "💀", "👾", "🛸", "🔮", "💎", "🎯", "🧬", "🌀"];
 
@@ -32,7 +33,6 @@ export function MemoryGame() {
   const [bestMoves, setBestMoves] = useState<number | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Use refs to avoid stale closures
   const cardsRef = useRef<Card[]>([]);
   const flippedRef = useRef<number[]>([]);
   const aiMemoryRef = useRef<AIMemory>(new Map());
@@ -48,7 +48,6 @@ export function MemoryGame() {
     setCards(updated);
   };
 
-  // ── AI Turn ───────────────────────────────────────────────
   const doAiTurn = useCallback(() => {
     const current = cardsRef.current;
     const unmatched = current.filter(c => !c.matched);
@@ -57,7 +56,6 @@ export function MemoryGame() {
     const aiMem = aiMemoryRef.current;
     let pick1 = -1, pick2 = -1;
 
-    // Find a known matching pair
     for (const [sym, ids] of aiMem.entries()) {
       const avail = ids.filter(id => {
         const c = current.find(cc => cc.id === id);
@@ -70,7 +68,6 @@ export function MemoryGame() {
       }
     }
 
-    // Otherwise pick two random unseen cards
     if (pick1 === -1) {
       const unseenCards = unmatched.filter(c => {
         const seen = aiMem.get(c.symbol) || [];
@@ -81,17 +78,14 @@ export function MemoryGame() {
         const idx = Math.floor(Math.random() * unseenCards.length);
         pick1 = unseenCards[idx].id;
         const sym1 = unseenCards[idx].symbol;
-        // Learn card 1
         const m1 = aiMem.get(sym1) || [];
         if (!m1.includes(pick1)) aiMem.set(sym1, [...m1, pick1]);
 
-        // Check if we now know the partner
         const knownSym = aiMem.get(sym1) || [];
         const partner = knownSym.find(id => id !== pick1 && !current.find(c => c.id === id)?.matched);
         if (partner !== undefined) {
           pick2 = partner;
         } else {
-          // Pick another unseen
           const remaining = unseenCards.filter(c => c.id !== pick1);
           if (remaining.length > 0) {
             const ri = Math.floor(Math.random() * remaining.length);
@@ -105,7 +99,6 @@ export function MemoryGame() {
           }
         }
       } else {
-        // All seen; pick any two unmatched
         pick1 = unmatched[0].id;
         pick2 = unmatched[1].id;
       }
@@ -116,21 +109,17 @@ export function MemoryGame() {
       return;
     }
 
-    // Animate: flip card 1
     timerRef.current = setTimeout(() => {
       syncCards(cardsRef.current.map(c => c.id === pick1 ? { ...c, flipped: true } : c));
 
-      // Animate: flip card 2
       timerRef.current = setTimeout(() => {
         syncCards(cardsRef.current.map(c => c.id === pick2 ? { ...c, flipped: true } : c));
 
-        // Evaluate
         timerRef.current = setTimeout(() => {
           const c1 = cardsRef.current.find(c => c.id === pick1)!;
           const c2 = cardsRef.current.find(c => c.id === pick2)!;
 
           if (c1.symbol === c2.symbol) {
-            // Match!
             syncCards(cardsRef.current.map(c =>
               c.id === pick1 || c.id === pick2 ? { ...c, matched: true, matchedBy: "ai", flipped: false } : c
             ));
@@ -159,7 +148,6 @@ export function MemoryGame() {
     }, 850);
   }, [totalPairs]);
 
-  // ── Player Flip ───────────────────────────────────────────
   const flip = useCallback((id: number) => {
     if (locked || isAiTurn || statusRef.current !== "playing") return;
     if (flippedRef.current.length >= 2) return;
@@ -167,7 +155,6 @@ export function MemoryGame() {
     const card = cardsRef.current.find(c => c.id === id);
     if (!card || card.flipped || card.matched) return;
 
-    // Teach AI about this card
     const m = aiMemoryRef.current.get(card.symbol) || [];
     if (!m.includes(id)) aiMemoryRef.current.set(card.symbol, [...m, id]);
 
@@ -243,126 +230,93 @@ export function MemoryGame() {
 
   useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
 
-  const winner = playerScore > aiScore ? "YOU WIN! 🏆" : playerScore === aiScore ? "DRAW! 🤝" : "AI WINS 🤖";
+  const winner = playerScore > aiScore ? "YOU WIN!" : playerScore === aiScore ? "DRAW!" : "AI WINS";
   const winColor = playerScore > aiScore ? "#34d399" : playerScore === aiScore ? "#f59e0b" : "#f87171";
 
   return (
-    <div className="game-panel">
-      <div className="game-hud" style={{ justifyContent: "space-between" }}>
-        <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-          <span className="game-label" style={{ fontSize: "0.55rem" }}>YOU</span>
-          <span className="game-score" style={{ color: "#f59e0b", fontSize: "1.4rem", lineHeight: 1 }}>{playerScore}</span>
-        </span>
-        <div style={{ textAlign: "center" }}>
-          <span className="game-label" style={{ fontSize: "0.58rem", display: "block", letterSpacing: "0.12em" }}>
-            {isAiTurn ? "🤖 AI THINKING…" : status === "playing" ? `MOVE ${moves}` : "MEMORY"}
-          </span>
-          {bestMoves && <span style={{ fontFamily: "monospace", fontSize: "0.52rem", color: "#a78bfa" }}>BEST {bestMoves} moves</span>}
+    <div className="w-full max-w-[650px] mx-auto">
+      <div className="relative">
+        <div className="absolute -top-12 left-0 right-0 z-40 pointer-events-none flex justify-between items-end px-2">
+           <div className="flex flex-col">
+              <span className="text-[9px] font-mono text-amber-500/30 uppercase font-bold tracking-widest">PLAYER</span>
+              <span className="text-2xl font-black text-amber-500/80 font-mono tracking-tighter">{playerScore}</span>
+           </div>
+           <div className="flex flex-col items-center">
+              <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-[0.2em] mb-1">
+                {isAiTurn ? "AI MOVING" : status === "playing" ? `MOVE: ${moves}` : "MEMORY"}
+              </span>
+           </div>
+           <div className="flex flex-col items-end">
+              <span className="text-[9px] font-mono text-red-500/30 uppercase font-bold tracking-widest">AI</span>
+              <span className="text-2xl font-black text-red-500/80 font-mono tracking-tighter">{aiScore}</span>
+           </div>
         </div>
-        <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
-          <span className="game-label" style={{ fontSize: "0.55rem" }}>AI 🤖</span>
-          <span className="game-score" style={{ color: "#f87171", fontSize: "1.4rem", lineHeight: 1 }}>{aiScore}</span>
-        </span>
-      </div>
 
-      {status === "idle" ? (
-        <div style={{ height: 320, display: "flex", flexDirection: "column", alignItems: "center",
-          justifyContent: "center", gap: 16, background: "rgba(0,0,0,0.3)", borderRadius: 10,
-          border: "1px solid rgba(245,158,11,0.1)" }}>
-          <div style={{ textAlign: "center", fontFamily: "monospace", fontSize: "0.78rem",
-            color: "rgba(245,158,11,0.6)", textTransform: "uppercase", lineHeight: 2, letterSpacing: "0.1em" }}>
-            10 pairs · 20 cards<br />
-            <span style={{ fontSize: "0.65rem", color: "rgba(245,158,11,0.35)" }}>
-              AI learns every card you flip
-            </span>
-          </div>
-          <button className="game-btn" onClick={init}>PLAY VS AI</button>
-        </div>
-      ) : (
-        <>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 5, marginTop: 4 }}>
-            {cards.map(card => {
-              const isVisible = card.flipped || card.matched;
-              return (
-                <div
-                  key={card.id}
-                  onClick={() => flip(card.id)}
-                  style={{
-                    aspectRatio: "1",
-                    cursor: isVisible || isAiTurn || locked ? "default" : "pointer",
-                    perspective: "800px",
-                    userSelect: "none",
-                  }}
-                >
-                  <div style={{
-                    width: "100%", height: "100%", position: "relative",
-                    transformStyle: "preserve-3d",
-                    transform: isVisible ? "rotateY(180deg)" : "rotateY(0deg)",
-                    transition: "transform 0.38s cubic-bezier(0.16,1,0.3,1)",
-                  }}>
-                    {/* Back face */}
-                    <div style={{
-                      position: "absolute", inset: 0, backfaceVisibility: "hidden",
-                      background: "linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03))",
-                      border: "1px solid rgba(245,158,11,0.14)",
-                      borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                    }}>
-                      <span style={{ fontSize: "0.75rem", opacity: 0.18, color: "#f59e0b", fontFamily: "monospace", fontWeight: 800 }}>?</span>
-                    </div>
-                    {/* Front face */}
-                    <div style={{
-                      position: "absolute", inset: 0, backfaceVisibility: "hidden",
-                      transform: "rotateY(180deg)",
-                      background: card.matched
-                        ? card.matchedBy === "player"
-                          ? "linear-gradient(135deg, rgba(52,211,153,0.18), rgba(52,211,153,0.06))"
-                          : "linear-gradient(135deg, rgba(248,113,113,0.18), rgba(248,113,113,0.06))"
-                        : "linear-gradient(135deg, rgba(245,158,11,0.14), rgba(245,158,11,0.05))",
-                      border: `1px solid ${card.matched
-                        ? card.matchedBy === "player" ? "rgba(52,211,153,0.55)" : "rgba(248,113,113,0.55)"
-                        : "rgba(245,158,11,0.45)"}`,
-                      borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column",
-                      boxShadow: card.matched
-                        ? card.matchedBy === "player" ? "0 0 12px rgba(52,211,153,0.25)" : "0 0 12px rgba(248,113,113,0.25)"
-                        : "none",
-                    }}>
-                      <span style={{ fontSize: "1.1rem" }}>{card.symbol}</span>
-                      {card.matched && (
-                        <span style={{
-                          fontSize: "0.38rem", fontFamily: "monospace", fontWeight: 800,
-                          color: card.matchedBy === "player" ? "rgba(52,211,153,0.9)" : "rgba(248,113,113,0.9)",
-                          textTransform: "uppercase", letterSpacing: "0.1em",
-                        }}>
-                          {card.matchedBy === "player" ? "YOU" : "AI"}
-                        </span>
-                      )}
+        <div className="relative p-1 rounded-xl bg-white/[0.02] border border-white/5 shadow-2xl">
+          <div className="grid grid-cols-5 gap-3">
+            {cards.length === 0 ? (
+              <div className="col-span-5 h-[350px] flex items-center justify-center">
+                 <button className="btn-primary !py-3 !px-12 !text-xs" onClick={init}>START GAME</button>
+              </div>
+            ) : (
+              cards.map(card => {
+                const isVisible = card.flipped || card.matched;
+                return (
+                  <div
+                    key={card.id}
+                    onClick={() => flip(card.id)}
+                    className="aspect-square relative"
+                    style={{ perspective: "1000px" }}
+                  >
+                    <div 
+                      className="w-full h-full relative transition-transform duration-500" 
+                      style={{ 
+                        transformStyle: "preserve-3d",
+                        transform: isVisible ? "rotateY(180deg)" : "rotateY(0deg)",
+                        cursor: isVisible || isAiTurn || locked ? "default" : "pointer" 
+                      }}
+                    >
+                      <div className="absolute inset-0 backface-hidden bg-white/[0.03] border border-white/5 rounded-lg flex items-center justify-center">
+                        <span className="text-zinc-700 font-mono text-xs opacity-50">?</span>
+                      </div>
+                      <div 
+                        className={`absolute inset-0 backface-hidden bg-white/[0.08] border rounded-lg flex flex-col items-center justify-center`}
+                        style={{ 
+                          transform: "rotateY(180deg)",
+                          borderColor: card.matched 
+                            ? card.matchedBy === "player" ? "rgba(52,211,153,0.3)" : "rgba(239,68,68,0.3)"
+                            : "rgba(245,158,11,0.2)"
+                        }}
+                      >
+                        <span className="text-2xl">{card.symbol}</span>
+                        {card.matched && (
+                          <span className={`text-[7px] font-mono font-black mt-1 uppercase ${card.matchedBy === "player" ? "text-green-500/80" : "text-red-500/80"}`}>
+                            {card.matchedBy === "player" ? "YOU" : "AI"}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
 
-          {status === "won" && (
-            <div style={{ textAlign: "center", marginTop: 14, padding: "1rem 1.5rem",
-              background: "rgba(0,0,0,0.5)", borderRadius: 8,
-              border: `1px solid ${winColor}44` }}>
-              <p style={{ fontFamily: "monospace", fontSize: "1rem", fontWeight: 900,
-                color: winColor, textTransform: "uppercase", letterSpacing: "0.2em", marginBottom: 4 }}>
-                {winner}
-              </p>
-              <p style={{ fontFamily: "monospace", fontSize: "0.65rem", color: "rgba(245,158,11,0.45)",
-                marginBottom: 12, textTransform: "uppercase" }}>
-                {playerScore} — {aiScore} · {moves} moves
-              </p>
-              <button className="game-btn" onClick={init}>REMATCH</button>
-            </div>
-          )}
-        </>
-      )}
-
-      <div className="game-controls-hint">
-        {isAiTurn ? "🤖 AI is playing — it remembers what you've flipped!" : "Click cards · Match before the AI does"}
+          <AnimatePresence>
+            {status === "won" && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                   className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 rounded-xl z-50">
+                <h2 className={`text-4xl font-black uppercase tracking-tighter mb-4 italic`} style={{ color: winColor }}>
+                  {winner}
+                </h2>
+                <p className="text-[10px] font-mono text-zinc-500 mb-8 uppercase tracking-widest">
+                  {playerScore} — {aiScore} · {moves} moves
+                </p>
+                <button className="btn-primary !py-3 !px-10 !text-xs" onClick={init}>TRY AGAIN</button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

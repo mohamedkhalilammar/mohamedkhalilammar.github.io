@@ -55,7 +55,7 @@ export function CreativeEntrance4D() {
       style={{
         position: "relative",
         width: "100%",
-        height: "100vh",
+        height: "90vh",
         overflow: "hidden",
         background: "#030712",
       }}
@@ -107,7 +107,7 @@ export function CreativeEntrance4D() {
         style={{
           position: "absolute",
           zIndex: 10,
-          bottom: "13.5rem",
+          bottom: "8rem",
           left: 0,
           right: 0,
           padding: "0 clamp(2rem, 6vw, 6rem)",
@@ -135,7 +135,7 @@ export function CreativeEntrance4D() {
           {/* Name — solid fill + strong shadow for crisp legibility on any bg */}
           <h1 style={{
             fontFamily: "var(--font-heading, sans-serif)",
-            fontSize: "clamp(3.5rem, 9vw, 7.5rem)",
+            fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
             fontWeight: 900,
             lineHeight: 0.88,
             letterSpacing: "-0.04em",

@@ -15,7 +15,7 @@ const navigationLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
-export function Sidebar() {
+export function Sidebar({ onArcadeOpen }: { onArcadeOpen?: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // Close sidebar on escape key
@@ -73,7 +73,13 @@ export function Sidebar() {
                       >
                         <a 
                           href={item.href} 
-                          onClick={() => setIsOpen(false)} 
+                          onClick={(e) => {
+                            if (item.label === "Arcade" && onArcadeOpen) {
+                              e.preventDefault();
+                              onArcadeOpen();
+                            }
+                            setIsOpen(false);
+                          }} 
                           target={(item as any).target || "_self"}
                           rel={(item as any).rel || ""}
                           className="nav-smooth-btn group"

@@ -224,37 +224,31 @@ export function Pong() {
   }, []);
 
   return (
-    <div className="game-panel">
-      <div className="game-hud" style={{ justifyContent: "space-between" }}>
-        <span className="game-label">PONG</span>
-        <span style={{ display: "flex", gap: 16 }}>
-          <span><span className="game-label">P </span><span className="game-score">{ps}</span></span>
-          <span><span className="game-label">AI </span><span className="game-score" style={{ color: "#f87171" }}>{as_}</span></span>
-        </span>
-        <span className="game-label" style={{ fontSize: "0.6rem" }}>FIRST TO 7</span>
-      </div>
-      <div style={{ position: "relative" }}>
+    <div className="w-full max-w-[800px] mx-auto">
+      <div className="relative p-1 bg-white/[0.02] border border-white/5 rounded-xl shadow-2xl overflow-hidden">
         <canvas
           ref={canvasRef}
           width={W}
           height={H}
-          style={{ display: "block", width: "100%", borderRadius: 8, border: "1px solid rgba(245,158,11,0.2)" }}
+          className="block w-full h-auto"
         />
         {status !== "running" && (
-          <div className="game-overlay">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 z-30">
             {status === "dead" && (
-              <p className="game-over-text">{ps >= 7 ? "YOU WIN!" : "AI WINS"}</p>
+              <div className="mb-6">
+                <p className="text-4xl font-black uppercase tracking-tighter italic text-white/80">
+                  {ps >= 7 ? "YOU WIN!" : "AI WINS"}
+                </p>
+                <p className="text-xl font-mono font-black text-amber-500/60 mt-1">{ps} — {as_}</p>
+              </div>
             )}
-            {status === "dead" && (
-              <p className="game-over-score">{ps} — {as_}</p>
-            )}
-            <button className="game-btn" onClick={start}>
-              {status === "idle" ? "PLAY" : "REMATCH"}
+            <button className="btn-primary !py-3 !px-12 !text-xs" onClick={start}>
+              {status === "idle" ? "START" : "REMATCH"}
             </button>
+            <div className="mt-8 text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em]">W / S / ArrowKeys to Move</div>
           </div>
         )}
       </div>
-      <div className="game-controls-hint">W / ↑↓ to move paddle</div>
     </div>
   );
 }

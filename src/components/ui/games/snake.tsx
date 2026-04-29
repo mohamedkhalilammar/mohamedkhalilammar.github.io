@@ -135,18 +135,17 @@ export function SnakeGame() {
   }, [status, reset]);
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-[1000px]">
-      <div className="flex justify-between w-full px-6 py-4 bg-black/40 border border-amber-500/10 rounded-lg">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-mono text-amber-500/40 tracking-[0.3em]">SCORE</span>
-          <span className="text-4xl font-mono font-black text-amber-500 tracking-tighter">{score.toString().padStart(4, '0')}</span>
+    <div className="w-full max-w-[600px] mx-auto">
+      <div className="relative w-full aspect-square bg-zinc-950/20 border border-white/5 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden cursor-crosshair">
+        {/* Floating Internal Score */}
+        <div className="absolute top-6 left-8 z-40 pointer-events-none select-none flex flex-col">
+          <span className="text-[10px] font-mono text-amber-500/30 tracking-[0.3em] font-bold">SCORE</span>
+          <span className="text-4xl font-mono font-black text-amber-500/80 tracking-tighter drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+            {score.toString().padStart(4, '0')}
+          </span>
+          <span className="text-[9px] font-mono text-zinc-600 mt-1 uppercase tracking-widest">BEST: {highScore}</span>
         </div>
-        <div className="flex flex-col items-end justify-center text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
-           <span>HIGH SCORE: {highScore}</span>
-        </div>
-      </div>
 
-      <div className="relative w-full aspect-square bg-black border border-white/5 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden cursor-crosshair">
         {/* Visual Grains */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }} />
         
@@ -157,32 +156,48 @@ export function SnakeGame() {
         {game.current.snake.map((p, i) => (
           <div 
             key={`${i}-${p.x}-${p.y}`}
-            className={`absolute ${i === 0 ? 'bg-amber-500 z-20' : 'bg-[#89C430] z-10'}`}
-            style={{ left: `${p.x * 2.5}%`, top: `${p.y * 2.5}%`, width: '2.5%', height: '2.5%', border: '1px solid rgba(0,0,0,0.3)', borderRadius: i === 0 ? '4px' : '2px' }}
+            className={`absolute ${i === 0 ? 'bg-amber-500/80 z-20' : 'bg-zinc-400/30 z-10'}`}
+            style={{ 
+              left: `${p.x * 2.5}%`, 
+              top: `${p.y * 2.5}%`, 
+              width: '2.5%', 
+              height: '2.5%', 
+              border: '1px solid rgba(255,255,255,0.05)', 
+              borderRadius: i === 0 ? '4px' : '2px', 
+              boxShadow: i === 0 ? '0 0 10px rgba(245,158,11,0.3)' : 'none' 
+            }}
           />
         ))}
 
         {/* Food */}
         <div className="absolute z-30 flex items-center justify-center text-lg pointer-events-none" style={{ left: `${game.current.food.x * 2.5}%`, top: `${game.current.food.y * 2.5}%`, width: '2.5%', height: '2.5%' }}>🍎</div>
-        {game.current.golden && <div className="absolute z-30 flex items-center justify-center text-lg pointer-events-none animate-bounce" style={{ left: `${game.current.golden.x * 2.5}%`, top: `${game.current.golden.y * 2.5}%`, width: '2.5%', height: '2.5%', filter: 'drop-shadow(0 0 8px gold)' }}>🌟</div>}
+        {(() => {
+          const gold = game.current.golden;
+          if (!gold) return null;
+          return (
+            <div 
+              className="absolute z-30 flex items-center justify-center text-lg pointer-events-none animate-bounce" 
+              style={{ left: `${gold.x * 2.5}%`, top: `${gold.y * 2.5}%`, width: '2.5%', height: '2.5%', filter: 'drop-shadow(0 0 8px gold)' }}
+            >
+              🌟
+            </div>
+          );
+        })()}
 
         <AnimatePresence>
           {(status === "idle" || status === "dead") && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                 className="absolute inset-0 bg-black/98 backdrop-blur-xl flex flex-col items-center justify-center text-center p-8 z-50">
-              <h2 className={`text-7xl font-sans font-black italic uppercase tracking-tighter mb-8 ${status === "dead" ? 'text-red-500' : 'text-amber-500'}`}>
+                 className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 z-50">
+              <h2 className={`text-4xl font-sans font-black uppercase tracking-tighter mb-4 ${status === "dead" ? 'text-red-500/80' : 'text-white/80'}`}>
                 {status === "dead" ? "GAME OVER" : "SNAKE"}
               </h2>
               <button 
                 onClick={reset}
-                className="group relative px-16 py-6 bg-transparent overflow-hidden border border-amber-500/50"
+                className="btn-primary !py-3 !px-10 !text-xs"
               >
-                <div className="absolute inset-0 bg-amber-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                <span className="relative z-10 font-mono font-black text-2xl uppercase tracking-widest text-amber-500 group-hover:text-black">
-                   {status === "idle" ? "START" : "RETRY"}
-                </span>
+                 {status === "idle" ? "START" : "RETRY"}
               </button>
-              <div className="mt-12 flex items-center gap-6 text-zinc-700 font-mono text-[10px] uppercase tracking-[0.4em]">
+              <div className="mt-8 text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em]">
                  <span>Arrow Keys to Move</span>
               </div>
             </motion.div>

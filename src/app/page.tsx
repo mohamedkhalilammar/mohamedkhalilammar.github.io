@@ -17,6 +17,7 @@ import { ParallaxPhotoColumn } from "@/components/ui/parallax-photo-column";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { EnhancedFooter } from "@/components/ui/enhanced-footer";
 import { EnhancedSkillModal } from "@/components/ui/enhanced-skill-modal";
+import { ArcadePanel } from "@/components/ui/arcade-panel";
 import { achievements, certifications, ctfWriteups, ctfIdentity, learningPath, profile, projects, skillGroups } from "@/data/portfolio";
 
 const navigationLinks = [
@@ -74,6 +75,7 @@ export default function Home() {
   const [formSent, setFormSent] = useState(false);
   const { scrollY } = useScroll();
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isArcadeOpen, setIsArcadeOpen] = useState(false);
 
   useEffect(() => scrollY.onChange(v => setShowScrollTop(v > 1000)), [scrollY]);
 
@@ -104,7 +106,7 @@ export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="page-shell">
-        <Sidebar />
+        <Sidebar onArcadeOpen={() => setIsArcadeOpen(true)} />
         <div className="page-noise" aria-hidden />
 
         {/* ── Header ── */}
@@ -119,7 +121,7 @@ export default function Home() {
 
           {/* ===== HERO ===== */}
           <section
-            className="hero-section relative min-h-[90vh] flex items-center overflow-hidden"
+            className="hero-section relative min-h-[75vh] flex items-center overflow-hidden"
             id="top"
             ref={heroRef}
           >
@@ -134,9 +136,9 @@ export default function Home() {
             <div className="absolute top-0 left-0 w-full h-px bg-white/10" />
             <div className="absolute top-0 left-0 w-32 h-[3px] bg-white/20" />
 
-            <div className="hero-content reveal-stagger w-full max-w-7xl mx-auto px-6 relative z-10 py-20 mt-12">
+            <div className="hero-content reveal-stagger w-full max-w-6xl mx-auto px-6 relative z-10 py-12 mt-8">
               {/* Background Index Watermark - Hero 00 */}
-              <div className="absolute top-10 left-6 font-sans text-[12rem] md:text-[20rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
+              <div className="absolute top-6 left-6 font-sans text-[8rem] md:text-[12rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
                 00
               </div>
               
@@ -146,11 +148,11 @@ export default function Home() {
                 <div className="w-full flex-col css-stagger-item text-left lg:col-span-8">
 
                   {/* Title Area */}
-                  <div className="relative mb-12 pb-4 pl-1 mt-10">
-                    <h1 className="font-sans text-5xl md:text-9xl lg:text-[10rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
+                  <div className="relative mb-8 pb-4 pl-1 mt-6">
+                    <h1 className="font-sans text-4xl md:text-7xl lg:text-[7.5rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
                       MEET KHALIL
                     </h1>
-                    <div className="h-[2px] w-24 bg-gradient-to-r from-amber-500 to-orange-600" />
+                    <div className="h-[2px] w-20 bg-gradient-to-r from-amber-500 to-orange-600" />
                   </div>
 
                   {/* Role rotator */}
@@ -250,11 +252,11 @@ export default function Home() {
           {/* ===== PROJECTS ===== */}
           <motion.div {...(reveal as any)} className="section-flow">
             <SectionShell id="projects" eyebrow="Work" title="" index="01">
-              <div className="mb-12">
-                <h2 className="font-sans text-5xl md:text-7xl font-black uppercase tracking-tighter mb-3 leading-none text-white">
+              <div className="mb-8">
+                <h2 className="font-sans text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 leading-none text-white">
                   Featured Projects
                 </h2>
-                <div className="h-[2px] w-20 bg-gradient-to-r from-amber-500 to-orange-600" />
+                <div className="h-[2px] w-16 bg-gradient-to-r from-amber-500 to-orange-600" />
               </div>
               <ProjectCarousel3D projects={projects} />
             </SectionShell>
@@ -554,9 +556,12 @@ export default function Home() {
                            </div>
                          ))}
                       </div>
-                      <Link href="/arcade" className="btn-primary py-3 px-8 text-xs">
+                      <button 
+                        onClick={() => setIsArcadeOpen(true)}
+                        className="btn-primary py-3 px-8 text-xs cursor-pointer"
+                      >
                          PLAY NOW →
-                      </Link>
+                      </button>
                    </div>
                 </div>
              </div>
@@ -574,6 +579,11 @@ export default function Home() {
             modalRef={modalRef as any}
           />
         )}
+        
+        <ArcadePanel 
+          isOpen={isArcadeOpen} 
+          onClose={() => setIsArcadeOpen(false)} 
+        />
       </div>
     </MotionConfig>
   );

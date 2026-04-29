@@ -196,18 +196,17 @@ export function RunnerGame() {
   }, [status, reset, jump]);
 
   return (
-    <div className="flex flex-col items-center gap-6 w-full max-w-[1000px]">
-      <div className="flex justify-between w-full px-6 py-4 bg-black/40 border border-amber-500/10 rounded-lg">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-mono text-amber-500/40 tracking-[0.3em]">DISTANCE</span>
-          <span className="text-4xl font-mono font-black text-amber-500 tracking-tighter">{score.toString().padStart(5, '0')}m</span>
+    <div className="w-full max-w-[850px] mx-auto">
+      <div className="relative w-full aspect-[2/1] bg-zinc-950/40 border border-white/5 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden">
+        {/* Floating Internal Score */}
+        <div className="absolute top-6 right-8 z-40 pointer-events-none select-none text-right">
+          <span className="text-[10px] font-mono text-amber-500/30 tracking-[0.3em] font-bold">DISTANCE</span>
+          <div className="text-4xl font-mono font-black text-amber-500/80 tracking-tighter drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+            {score.toString().padStart(5, '0')}m
+          </div>
+          <div className="text-[9px] font-mono text-zinc-600 mt-1 uppercase tracking-widest">BEST: {highScore}m</div>
         </div>
-        <div className="flex flex-col items-end justify-center text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
-           <span>BEST: {highScore}m</span>
-        </div>
-      </div>
 
-      <div className="relative w-full aspect-[2/1] bg-black border border-white/5 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden">
         <canvas ref={canvasRef} width={900} height={450} className="w-full h-full" />
         
         {/* Subtle Cyber Grid lines on Canvas over everything */}
@@ -216,17 +215,17 @@ export function RunnerGame() {
         <AnimatePresence>
           {(status === "idle" || status === "dead") && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                 className="absolute inset-0 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center text-center p-12 z-50">
-              <h2 className="text-7xl font-sans font-black italic uppercase tracking-tighter mb-8 text-amber-500">
+                 className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-12 z-50">
+              <h2 className={`text-4xl font-sans font-black uppercase tracking-tighter mb-6 ${status === "dead" ? 'text-red-500/80' : 'text-white/80'}`}>
                 {status === "dead" ? "GAME OVER" : "RUNNER"}
               </h2>
-              <button onClick={reset} className="group relative px-16 py-6 bg-transparent border border-amber-500/50">
-                <div className="absolute inset-0 bg-amber-500 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                <span className="relative z-10 font-mono font-black text-2xl uppercase tracking-widest text-amber-500 group-hover:text-black">
-                   {status === "idle" ? "START" : "RETRY"}
-                </span>
+              <button 
+                onClick={reset} 
+                className="btn-primary !py-3 !px-10 !text-xs"
+              >
+                 {status === "idle" ? "START" : "RETRY"}
               </button>
-              <div className="mt-12 text-zinc-700 font-mono text-[10px] uppercase tracking-[0.4em]">SPACE or ArrowUp to Jump</div>
+              <div className="mt-8 text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em]">SPACE / AU to Jump</div>
             </motion.div>
           )}
         </AnimatePresence>
