@@ -31,6 +31,11 @@ const navigationLinks = [
   { label: "Contact", href: "#contact" },
 ];
 
+const commands = [
+  { cmd: "whoami --profile", out: "Name: Khalil Ammar\nAge: 21\nRole: Offensive Security Engineer\nEducation: INSAT ICT 3rd-Year" },
+  { cmd: "cat /etc/profile.about", out: profile.about }
+];
+
 const ACHIEVEMENT_PHOTOS = [
   "/media/team.jpeg",
   "/media/winners.jpeg",
@@ -43,10 +48,10 @@ const ACHIEVEMENT_PHOTOS = [
 
 // Refined reveal config — tighter, more intentional
 const makeReveal = (reducedMotion: boolean) => ({
-  initial: reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 36, filter: "blur(8px)" },
+  initial: reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20, filter: "blur(2px)" },
   whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
-  transition: reducedMotion ? { duration: 0 } : { duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.08 },
-  viewport: { once: true, amount: 0.12 },
+  transition: reducedMotion ? { duration: 0 } : { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 },
+  viewport: { once: true, amount: 0.1 },
 });
 
 export default function Home() {
@@ -171,69 +176,10 @@ export default function Home() {
                     </AnimatePresence>
                   </h2>
 
-                  {/* Terminal block */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.985 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.9, delay: 0.25 }}
-                    className="w-full mb-12 rounded-2xl overflow-hidden bg-[#08080a]/40 backdrop-blur-2xl border border-white/[0.12] shadow-[0_0_80px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.06)]"
-                  >
-                    {/* Traffic lights */}
-                    <div className="flex items-center gap-2 px-5 py-3.5 bg-white/[0.02] border-b border-white/[0.04]">
-                      <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-400/80" />
-                      <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                      <span className="ml-3 font-mono text-[10px] text-zinc-600 tracking-widest uppercase">khalil.sh — zsh</span>
-                    </div>
-
-                    <div className="p-7 md:p-9 font-mono text-[14px] md:text-[15px] leading-[1.9] text-zinc-100">
-                      {profile.about.split('\n\n').map((paragraph, index) => (
-                        <motion.p
-                          key={index}
-                          initial={{ opacity: 0, filter: "blur(3px)", y: 4 }}
-                          animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                          transition={{ duration: 0.5, delay: 0.45 + index * 0.18 }}
-                          className="mb-6 last:mb-0 flex items-start"
-                        >
-                          <span className="text-zinc-700 mr-5 select-none font-bold w-5 text-right flex-shrink-0 text-[11px] mt-1.5">
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          <span className="flex-1 text-zinc-200/90 leading-[1.85]">{paragraph}</span>
-                        </motion.p>
-                      ))}
-
-                      {/* Quotes */}
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 1.4 }}
-                        className="mt-8 pt-6 border-t border-white/[0.06] space-y-5"
-                      >
-                        {[
-                          {
-                            text: <>AI is not a substitute for human intelligence — it's a{" "}<span className="text-amber-400/90 not-italic font-medium">tool to amplify it.</span></>,
-                            cite: "Dr. Fei-Fei Li, Stanford",
-                          },
-                        ].map(({ text, cite }, i) => (
-                          <blockquote key={i} className="group pl-4 transition-colors duration-500">
-                            <p className="text-[13px] text-zinc-400 italic leading-relaxed group-hover:text-zinc-300 transition-colors duration-400">
-                              "{text}"
-                            </p>
-                            <cite className="block not-italic font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-600 mt-1.5">
-                              — {cite}
-                            </cite>
-                          </blockquote>
-                        ))}
-                      </motion.div>
-
-                      {/* Blinking cursor */}
-                      <motion.span
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ repeat: Infinity, duration: 1.1, ease: "linear", delay: 2 }}
-                        className="inline-block w-2.5 h-[1.1em] bg-amber-500 ml-1 mt-3 align-middle shadow-[0_0_10px_rgba(245,158,11,0.5)]"
-                      />
-                    </div>
-                  </motion.div>
+                  {/* Terminal block - Restored Original Content */}
+                  <div className="relative mb-12 max-w-6xl">
+                    <LiveTerminal />
+                  </div>
 
                   <div className="flex flex-wrap items-center gap-4">
                     <a className="btn-primary" href="#projects">{profile.cta.primary}</a>
@@ -241,9 +187,32 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* ── Photo column ── */}
-                <div className="w-full flex justify-center lg:justify-end css-stagger-item relative lg:col-span-4">
-                  <ParallaxPhotoColumn scrollYProgress={scrollYProgress} />
+                {/* ── Photo Row - Static Side-by-Side Highlights ── */}
+                <div className="hidden lg:flex lg:col-span-4 flex-row items-center gap-4 h-full pt-12 self-start translate-x-4">
+                  {[
+                    { src: "/media/photo.jpg", rotate: "-2deg" },
+                    { src: "/media/teamm.jpeg", rotate: "1deg" },
+                    { src: "/media/team.jpeg", rotate: "-1deg" }
+                  ].map((img, i) => (
+                    <motion.div 
+                      key={i}
+                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: 0.1 * i, duration: 0.8 }}
+                      viewport={{ once: true }}
+                      className="relative w-[130px] aspect-[4/5] rounded-xl overflow-hidden border-[0.5px] border-white/20 shadow-2xl hover:scale-105 transition-all duration-500 bg-black group shrink-0"
+                      style={{ 
+                        rotate: img.rotate
+                      }}
+                    >
+                      <img 
+                        src={img.src} 
+                        alt="Profile Context" 
+                        className="w-full h-full object-cover saturate-[0.8] group-hover:saturate-100 transition-all" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 z-20 pointer-events-none" />
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -551,7 +520,7 @@ export default function Home() {
                    <div className="flex items-center gap-6">
                       <div className="hidden sm:flex gap-3">
                          {["🐍", "🏃", "💣"].map((icon, i) => (
-                           <div key={i} className="w-12 h-12 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-xl">
+                           <div key={i} className="w-[200px] h-12 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-xl">
                               {icon}
                            </div>
                          ))}

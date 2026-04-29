@@ -4,18 +4,16 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const commands = [
-  { cmd: "whoami --profile", out: "Name: Khalil Ammar\nAge: 21\nRole: Offensive Security Engineer\nEducation: INSAT ICT 3rd-Year" },
-  { cmd: "cat /etc/skills.conf", out: "[ok] Malware Analysis & Reverse Engineering\n[ok] Mobile Pentesting & Hardening Defeat\n[info] SOC & Threat Hunting Protocols Active" },
-  { cmd: "cat labs/ai_workflows.md", out: "In parallel, I’ve been diving deeper into the effective use of AI—focusing on prompt engineering, workflow optimization, and the integration of tools such as MCP servers—to better understand how to systematically leverage AI as a practical, reliable component within technical and security-focused workflows." },
-  { cmd: "tail -f /var/log/syslog --lines=2", out: "Establishing secure reverse shell...\nAwaiting incoming challenges..." }
+  { 
+    cmd: "cat /bio/overview.md", 
+    out: "01 I’m an engineering student at INSAT specializing in Networks and Telecommunications, with a strong interest in cybersecurity. I enjoy exploring how systems work at a low level, especially through reverse engineering, binary analysis, and Android application reversing.\n\n02 Outside of my studies, I regularly take part in CTF competitions, work on personal projects, and occasionally create challenges of my own. These experiences have helped me develop practical skills in areas like Android security, exploitation, and debugging.\n\n03 I’m currently working on improving my skills in system and web penetration testing through hands-on labs on dedicated learning platforms. My goal is to build a solid understanding of systems and security, and to create tools and solutions that are both useful and reliable.\n\n04 In parallel, I’ve been diving deeper into the effective use of AI—focusing on prompt engineering, workflow optimization, and the integration of tools such as MCP servers—to better understand how to systematically leverage AI as a practical, reliable component within technical and security-focused workflows. I am currently exploring the intersection of AI agents and offensive security automation." 
+  }
 ];
 
 export function LiveTerminal() {
-  const [history, setHistory] = useState<{ type: "cmd" | "out"; text: string }[]>([]);
-  const [currentCmd, setCurrentCmd] = useState("");
-  const [cmdIndex, setCmdIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
-  const [phase, setPhase] = useState<"typing" | "output" | "wait">("typing");
+  const [history, setHistory] = useState<{ type: "out"; text: string }[]>([]);
+  const [lineIndex, setLineIndex] = useState(0);
+  const [phase, setPhase] = useState<"output" | "done">("output");
 
   const ref = useRef<HTMLDivElement>(null);
   
@@ -52,51 +50,18 @@ export function LiveTerminal() {
   };
 
   useEffect(() => {
-    if (cmdIndex >= commands.length) return;
-    const current = commands[cmdIndex];
-
-    if (phase === "typing") {
-      if (charIndex < current.cmd.length) {
-        const timeout = setTimeout(() => {
-          setCurrentCmd((prev) => prev + current.cmd[charIndex]);
-          setCharIndex((prev) => prev + 1);
-        }, 40 + Math.random() * 40);
-        return () => clearTimeout(timeout);
-      } else {
-        const timeout = setTimeout(() => setPhase("output"), 150);
-        return () => clearTimeout(timeout);
-      }
-    } else if (phase === "output") {
+    const lines = commands[0].out.split('\n\n');
+    
+    if (phase === "output" && lineIndex < lines.length) {
       const timeout = setTimeout(() => {
-        setHistory((prev) => [...prev, { type: "cmd", text: current.cmd }]);
-        
-        const lines = current.out.split('\n');
-        let currentLine = 0;
-
-        const processLine = () => {
-          if (currentLine < lines.length) {
-            const lineToLog = lines[currentLine];
-            setHistory((prev) => [...prev, { type: "out", text: lineToLog }]);
-            currentLine++;
-            setTimeout(processLine, 300 + Math.random() * 250);
-          } else {
-            setCurrentCmd("");
-            setCharIndex(0);
-            setPhase("wait");
-          }
-        };
-
-        setTimeout(processLine, 150);
-      }, 0);
+        setHistory((prev) => [...prev, { type: "out", text: lines[lineIndex] }]);
+        setLineIndex((prev) => prev + 1);
+      }, 800 + Math.random() * 400);
       return () => clearTimeout(timeout);
-    } else if (phase === "wait") {
-      const timeout = setTimeout(() => {
-        setCmdIndex((prev) => prev + 1);
-        setPhase("typing");
-      }, 1200);
-      return () => clearTimeout(timeout);
+    } else if (lineIndex >= lines.length) {
+      setPhase("done");
     }
-  }, [phase, charIndex, cmdIndex]);
+  }, [phase, lineIndex]);
 
   return (
     <motion.div 
@@ -114,41 +79,40 @@ export function LiveTerminal() {
         perspective: 1200
       }}
     >
-      <aside className="hero-terminal" aria-label="Live security terminal">
-        <div className="terminal-chrome">
-          <div className="terminal-dots" aria-hidden>
-            <span />
-            <span />
-            <span />
+      <aside 
+        className="hero-terminal border-[0.5px] border-white/20 bg-[#07090e]/95 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col h-[600px] md:h-[800px] rounded-2xl" 
+        aria-label="Live security terminal"
+      >
+        <div className="bg-white/5 border-b-[0.5px] border-white/10 px-5 py-3 flex items-center justify-between">
+          <div className="flex gap-2" aria-hidden>
+            <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
+            <div className="w-2.5 h-2.5 rounded-full bg-amber-500/50" />
+            <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
           </div>
-          <p className="terminal-title">monitor@khalil:~</p>
+          <p className="font-mono text-[9px] uppercase tracking-widest text-zinc-500 font-bold">session://root@khalil-dossier</p>
         </div>
-        <div className="terminal-lines-container">
-          <ul className="terminal-lines">
-            <AnimatePresence>
+
+        <div className="flex-1 overflow-y-auto p-10 font-mono text-sm md:text-base antialiased scrollbar-hide">
+          <ul className="space-y-12">
+            <AnimatePresence mode="popLayout">
               {history.map((item, i) => (
                 <motion.li 
                   key={i} 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className={item.type === "cmd" ? "cmd-line" : "out-line"}
+                  initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative group pb-4"
                 >
-                  {item.type === "cmd" && <span className="prompt">$</span>}
-                  {item.type === "cmd" && <span className="cmd-text">{item.text}</span>}
-                  {item.type === "out" && item.text.startsWith("[ok]") ? (
-                    <><span className="ok">[ok]</span>{item.text.substring(4)}</>
-                  ) : item.type === "out" && item.text.startsWith("[info]") ? (
-                    <><span className="warn">[info]</span>{item.text.substring(6)}</>
-                  ) : item.type === "out" ? (
-                    item.text
-                  ) : null}
+                  <p className="text-zinc-300 leading-relaxed font-light tracking-wide text-base md:text-lg">
+                    {item.text.replace(/^\d+\s/, '')}
+                  </p>
                 </motion.li>
               ))}
             </AnimatePresence>
-            {cmdIndex < commands.length && (
-              <li className="typing-line">
-                <span className="prompt">$</span> <span className="cmd-text">{currentCmd}</span>
+            {phase === "output" && (
+              <li className="flex items-center gap-4 opacity-30 mt-8">
+                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                 <span className="text-[9px] uppercase tracking-widest font-bold">Injesting_Data...</span>
               </li>
             )}
           </ul>

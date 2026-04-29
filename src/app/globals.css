@@ -5,10 +5,10 @@
    =============================== */
 :root {
   /* Default Theme: Ambient Twilight — lighter cozy deep indigo/blue */
-  --background: #171E2E;       /* Soft twilight blue-grey, much lighter than pitch black */
-  --foreground: #F8FAFC;       /* Brighter soft white */
-  --surface: rgba(35, 45, 65, 0.7);
-  --surface-alt: rgba(45, 55, 80, 0.75);
+  --background: #0a0e14;       /* Deeper, sharp black-indigo */
+  --foreground: #ffffff;       /* Pure white for 4K contrast */
+  --surface: rgba(15, 20, 30, 0.4);
+  --surface-alt: rgba(20, 25, 35, 0.5);
 
   --primary: #818CF8;          /* Cozy Periwinkle / Soft Indigo */
   --primary-alt: #C084FC;      /* Soft Ambient Lavender */
@@ -40,10 +40,10 @@
   --radius-lg: 12px;
   --radius-xl: 16px;
 
-  --glass-bg: rgba(9, 11, 16, 0.88);
-  --glass-border: rgba(129, 140, 248, 0.22);
-  --glass-blur: 32px;
-  --noise-opacity: 0.04;
+  --glass-bg: rgba(7, 9, 14, 0.92);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-blur: 16px;
+  --noise-opacity: 0.03;
 }
 
 
@@ -72,6 +72,9 @@ html {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
   scroll-padding-top: 80px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -146,14 +149,14 @@ a:hover {
   position: fixed;
   inset: -100px;
   background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(var(--line) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--line) 0.5px, transparent 0.5px);
+  background-size: 80px 80px;
   background-position: 0 0;
-  opacity: 0.06;
+  opacity: 0.08;
   z-index: -3;
   pointer-events: none;
-  animation: global-grid-drift 40s linear infinite;
+  animation: global-grid-drift 60s linear infinite;
 }
 
 @keyframes global-grid-drift {

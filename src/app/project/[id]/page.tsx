@@ -152,40 +152,38 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               </div>
             )}
 
-            {/* Deep Analysis (Descriptions) */}
-            <div className="space-y-40 css-stagger-item">
-              <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-x-16 gap-y-20 lg:gap-y-32 items-start py-12 border-t border-white/5">
-                {project.architecture && (
-                  <>
-                    <h2 className="font-sans text-2xl font-black uppercase tracking-tighter text-amber-500/80">System Architecture</h2>
-                    <p className="text-xl leading-relaxed text-zinc-300 font-medium max-w-4xl">{project.architecture}</p>
-                  </>
-                )}
-
-                {project.challenges && (
-                  <>
-                    <h2 className="font-sans text-2xl font-black uppercase tracking-tighter text-amber-500/80">Implementation Strategy</h2>
-                    <p className="text-xl leading-relaxed text-zinc-300 font-medium max-w-4xl">{project.challenges}</p>
-                  </>
-                )}
-                {project.impact && (
-                  <>
-                    <h2 className="font-sans text-2xl font-black uppercase tracking-tighter text-amber-500/80">Technical Outcome</h2>
-                    <p className="text-xl leading-relaxed text-zinc-300 font-medium max-w-4xl">{project.impact}</p>
-                  </>
-                )}
+            {/* Deep Analysis (Descriptions) - Tactical Grid Upgrade */}
+            <div className="css-stagger-item">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start py-12 border-t border-white/5">
+                {[
+                  { title: "System Architecture", content: project.architecture },
+                  { title: "Implementation Strategy", content: project.challenges },
+                  { title: "Technical Outcome", content: project.impact }
+                ].filter(s => s.content).map((section, idx) => (
+                  <div key={idx} className="group p-8 rounded-2xl bg-white/[0.015] border border-white/5 hover:border-amber-500/30 transition-all duration-500 relative overflow-hidden h-full"> 
+                    <div className="absolute top-0 right-0 p-4 font-mono text-3xl font-black text-white/[0.02] group-hover:text-amber-500/10 italic select-none">
+                      0{idx + 1}
+                    </div>
+                    <h2 className="font-sans text-xl font-black uppercase tracking-tighter text-amber-500 mb-6 flex items-center gap-3">
+                      <span className="w-2 h-2 rounded-full bg-amber-500/50" />
+                      {section.title}
+                    </h2>
+                    <p className="text-lg leading-relaxed text-zinc-400 font-medium group-hover:text-zinc-200 transition-colors">
+                      {section.content}
+                    </p>
+                  </div>
+                ))}
               </div>
 
               {project.features && (
-                <div className="p-12 rounded-[2.5rem] bg-white/[0.01] border border-white/[0.04] relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 blur-[80px] group-hover:bg-amber-500/10 transition-all" />
-                  <h2 className="font-sans text-4xl font-black uppercase tracking-tighter text-white mb-10">Key Features</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                <div className="mt-12 p-10 md:p-12 rounded-[2rem] bg-white/[0.02] border border-white/[0.06] relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] group-hover:bg-amber-500/10 transition-all" />
+                  <h2 className="font-sans text-3xl font-black uppercase tracking-tighter text-white mb-10">System Features</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                     {project.features.map((feature, i) => (
-                      <div key={feature} className="flex gap-4 group/item">
-                        <span className="font-mono text-sm text-amber-500/40 group-hover/item:text-amber-500 font-bold">{String(i + 1).padStart(2, '0')}</span>
-                        <div className="h-px flex-1 mt-3 bg-white/[0.05]" />
-                        <span className="text-base text-zinc-400 font-medium group-hover/item:text-zinc-100 transition-colors">{feature}</span>
+                      <div key={feature} className="flex items-center gap-4 group/item">
+                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500/30 group-hover/item:bg-amber-500 transition-all" />
+                        <span className="text-zinc-400 font-medium group-hover/item:text-white transition-colors">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -253,8 +251,30 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                       <div className="absolute top-0 right-0 p-4 font-mono text-4xl font-black text-white/[0.02] group-hover:text-amber-500/10 transition-colors uppercase italic">{item.step}</div>
                       <div className="relative z-10">
                         <h4 className="font-sans text-lg font-bold text-white mb-4 uppercase tracking-tighter">{item.title}</h4>
-                        <div className="bg-black/40 rounded-lg p-4 mb-4 border border-white/5 font-mono text-[11px] text-amber-500/80 overflow-x-auto whitespace-nowrap">
-                          {item.cmd}
+                        <div className="bg-[#0c1117] rounded-xl overflow-hidden border border-white/10 shadow-inner mb-6 group/code transition-all duration-300 hover:border-amber-500/20">
+                          <div className="bg-white/5 border-b border-white/5 px-4 py-2 flex items-center justify-between">
+                            <div className="flex gap-1.5">
+                              <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+                              <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+                              <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-amber-500/40">
+                                <polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" />
+                              </svg>
+                              <span className="font-mono text-[8px] uppercase tracking-widest text-white/20 font-bold">bash://terminal</span>
+                            </div>
+                          </div>
+                          <div className="p-5 font-mono text-[12px] md:text-[13px] leading-relaxed relative flex items-start group-hover/code:bg-white/[0.01] transition-colors">
+                            <span className="text-amber-500/40 mr-4 select-none mt-1">$</span>
+                            <code className="text-zinc-200 block break-all selection:bg-amber-500/30">
+                              {item.cmd.split(' ').map((word, i) => (
+                                <span key={i} className={i === 0 ? "text-amber-500 font-bold" : "text-zinc-300"}>
+                                  {word}{" "}
+                                </span>
+                              ))}
+                            </code>
+                          </div>
                         </div>
                         <p className="text-sm text-zinc-500 leading-relaxed font-medium">{item.desc}</p>
                       </div>

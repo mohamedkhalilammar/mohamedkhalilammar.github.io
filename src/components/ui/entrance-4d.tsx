@@ -95,9 +95,9 @@ export function CreativeEntrance4D() {
       {/* ── Blue accent glow (top-right atmosphere) ── */}
       <div style={{
         position: "absolute", top: "-15%", right: "-5%", zIndex: 4,
-        width: "480px", height: "480px", borderRadius: "50%",
-        background: "rgba(56,189,248,0.07)",
-        filter: "blur(90px)",
+        width: "600px", height: "600px", borderRadius: "50%",
+        background: "rgba(56,189,248,0.04)",
+        filter: "blur(60px)",
         pointerEvents: "none",
       }} />
 
@@ -323,8 +323,10 @@ function SlidePhoto({
           style={{
             width: "100%", height: "100%",
             objectFit: "cover", objectPosition: "center 20%",
-            filter: "contrast(1.05) saturate(0.38) brightness(0.98)",
+            filter: "contrast(1.1) saturate(0.85) brightness(1.05)",
             userSelect: "none", display: "block",
+            transform: "translateZ(0)",
+            backfaceVisibility: "hidden",
           }}
         />
       </motion.div>
