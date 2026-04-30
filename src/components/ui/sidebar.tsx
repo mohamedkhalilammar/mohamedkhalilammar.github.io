@@ -31,7 +31,7 @@ export function Sidebar({ onArcadeOpen }: { onArcadeOpen?: () => void }) {
     <>
       <button
         type="button"
-        className={`sidebar-fab ${isOpen ? "is-active" : ""}`}
+        className={`sidebar-fab hidden lg:flex ${isOpen ? "is-active" : ""}`}
         aria-label="Toggle Navigation Sidebar"
         aria-expanded={isOpen}
         onClick={() => setIsOpen((prev) => !prev)}

@@ -85,7 +85,7 @@ export function LiveTerminal() {
       }}
     >
       <aside 
-        className="hero-terminal border-[0.5px] border-white/20 bg-[#07090e]/95 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col h-[400px] sm:h-[600px] md:h-[800px] rounded-2xl" 
+        className="hero-terminal border-[0.5px] border-white/20 bg-[#07090e]/95 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col h-[500px] sm:h-[600px] md:h-[800px] rounded-2xl" 
         aria-label="Live security terminal"
       >
         <div className="bg-white/5 border-b-[0.5px] border-white/10 px-4 md:px-5 py-3 flex items-center justify-between">
@@ -97,7 +97,7 @@ export function LiveTerminal() {
           <p className="font-mono text-[8px] md:text-[9px] uppercase tracking-widest text-zinc-500 font-bold truncate ml-4">session://root@khalil-dossier</p>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 md:p-10 font-mono text-xs sm:text-sm md:text-base antialiased scrollbar-hide">
+        <div className="flex-1 overflow-y-auto p-5 sm:p-8 md:p-10 font-mono text-xs sm:text-sm md:text-base antialiased scrollbar-hide">
           <ul className="space-y-8 md:space-y-12">
             <AnimatePresence mode="popLayout">
               {history.map((item, i) => (

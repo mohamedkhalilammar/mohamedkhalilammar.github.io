@@ -10,7 +10,7 @@ type SectionShellProps = {
 
 export function SectionShell({ id, eyebrow, title, children, index }: SectionShellProps) {
   return (
-    <section id={id} className="relative py-16 md:py-20 px-6 md:px-12 max-w-[1300px] mx-auto group mt-6 md:mt-12">
+    <section id={id} className="relative py-12 md:py-20 px-6 md:px-12 max-w-[1300px] mx-auto group mt-4 md:mt-12">
       
       {/* ── BOLD TACTICAL DIVIDER ── */}
       <div className="absolute top-0 left-0 w-full h-px bg-white/10" />
@@ -18,7 +18,7 @@ export function SectionShell({ id, eyebrow, title, children, index }: SectionShe
       
       {/* Background Index Watermark */}
       {index && (
-        <div className="absolute top-16 left-6 md:left-12 font-sans text-[8rem] md:text-[12rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
+        <div className="absolute top-12 left-6 md:top-16 md:left-12 font-sans text-[6rem] md:text-[12rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
           {index}
         </div>
       )}

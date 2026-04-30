@@ -154,7 +154,7 @@ export default function Home() {
 
                   {/* Title Area */}
                   <div className="relative mb-8 pb-4 pl-1 mt-6">
-                    <h1 className="font-sans text-4xl sm:text-5xl md:text-7xl lg:text-[7.5rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
+                    <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
                       MEET KHALIL
                     </h1>
                     <div className="h-[2px] w-20 bg-gradient-to-r from-amber-500 to-orange-600" />
@@ -177,7 +177,7 @@ export default function Home() {
                   </h2>
 
                   {/* Terminal block - Restored Original Content */}
-                  <div className="relative mb-12 max-w-6xl">
+                  <div className="relative mb-8 md:mb-12 max-w-6xl">
                     <LiveTerminal />
                   </div>
 
@@ -188,7 +188,7 @@ export default function Home() {
                 </div>
 
                 {/* ── Photo Row - Static Side-by-Side Highlights ── */}
-                <div className="hidden lg:flex lg:col-span-4 flex-row items-center gap-4 h-full pt-12 self-start translate-x-4">
+                <div className="lg:col-span-4 flex flex-row items-center gap-4 h-auto lg:h-full pt-4 lg:pt-12 self-start lg:translate-x-4 overflow-x-auto lg:overflow-visible pb-8 lg:pb-0 scrollbar-hide w-full max-w-[100vw] -mx-6 px-6 lg:mx-0 lg:px-0">
                   {[
                     { src: "/media/photo.jpg", rotate: "-2deg" },
                     { src: "/media/teamm.jpeg", rotate: "1deg" },
@@ -200,7 +200,7 @@ export default function Home() {
                       whileInView={{ opacity: 1, scale: 1, y: 0 }}
                       transition={{ delay: 0.1 * i, duration: 0.8 }}
                       viewport={{ once: true }}
-                      className="relative w-[130px] aspect-[4/5] rounded-xl overflow-hidden border-[0.5px] border-white/20 shadow-2xl hover:scale-105 transition-all duration-500 bg-black group shrink-0"
+                      className="relative w-[140px] sm:w-[160px] aspect-[4/5] rounded-xl overflow-hidden border-[0.5px] border-white/20 shadow-2xl hover:scale-105 transition-all duration-500 bg-black group shrink-0"
                       style={{ 
                         rotate: img.rotate
                       }}
@@ -260,7 +260,7 @@ export default function Home() {
 
           {/* ===== WRITEUPS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
-            <SectionShell id="writeups" eyebrow="Knowledge" title="Writeups & Breakdowns" index="03">
+            <SectionShell id="ctf" eyebrow="Knowledge" title="Writeups & Breakdowns" index="03">
               <p className="text-zinc-400 text-base leading-relaxed mb-10 max-w-2xl">
                 I design and solve CTF challenges across reverse engineering, mobile security, and exploitation. 
                 Browse selected technical notes and systemic challenge breakdowns.
