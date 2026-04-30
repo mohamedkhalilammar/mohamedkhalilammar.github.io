@@ -57,49 +57,49 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       {/* Simplified Space */}
       <div className="fixed left-0 top-0 bottom-0 w-[1px] bg-white/[0.03] z-50" />
 
-      <header className="fixed top-0 left-0 right-0 z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none">
+      <header className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-12 md:py-6 flex justify-between items-center pointer-events-none">
         <Link 
           href="/#projects" 
-          className="group flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
+          className="group flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500 group-hover:-translate-x-1.5 transition-transform duration-500">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500 group-hover:-translate-x-1.5 transition-transform duration-500">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
-          <span className="font-mono text-[10px] uppercase font-bold tracking-[0.3em] text-white/40 group-hover:text-white transition-colors">
-            Back to Catalog
+          <span className="font-mono text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] text-white/40 group-hover:text-white transition-colors">
+            Catalog
           </span>
         </Link>
 
         <Link 
           href={`/project/${nextSlug}`} 
-          className="group flex items-center gap-3 px-6 py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
+          className="group flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
         >
-          <span className="font-mono text-[10px] uppercase font-bold tracking-[0.3em] text-white/40 group-hover:text-white transition-colors">
-            Next Project
+          <span className="font-mono text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] text-white/40 group-hover:text-white transition-colors">
+            Next
           </span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500 group-hover:translate-x-1.5 transition-transform duration-500">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500 group-hover:translate-x-1.5 transition-transform duration-500">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </Link>
       </header>
 
-      <main className="max-w-[1300px] mx-auto px-6 md:px-12 lg:px-20" style={{ paddingTop: "8.5rem", paddingBottom: "10rem" }}>
+      <main className="max-w-[1300px] mx-auto px-6 md:px-12 lg:px-20" style={{ paddingTop: "6rem", paddingBottom: "8rem" }}>
 
         {/* TOP LEVEL INTEL: Title & Summary */}
-        <div className="relative mb-24 css-stagger-item">
+        <div className="relative mb-16 md:mb-24 css-stagger-item">
           {/* Decorative Corner Brackets */}
-          <div className="absolute -top-12 -left-12 w-24 h-24 border-t border-l border-white/10 rounded-tl-[3rem]" />
+          <div className="hidden md:block absolute -top-12 -left-12 w-24 h-24 border-t border-l border-white/10 rounded-tl-[3rem]" />
 
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-4">
-              <div className="px-3 py-1 rounded bg-white/5 border border-white/10 text-[10px] font-mono font-bold text-amber-500 uppercase tracking-[0.3em]">
+          <div className="flex flex-col gap-4 md:gap-6">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="px-2 py-0.5 md:px-3 md:py-1 rounded bg-white/5 border border-white/10 text-[8px] md:text-[10px] font-mono font-bold text-amber-500 uppercase tracking-[0.3em]">
                 Project Overview
               </div>
-              <div className="h-px w-24 bg-white/10" />
-              <p className="font-mono text-xs uppercase tracking-[0.4em] text-white/20 font-bold">{project.context || "Engineering Student"}</p>
+              <div className="h-px w-12 md:w-24 bg-white/10" />
+              <p className="font-mono text-[9px] md:text-xs uppercase tracking-[0.4em] text-white/20 font-bold truncate">{project.context || "Engineering Student"}</p>
             </div>
 
-            <h1 className="font-sans text-5xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-8 drop-shadow-2xl">
+            <h1 className="font-sans text-4xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.95] md:leading-[0.85] mb-6 md:mb-8 drop-shadow-2xl">
               {project.name.split(" ").map((word, i) => (
                 <span key={i} className={i % 2 !== 0 ? "text-amber-500" : ""}>
                   {word}{" "}
@@ -107,7 +107,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               ))}
             </h1>
 
-            <p className="text-lg md:text-2xl leading-relaxed text-zinc-400 max-w-4xl font-medium">
+            <p className="text-base md:text-2xl leading-relaxed text-zinc-400 max-w-4xl font-medium">
               {project.summary}
             </p>
           </div>

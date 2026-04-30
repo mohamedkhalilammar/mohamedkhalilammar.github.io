@@ -107,10 +107,10 @@ export function CreativeEntrance4D() {
         style={{
           position: "absolute",
           zIndex: 10,
-          bottom: "8rem",
+          bottom: "clamp(4rem, 15vh, 8rem)",
           left: 0,
           right: 0,
-          padding: "0 clamp(2rem, 6vw, 6rem)",
+          padding: "0 clamp(1.5rem, 6vw, 6rem)",
           pointerEvents: "none",
         }}
       >
@@ -118,10 +118,10 @@ export function CreativeEntrance4D() {
         <div style={{
           position: "absolute",
           bottom: "-2rem",
-          left: "clamp(2rem, 6vw, 6rem)",
-          right: "40%",
+          left: "clamp(1.5rem, 6vw, 6rem)",
+          right: "20%",
           top: "-3rem",
-          background: "radial-gradient(ellipse at 0% 100%, rgba(3,7,18,0.72) 0%, transparent 80%)",
+          background: "radial-gradient(ellipse at 0% 100%, rgba(3,7,18,0.85) 0%, transparent 85%)",
           pointerEvents: "none",
         }} />
 
@@ -135,12 +135,12 @@ export function CreativeEntrance4D() {
           {/* Name — solid fill + strong shadow for crisp legibility on any bg */}
           <h1 style={{
             fontFamily: "var(--font-heading, sans-serif)",
-            fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+            fontSize: "clamp(2.5rem, 9vw, 5.5rem)",
             fontWeight: 900,
-            lineHeight: 0.88,
+            lineHeight: 0.9,
             letterSpacing: "-0.04em",
             textTransform: "uppercase",
-            margin: "0 0 1rem",
+            margin: "0 0 1.2rem",
           }}>
             <span style={{
               color: "#ffffff",
@@ -161,16 +161,16 @@ export function CreativeEntrance4D() {
           {/* Subtitle — readable opacity with shadow */}
           <p style={{
             fontFamily: "var(--font-mono, monospace)",
-            fontSize: "clamp(0.8rem, 1.6vw, 0.93rem)",
-            color: "rgba(255,255,255,0.70)",
-            lineHeight: 1.75,
-            maxWidth: "400px",
-            marginBottom: "2rem",
+            fontSize: "clamp(0.75rem, 3.5vw, 0.93rem)",
+            color: "rgba(255,255,255,0.75)",
+            lineHeight: 1.6,
+            maxWidth: "360px",
+            marginBottom: "2.5rem",
             letterSpacing: "0.02em",
             textShadow: "0 1px 14px rgba(3,7,18,0.9)",
           }}>
-            Cybersecurity Enthusiast &amp; 3rd Year<br />
-            Network &amp; Telecom Engineering Student at INSAT.
+            Cybersecurity Enthusiast<br className="hidden sm:block" />
+            &amp; Engineering Student at INSAT.
           </p>
 
           {/* CTAs */}
@@ -179,9 +179,9 @@ export function CreativeEntrance4D() {
               href="#projects"
               style={{
                 fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.67rem", letterSpacing: "0.18em",
+                fontSize: "0.65rem", letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                padding: "13px 26px",
+                padding: "12px 24px",
                 background: BLUE_FAINT,
                 border: `1px solid ${BLUE_DIM}`,
                 color: BLUE,
@@ -194,13 +194,13 @@ export function CreativeEntrance4D() {
               href="#contact"
               style={{
                 fontFamily: "var(--font-mono, monospace)",
-                fontSize: "0.67rem", letterSpacing: "0.18em",
+                fontSize: "0.65rem", letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                padding: "12px 26px",
-                background: "rgba(3,7,18,0.45)",
-                color: "rgba(255,255,255,0.72)",
+                padding: "12px 24px",
+                background: "rgba(3,7,18,0.6)",
+                color: "rgba(255,255,255,0.8)",
                 fontWeight: 600, textDecoration: "none",
-                border: "1px solid rgba(255,255,255,0.15)", borderRadius: "2px",
+                border: "1px solid rgba(255,255,255,0.2)", borderRadius: "2px",
               }}
             >
               Contact

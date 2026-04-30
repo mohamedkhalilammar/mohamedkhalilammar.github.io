@@ -14,6 +14,7 @@ export function LiveTerminal() {
   const [history, setHistory] = useState<{ type: "out"; text: string }[]>([]);
   const [lineIndex, setLineIndex] = useState(0);
   const [phase, setPhase] = useState<"output" | "done">("output");
+  const [isTouch, setIsTouch] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
   
@@ -26,8 +27,12 @@ export function LiveTerminal() {
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
 
+  useEffect(() => {
+    setIsTouch(window.matchMedia("(pointer: coarse)").matches);
+  }, []);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
+    if (!ref.current || isTouch) return;
     
     const rect = ref.current.getBoundingClientRect();
     
@@ -73,27 +78,27 @@ export function LiveTerminal() {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.2, type: 'spring', bounce: 0.4 }}
       style={{
-        rotateX,
-        rotateY,
+        rotateX: isTouch ? 0 : rotateX,
+        rotateY: isTouch ? 0 : rotateY,
         transformStyle: "preserve-3d",
         perspective: 1200
       }}
     >
       <aside 
-        className="hero-terminal border-[0.5px] border-white/20 bg-[#07090e]/95 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col h-[600px] md:h-[800px] rounded-2xl" 
+        className="hero-terminal border-[0.5px] border-white/20 bg-[#07090e]/95 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col h-[400px] sm:h-[600px] md:h-[800px] rounded-2xl" 
         aria-label="Live security terminal"
       >
-        <div className="bg-white/5 border-b-[0.5px] border-white/10 px-5 py-3 flex items-center justify-between">
+        <div className="bg-white/5 border-b-[0.5px] border-white/10 px-4 md:px-5 py-3 flex items-center justify-between">
           <div className="flex gap-2" aria-hidden>
-            <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
-            <div className="w-2.5 h-2.5 rounded-full bg-amber-500/50" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
+            <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-red-500/50" />
+            <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-amber-500/50" />
+            <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-500/50" />
           </div>
-          <p className="font-mono text-[9px] uppercase tracking-widest text-zinc-500 font-bold">session://root@khalil-dossier</p>
+          <p className="font-mono text-[8px] md:text-[9px] uppercase tracking-widest text-zinc-500 font-bold truncate ml-4">session://root@khalil-dossier</p>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-10 font-mono text-sm md:text-base antialiased scrollbar-hide">
-          <ul className="space-y-12">
+        <div className="flex-1 overflow-y-auto p-6 md:p-10 font-mono text-xs sm:text-sm md:text-base antialiased scrollbar-hide">
+          <ul className="space-y-8 md:space-y-12">
             <AnimatePresence mode="popLayout">
               {history.map((item, i) => (
                 <motion.li 
@@ -103,7 +108,7 @@ export function LiveTerminal() {
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   className="relative group pb-4"
                 >
-                  <p className="text-zinc-300 leading-relaxed font-light tracking-wide text-base md:text-lg">
+                  <p className="text-zinc-300 leading-relaxed font-light tracking-wide text-sm sm:text-base md:text-lg">
                     {item.text.replace(/^\d+\s/, '')}
                   </p>
                 </motion.li>

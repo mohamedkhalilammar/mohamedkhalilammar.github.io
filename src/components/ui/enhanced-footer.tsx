@@ -34,52 +34,45 @@ const SOCIALS = [
 
 export function EnhancedFooter() {
   return (
-    <footer className="site-footer">
-      <div className="footer-content" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem" }}>
+    <footer className="site-footer border-t border-white/5 bg-[#050505] py-20 px-8 relative overflow-hidden">
+      {/* Decorative background elements */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none" />
 
-        <p className="brand-mark">{profile.name}</p>
+      <div className="max-w-6xl mx-auto flex flex-col items-center text-center relative z-10">
+        <h2 className="brand-mark text-2xl font-black uppercase tracking-[0.2em] mb-12 text-white">
+          {profile.name}
+        </h2>
 
-        {/* Socials row */}
-        <nav aria-label="Social links">
-          <ul style={{ display: "flex", gap: "1rem", listStyle: "none", margin: 0, padding: 0 }}>
+        <nav aria-label="Social links" className="mb-16">
+          <ul className="flex flex-wrap justify-center gap-6 md:gap-8 list-none p-0 m-0">
             {SOCIALS.filter((s) => s.href).map((social) => (
               <li key={social.label}>
                 <a
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={social.label}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: 36,
-                    height: 36,
-                    borderRadius: "50%",
-                    border: "1px solid rgba(245,158,11,0.2)",
-                    color: "rgba(245,158,11,0.6)",
-                    transition: "color 0.2s, border-color 0.2s, background 0.2s",
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.color = "#f59e0b";
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(245,158,11,0.6)";
-                    (e.currentTarget as HTMLAnchorElement).style.background = "rgba(245,158,11,0.07)";
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLAnchorElement).style.color = "rgba(245,158,11,0.6)";
-                    (e.currentTarget as HTMLAnchorElement).style.borderColor = "rgba(245,158,11,0.2)";
-                    (e.currentTarget as HTMLAnchorElement).style.background = "transparent";
-                  }}
+                  className="group flex flex-col items-center gap-3 no-underline"
                 >
-                  {social.icon}
+                  <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-amber-500 group-hover:border-amber-500/40 group-hover:bg-amber-500/5 transition-all duration-300">
+                    {social.icon}
+                  </div>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-600 group-hover:text-zinc-300 transition-colors">
+                    {social.label}
+                  </span>
                 </a>
               </li>
             ))}
           </ul>
         </nav>
 
-        <p className="footer-copy">
-          © {new Date().getFullYear()} {profile.name}. All rights reserved.
+        <div className="w-16 h-px bg-white/10 mb-8" />
+
+        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-500 mb-2">
+          Handcrafted by {profile.name}
+        </p>
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-700">
+          © {new Date().getFullYear()} — Dossier V4.0.0
         </p>
       </div>
     </footer>

@@ -141,9 +141,9 @@ export default function Home() {
             <div className="absolute top-0 left-0 w-full h-px bg-white/10" />
             <div className="absolute top-0 left-0 w-32 h-[3px] bg-white/20" />
 
-            <div className="hero-content reveal-stagger w-full max-w-6xl mx-auto px-6 relative z-10 py-12 mt-8">
+            <div className="hero-content reveal-stagger w-full max-w-6xl mx-auto px-6 relative z-10 py-12 mt-4 md:mt-8">
               {/* Background Index Watermark - Hero 00 */}
-              <div className="absolute top-6 left-6 font-sans text-[8rem] md:text-[12rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
+              <div className="absolute top-4 left-4 md:top-6 md:left-6 font-sans text-[6rem] md:text-[12rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
                 00
               </div>
               
@@ -154,7 +154,7 @@ export default function Home() {
 
                   {/* Title Area */}
                   <div className="relative mb-8 pb-4 pl-1 mt-6">
-                    <h1 className="font-sans text-4xl md:text-7xl lg:text-[7.5rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
+                    <h1 className="font-sans text-4xl sm:text-5xl md:text-7xl lg:text-[7.5rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
                       MEET KHALIL
                     </h1>
                     <div className="h-[2px] w-20 bg-gradient-to-r from-amber-500 to-orange-600" />
@@ -208,9 +208,9 @@ export default function Home() {
                       <img 
                         src={img.src} 
                         alt="Profile Context" 
-                        className="w-full h-full object-cover saturate-[0.8] group-hover:saturate-100 transition-all" 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 z-20 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
                     </motion.div>
                   ))}
                 </div>
