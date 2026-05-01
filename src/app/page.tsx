@@ -502,13 +502,6 @@ export default function Home() {
                           Send a Message
                         </h3>
                         <input
-                          type="text"
-                          name="_subject"
-                          placeholder="Subject"
-                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all"
-                          required
-                        />
-                        <input
                           type="email"
                           name="email"
                           placeholder="Your Email"
