@@ -449,10 +449,36 @@ export default function Home() {
 
                 {/* Contact form */}
                 <form
-                  onSubmit={(e) => {
+                  onSubmit={async (e) => {
                     e.preventDefault();
                     setIsSubmitting(true);
-                    setTimeout(() => { setIsSubmitting(false); setFormSent(true); setTimeout(() => setFormSent(false), 5000); }, 1500);
+
+                    const FORMSPREE_ENDPOINT = "https://formspree.io/f/mnjwqeyv";
+
+                    const formData = new FormData(e.currentTarget);
+                    
+                    try {
+                      const response = await fetch(FORMSPREE_ENDPOINT, {
+                        method: "POST",
+                        body: formData,
+                        headers: {
+                          'Accept': 'application/json'
+                        }
+                      });
+
+                      if (response.ok) {
+                        setIsSubmitting(false);
+                        setFormSent(true);
+                        setTimeout(() => setFormSent(false), 5000);
+                        (e.target as HTMLFormElement).reset();
+                      } else {
+                        throw new Error("Form submission failed");
+                      }
+                    } catch (error) {
+                      setIsSubmitting(false);
+                      alert("Failed to send message. Please check your connection or try again later.");
+                      console.error("Formspree Error:", error);
+                    }
                   }}
                   className="contact-form-ui flex flex-col gap-5 p-7 bg-gradient-to-br from-primary-950/15 to-black/40 border border-primary-500/20 hover:border-primary-400/40 transition-all duration-300 rounded-xl shadow-xl relative overflow-hidden"
                   style={{ animation: "contactCardIn 0.5s ease-out 0.24s both" }}
@@ -477,7 +503,7 @@ export default function Home() {
                         </h3>
                         <input
                           type="text"
-                          name="subject"
+                          name="_subject"
                           placeholder="Subject"
                           className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all"
                           required
@@ -490,7 +516,7 @@ export default function Home() {
                           required
                         />
                         <textarea
-                          name="body"
+                          name="message"
                           placeholder="Your message..."
                           rows={4}
                           className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all resize-none"
