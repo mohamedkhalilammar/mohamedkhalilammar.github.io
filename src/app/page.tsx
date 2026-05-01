@@ -551,16 +551,25 @@ export default function Home() {
                    </div>
 
                    <div className="flex items-center gap-6">
-                      <div className="hidden sm:flex gap-3">
-                         {["🐍", "🏃", "💣"].map((icon, i) => (
-                           <div key={i} className="w-[200px] h-12 bg-white/5 border border-white/10 rounded-lg flex items-center justify-center text-xl">
-                              {icon}
-                           </div>
-                         ))}
+                      <div className="hidden lg:flex gap-4">
+                        {[
+                          { id: "SNAKE", label: "Snake", color: "text-emerald-500", border: "border-emerald-500/10", bg: "bg-emerald-500/5" },
+                          { id: "RUNNER", label: "Runner", color: "text-blue-500", border: "border-blue-500/10", bg: "bg-blue-500/5" },
+                          { id: "MINESWEEPER", label: "Minesweeper", color: "text-rose-500", border: "border-rose-500/10", bg: "bg-rose-500/5" }
+                        ].map((game, i) => (
+                          <motion.div
+                            key={i}
+                            whileHover={{ y: -2, scale: 1.02, borderColor: "rgba(255,255,255,0.1)" }}
+                            className={`w-28 h-12 ${game.bg} border ${game.border} rounded-lg flex items-center justify-center relative overflow-hidden transition-all duration-300`}
+                          >
+                            <p className={`font-mono text-[10px] font-bold uppercase tracking-widest ${game.color} relative z-10`}>{game.label}</p>
+                            <div className={`absolute left-0 top-0 bottom-0 w-0.5 ${game.color.replace('text-', 'bg-')} opacity-30`} />
+                          </motion.div>
+                        ))}
                       </div>
                       <button 
                         onClick={() => setIsArcadeOpen(true)}
-                        className="btn-primary py-3 px-8 text-xs cursor-pointer"
+                        className="btn-primary py-4 px-10 text-[10px] tracking-widest font-black uppercase cursor-pointer"
                       >
                          PLAY NOW →
                       </button>
