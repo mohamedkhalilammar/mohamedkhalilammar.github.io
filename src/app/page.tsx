@@ -482,10 +482,17 @@ export default function Home() {
                           className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all"
                           required
                         />
+                        <input
+                          type="email"
+                          name="email"
+                          placeholder="Your Email"
+                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all"
+                          required
+                        />
                         <textarea
                           name="body"
                           placeholder="Your message..."
-                          rows={5}
+                          rows={4}
                           className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all resize-none"
                           required
                         />

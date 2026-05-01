@@ -142,39 +142,59 @@ export function CreativeEntrance4D() {
             textTransform: "uppercase",
             margin: "0 0 1.2rem",
           }}>
-            <span style={{
-              color: "#ffffff",
-              textShadow: "0 2px 32px rgba(3,7,18,0.95), 0 0 80px rgba(3,7,18,0.7)",
-              display: "block",
-            }}>
+            <motion.span 
+              initial={{ y: -80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+              style={{
+                color: "#ffffff",
+                textShadow: "0 2px 32px rgba(3,7,18,0.95), 0 0 80px rgba(3,7,18,0.7)",
+                display: "block",
+              }}
+            >
               Khalil
-            </span>
-            <span style={{
-              color: BLUE,
-              textShadow: "0 2px 32px rgba(3,7,18,0.95), 0 0 50px rgba(56,189,248,0.3)",
-              display: "block",
-            }}>
+            </motion.span>
+            <motion.span 
+              initial={{ y: -80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.75 }}
+              style={{
+                color: BLUE,
+                textShadow: "0 2px 32px rgba(3,7,18,0.95), 0 0 50px rgba(56,189,248,0.3)",
+                display: "block",
+              }}
+            >
               Ammar
-            </span>
+            </motion.span>
           </h1>
 
           {/* Subtitle — readable opacity with shadow */}
-          <p style={{
-            fontFamily: "var(--font-mono, monospace)",
-            fontSize: "clamp(0.75rem, 3.5vw, 0.93rem)",
-            color: "rgba(255,255,255,0.75)",
-            lineHeight: 1.6,
-            maxWidth: "360px",
-            marginBottom: "2.5rem",
-            letterSpacing: "0.02em",
-            textShadow: "0 1px 14px rgba(3,7,18,0.9)",
-          }}>
+          <motion.p 
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 1.0 }}
+            style={{
+              fontFamily: "var(--font-mono, monospace)",
+              fontSize: "clamp(0.75rem, 3.5vw, 0.93rem)",
+              color: "rgba(255,255,255,0.75)",
+              lineHeight: 1.6,
+              maxWidth: "360px",
+              marginBottom: "2.5rem",
+              letterSpacing: "0.02em",
+              textShadow: "0 1px 14px rgba(3,7,18,0.9)",
+            }}
+          >
             Cybersecurity Enthusiast<br className="hidden sm:block" />
             &amp; Engineering Student at INSAT.
-          </p>
+          </motion.p>
 
           {/* CTAs */}
-          <div style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap" }}>
+          <motion.div 
+            initial={{ y: -40, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 1.2 }}
+            style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap" }}
+          >
             <a
               href="#projects"
               style={{
@@ -205,7 +225,7 @@ export function CreativeEntrance4D() {
             >
               Contact
             </a>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
 
