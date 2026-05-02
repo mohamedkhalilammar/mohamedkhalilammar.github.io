@@ -10,9 +10,10 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const BG_PHOTOS = [
+  "/media/cybersphere.jpeg",
   "/media/finals.jpg",
   "/media/photo.jpg",
-  "/media/cybersphere.jpeg",
+
 ];
 
 const LABELS = ["Finals", "Portrait", "Cyber Lab"];
@@ -142,7 +143,7 @@ export function CreativeEntrance4D() {
             textTransform: "uppercase",
             margin: "0 0 1.2rem",
           }}>
-            <motion.span 
+            <motion.span
               initial={{ y: -80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
@@ -154,7 +155,7 @@ export function CreativeEntrance4D() {
             >
               Khalil
             </motion.span>
-            <motion.span 
+            <motion.span
               initial={{ y: -80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.75 }}
@@ -169,7 +170,7 @@ export function CreativeEntrance4D() {
           </h1>
 
           {/* Subtitle — readable opacity with shadow */}
-          <motion.p 
+          <motion.p
             initial={{ y: -60, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 1.0 }}
@@ -189,7 +190,7 @@ export function CreativeEntrance4D() {
           </motion.p>
 
           {/* CTAs */}
-          <motion.div 
+          <motion.div
             initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 1.2 }}
