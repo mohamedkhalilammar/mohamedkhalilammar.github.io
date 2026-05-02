@@ -10,7 +10,6 @@ const navigationLinks = [
   { label: "Projects", href: "#projects" },
   { label: "CTF", href: "#ctf" },
   { label: "Skills", href: "#skills" },
-  { label: "Arcade", href: "/arcade", target: "_self" },
   { label: "CV", href: "/media/CV.pdf", target: "_blank", rel: "noopener noreferrer" },
   { label: "Contact", href: "#contact" },
 ];

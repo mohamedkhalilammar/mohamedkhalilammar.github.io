@@ -50,7 +50,6 @@ const NAV_LINKS = [
   { label: "Projects",       href: "#projects" },
   { label: "CTF",            href: "#ctf" },
   { label: "Skills",         href: "#skills" },
-  { label: "Arcade",         href: "/arcade", isExternal: true },
   { label: "CV",             href: "/media/CV.pdf", isFile: true },
   { label: "Contact",        href: "#contact" },
 ];

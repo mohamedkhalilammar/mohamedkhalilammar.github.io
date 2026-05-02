@@ -20,16 +20,6 @@ import { EnhancedSkillModal } from "@/components/ui/enhanced-skill-modal";
 import { ArcadePanel } from "@/components/ui/arcade-panel";
 import { achievements, certifications, ctfWriteups, ctfIdentity, learningPath, profile, projects, skillGroups } from "@/data/portfolio";
 
-const navigationLinks = [
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
-  { label: "Achievements", href: "#achievements" },
-  { label: "Writeups", href: "#writeups" },
-  { label: "Certifications", href: "#certifications" },
-  { label: "Skills", href: "#skills" },
-  { label: "Arcade", href: "/arcade" },
-  { label: "Contact", href: "#contact" },
-];
 
 const commands = [
   { cmd: "whoami --profile", out: "Name: Khalil Ammar\nAge: 21\nRole: Offensive Security Engineer\nEducation: INSAT ICT 3rd-Year" },
