@@ -23,13 +23,14 @@ export function ScrollToTop() {
       {visible && (
         <motion.button
           key="scroll-top"
-          className="scroll-top-btn"
+          className="scroll-top-btn hover:scale-110 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           aria-label="Scroll to top"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+          initial={{ opacity: 0, scale: 0.6, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 10 }}
-          transition={{ duration: 0.2 }}
+          exit={{ opacity: 0, scale: 0.6, y: 20 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          whileHover={{ y: -2 }}
         >
           {/* Up arrow SVG */}
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

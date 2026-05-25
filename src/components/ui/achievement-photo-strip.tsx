@@ -21,9 +21,9 @@ interface Props {
 
 export function AchievementPhotoStrip({ photos }: Props) {
   return (
-    <div className="lg:hidden -mx-4 sm:-mx-6 mb-10 overflow-x-auto scroll-smooth achievement-strip-scroll relative">
+    <div className="lg:hidden mb-10 overflow-x-auto overflow-y-hidden scroll-smooth achievement-strip-scroll relative w-full">
       <div
-        className="flex gap-3 px-4 sm:px-6 pb-3"
+        className="flex gap-4 px-6 pb-4"
         style={{ width: "max-content" }}
       >
         {photos.map((src, i) => (
@@ -33,12 +33,12 @@ export function AchievementPhotoStrip({ photos }: Props) {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.06 }}
-            className="relative flex-shrink-0 w-[220px] h-[155px] rounded-xl overflow-hidden border border-primary-500/30 shadow-lg"
+            className="relative flex-shrink-0 w-[220px] h-[155px] rounded-2xl overflow-hidden border border-primary-500/25 shadow-lg group/photo"
           >
             <img
               src={src}
               alt={`Achievement photo ${i + 1}`}
-              className="w-full h-full object-cover object-center brightness-105"
+              className="w-full h-full object-cover object-center brightness-105 group-hover/photo:scale-105 transition-transform duration-500"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
@@ -46,7 +46,7 @@ export function AchievementPhotoStrip({ photos }: Props) {
         ))}
       </div>
       {/* Scroll hint fade */}
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-black to-transparent" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent" />
     </div>
   );
 }

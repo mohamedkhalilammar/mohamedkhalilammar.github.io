@@ -107,10 +107,10 @@ export function EnhancedSkillModal({ skill, isOpen, onClose, modalRef }: Props) 
             tabIndex={-1}
             ref={modalRef}
             onClick={(e) => e.stopPropagation()}
-            initial={{ opacity: 0, scale: 0.95, y: 12 }}
+            initial={{ opacity: 0, scale: 0.92, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 12 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, scale: 0.92, y: 16 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
             style={{ maxWidth: 480, width: "92vw" }}
           >
             {/* Header */}
@@ -152,7 +152,7 @@ export function EnhancedSkillModal({ skill, isOpen, onClose, modalRef }: Props) 
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${proficiency}%` }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                  transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
                   style={{
                     height: "100%",
                     background: "linear-gradient(90deg, rgba(245,158,11,0.7), rgba(245,158,11,1))",

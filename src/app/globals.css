@@ -73,14 +73,11 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
 }
 
-@media (min-width: 1024px) {
-  html {
-    scroll-snap-type: y mandatory;
-    scroll-padding-top: 80px;
-  }
-}
+/* Scroll snap removed — was too jarring on long-form content */
 
 body {
   background: var(--background);
@@ -90,6 +87,9 @@ body {
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
   font-size: 1.05rem;
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 /* Soft Grain Texture */
@@ -132,7 +132,7 @@ h3 {
 a {
   color: inherit;
   text-decoration: none;
-  transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
 }
 
 a:hover {
@@ -323,7 +323,6 @@ a:hover {
 }
 
 .nav-list {
-  display: flex;
   gap: 1.5rem;
   list-style: none;
   font-family: var(--font-mono), monospace;
@@ -338,13 +337,30 @@ a:hover {
   position: relative;
   padding: 0.3rem 0.6rem;
   border-radius: var(--radius-sm);
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .nav-link-btn:hover {
   opacity: 1;
   color: var(--accent);
   background: rgba(126, 184, 164, 0.08);
+}
+
+.nav-link-btn.nav-link-active {
+  opacity: 1;
+  color: var(--accent);
+}
+
+.nav-link-btn.nav-link-active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
 }
 
 /* ===============================
@@ -571,8 +587,8 @@ a:hover {
    HERO ORCHESTRATION
    =============================== */
 .hero-section {
-  padding: clamp(3rem, 6vw, 5rem) var(--space-page) 3rem;
-  min-height: 80vh;
+  padding: clamp(2rem, 4vw, 4rem) var(--space-page) 2rem;
+  min-height: auto;
   display: flex;
   align-items: center;
   position: relative;
@@ -702,12 +718,13 @@ a:hover {
   color: #0a1410;
   border-radius: 4px;
   border: none;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2), 0 0 20px rgba(126, 184, 164, 0.3);
   cursor: pointer;
   position: relative;
   overflow: hidden;
   clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+  will-change: transform, box-shadow;
 }
 
 .btn-primary::before {
@@ -757,9 +774,10 @@ a:hover {
   border-radius: 4px;
   border: 1px solid rgba(126, 184, 164, 0.3);
   backdrop-filter: blur(8px);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   clip-path: polygon(0 0, 90% 0, 100% 30%, 100% 100%, 10% 100%, 0 70%);
+  will-change: transform, box-shadow;
 }
 
 .btn-secondary:hover,
@@ -781,24 +799,46 @@ a:hover {
    =============================== */
 .terminal-perspective-wrapper {
   width: 100%;
-  max-width: 1000px;
+  max-width: 100%;
   perspective: 1600px;
   margin: 0 auto;
 }
 
+@media (min-width: 769px) {
+  .terminal-perspective-wrapper {
+    max-width: 1000px;
+  }
+}
+
+@media (max-width: 768px) {
+  .terminal-perspective-wrapper {
+    perspective: none;
+  }
+}
+
 .hero-terminal {
-  background: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(28px) saturate(1.8);
-  border: 1px solid rgba(129, 140, 248, 0.25);
+  background: rgba(10, 14, 23, 0.55);
+  backdrop-filter: blur(32px) saturate(2);
+  border: 1px solid rgba(var(--primary-rgb), 0.3);
   border-radius: var(--radius-xl);
   height: 580px;
   display: flex;
   flex-direction: column;
   box-shadow: 
-    0 40px 100px -20px rgba(0, 0, 0, 0.5),
-    inset 0 0 40px rgba(129, 140, 248, 0.05);
+    0 40px 100px -20px rgba(0, 0, 0, 0.8),
+    inset 0 0 50px rgba(var(--primary-rgb), 0.1),
+    0 0 30px rgba(var(--primary-rgb), 0.15);
   overflow: hidden;
   position: relative;
+  transition: box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-terminal:hover {
+  box-shadow: 
+    0 40px 100px -20px rgba(0, 0, 0, 0.8),
+    inset 0 0 50px rgba(var(--primary-rgb), 0.15),
+    0 0 50px rgba(var(--primary-rgb), 0.3);
+  border-color: rgba(var(--primary-rgb), 0.6);
 }
 
 .hero-terminal::before {
@@ -924,12 +964,6 @@ a:hover {
 .section-flow {
   position: relative;
   background: transparent;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-
-.hero-section {
-  scroll-snap-align: start;
 }
 
 .section-shell {
@@ -1043,8 +1077,8 @@ a:hover {
 .certification-card:hover,
 .skills-card:hover,
 .learning-path-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--accent);
   border-color: var(--accent);
   background: var(--surface-alt);
 }
@@ -1376,8 +1410,8 @@ a:hover {
 @keyframes slideUpStark {
   from {
     opacity: 0;
-    transform: translateY(20px);
-    filter: blur(4px);
+    transform: translateY(14px);
+    filter: blur(2px);
   }
 
   to {
@@ -1389,7 +1423,7 @@ a:hover {
 
 .css-stagger-item {
   opacity: 0;
-  animation: slideUpStark 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUpStark 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .css-stagger-item:nth-child(1) {
@@ -1417,9 +1451,16 @@ a:hover {
    =============================== */
 .contact-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5rem;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 768px) {
+  .contact-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
 }
 
 .contact-card {
@@ -3089,4 +3130,170 @@ html.amber-light .project-markdown-block pre {
 @keyframes stage-scan {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100vw); }
+}
+
+/* ===============================
+   MOBILE-FIRST RESPONSIVE ENHANCEMENTS
+   =============================== */
+
+/* ── Mobile hero tightening ── */
+@media (max-width: 767px) {
+  .hero-section {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    min-height: auto;
+  }
+
+  .hero-section h1 {
+    font-size: 2.5rem !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-content {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Terminal compact on mobile */
+  .hero-terminal {
+    height: 340px !important;
+    border-radius: 12px;
+  }
+
+  .terminal-lines-container {
+    padding: 1rem 1.25rem;
+  }
+
+  .terminal-lines {
+    font-size: 0.85rem;
+    line-height: 1.65;
+  }
+
+  .terminal-chrome {
+    padding: 0.8rem 1rem;
+  }
+
+  /* Tighter section shells */
+  .section-shell {
+    padding: 2rem 1.25rem !important;
+  }
+
+  .section-flow {
+    margin-bottom: 0;
+  }
+
+  /* Fix section title sizes on mobile */
+  .section-title {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Better buttons on mobile */
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.9rem 1.8rem;
+    font-size: 0.72rem;
+    width: 100%;
+    justify-content: center;
+    clip-path: none;
+    border-radius: 8px;
+  }
+
+  /* Contact stacking on mobile */
+  .contact-grid {
+    gap: 1rem;
+  }
+
+  .contact-card {
+    padding: 1.25rem;
+  }
+
+  /* Footer compactness */
+  .site-footer {
+    padding: 2.5rem 1.25rem !important;
+  }
+
+  /* Skills grid single column */
+  .skills-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .skills-card {
+    padding: 1.25rem !important;
+  }
+
+  /* Fix scroll-to-top overlap with sidebar fab */
+  .scroll-top-btn {
+    bottom: 1.25rem;
+    right: 1.25rem;
+    width: 40px;
+    height: 40px;
+  }
+
+  /* Sidebar FAB smaller on mobile */
+  .sidebar-fab {
+    width: 3rem;
+    height: 3rem;
+    right: 1.25rem;
+    bottom: 1.25rem;
+  }
+
+  /* Better certifications grid on mobile */
+  .certification-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── Tablet refinements ── */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-terminal {
+    height: 500px !important;
+  }
+
+  .hero-section h1 {
+    font-size: 3.5rem !important;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ── Large desktop polish ── */
+@media (min-width: 1440px) {
+  .section-shell {
+    max-width: 1400px;
+  }
+
+  .hero-content {
+    max-width: 1400px;
+  }
+}
+
+/* ── Reduced motion — globally dial back ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .page-shell::before,
+  .page-shell::after,
+  .page-noise::before,
+  .page-noise::after {
+    animation: none !important;
+  }
+}
+
+/* ── Scrollbar hide utility ── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

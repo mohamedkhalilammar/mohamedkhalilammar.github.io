@@ -61,7 +61,7 @@ export function LiveTerminal() {
       const timeout = setTimeout(() => {
         setHistory((prev) => [...prev, { type: "out", text: lines[lineIndex] }]);
         setLineIndex((prev) => prev + 1);
-      }, 800 + Math.random() * 400);
+      }, 500 + Math.random() * 300);
       return () => clearTimeout(timeout);
     } else if (lineIndex >= lines.length) {
       setPhase("done");
@@ -74,9 +74,9 @@ export function LiveTerminal() {
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, scale: 0.9, y: 30 }}
+      initial={{ opacity: 0, scale: 0.97, y: 12 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.2, type: 'spring', bounce: 0.4 }}
+      transition={{ duration: 0.5, delay: 0.15, type: 'spring', bounce: 0.2 }}
       style={{
         rotateX: isTouch ? 0 : rotateX,
         rotateY: isTouch ? 0 : rotateY,
@@ -85,7 +85,7 @@ export function LiveTerminal() {
       }}
     >
       <aside 
-        className="hero-terminal border-[0.5px] border-white/20 bg-[#07090e]/95 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col h-[500px] sm:h-[600px] md:h-[800px] rounded-2xl" 
+        className="hero-terminal border-[0.5px] border-white/20 bg-[#07090e]/95 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex flex-col h-[340px] sm:h-[420px] md:h-[520px] rounded-2xl" 
         aria-label="Live security terminal"
       >
         <div className="bg-white/5 border-b-[0.5px] border-white/10 px-4 md:px-5 py-3 flex items-center justify-between">
@@ -97,18 +97,18 @@ export function LiveTerminal() {
           <p className="font-mono text-[8px] md:text-[9px] uppercase tracking-widest text-zinc-500 font-bold truncate ml-4">session://root@khalil-dossier</p>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5 sm:p-8 md:p-10 font-mono text-xs sm:text-sm md:text-base antialiased scrollbar-hide">
-          <ul className="space-y-8 md:space-y-12">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 font-mono text-xs sm:text-sm md:text-base antialiased scrollbar-hide">
+          <ul className="space-y-5 md:space-y-8">
             <AnimatePresence mode="popLayout">
               {history.map((item, i) => (
                 <motion.li 
                   key={i} 
-                  initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+                  initial={{ opacity: 0, y: 12, filter: "blur(2px)" }}
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                   className="relative group pb-4"
                 >
-                  <p className="text-zinc-300 leading-relaxed font-light tracking-wide text-sm sm:text-base md:text-lg">
+                  <p className="text-zinc-300 leading-[1.7] font-light tracking-wide text-[13px] sm:text-sm md:text-base">
                     {item.text.replace(/^\d+\s/, '')}
                   </p>
                 </motion.li>
@@ -117,7 +117,7 @@ export function LiveTerminal() {
             {phase === "output" && (
               <li className="flex items-center gap-4 opacity-30 mt-8">
                  <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                 <span className="text-[9px] uppercase tracking-widest font-bold">Injesting_Data...</span>
+                 <span className="text-[9px] uppercase tracking-widest font-bold">Ingesting_Data...</span>
               </li>
             )}
           </ul>

@@ -7,11 +7,11 @@ import { Writeup } from "@/data/portfolio";
 function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
   // Simple, clean entry stagger without heavy 3D math
   const entryVariants = {
-    hidden: { opacity: 0, y: 30 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] as const }
+      transition: { duration: 0.4, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] as const }
     }
   };
 
@@ -23,7 +23,7 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
       viewport={{ once: true, margin: "-50px" }}
       className="group h-full"
     >
-      <div className="flex flex-col h-full bg-black/40 backdrop-blur-sm border border-primary-500/20 rounded-xl overflow-hidden hover:border-primary-500/50 hover:bg-black/60 transition-all duration-300 hover:-translate-y-2 shadow-sm hover:shadow-[0_15px_30px_rgba(var(--primary-rgb),0.1)] relative">
+      <div className="flex flex-col h-full bg-black/40 backdrop-blur-sm border border-primary-500/20 rounded-xl overflow-hidden hover:border-primary-500/50 hover:bg-black/60 transition-all duration-300 hover:-translate-y-2 shadow-sm hover:shadow-[0_15px_30px_rgba(var(--primary-rgb),0.12)] relative">
 
         {/* Subtle background image header if available */}
         {writeup.mediaUrl && (
@@ -37,27 +37,27 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
           </div>
         )}
 
-        <div className="p-5 flex flex-col flex-1 relative z-20">
-          <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
-            <span className="font-mono text-[10px] font-bold tracking-[0.1em] uppercase text-background bg-primary px-3 py-1 rounded shadow-sm">
+        <div className="p-5 md:p-8 flex flex-col flex-1 relative z-20">
+          <div className="flex items-center justify-between flex-wrap gap-2 mb-5">
+            <span className="font-mono text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-background bg-primary px-3 py-1 rounded shadow-sm">
               {writeup.category}
             </span>
-            <span className="font-mono text-[11px] text-foreground/50 tracking-wider">
+            <span className="font-mono text-[11px] md:text-[12px] text-foreground/50 tracking-wider">
               {writeup.competition}
             </span>
           </div>
 
-          <h3 className="font-sans text-lg font-bold text-foreground uppercase tracking-tight leading-snug mb-3 drop-shadow-sm group-hover:text-primary-300 transition-colors">
+          <h3 className="font-sans text-lg md:text-xl font-bold text-foreground uppercase tracking-tight leading-snug mb-3 drop-shadow-sm group-hover:text-primary-300 transition-colors">
             {writeup.title}
           </h3>
 
-          <p className="text-sm leading-relaxed text-foreground/70 mb-6 flex-1">
+          <p className="text-sm md:text-base leading-relaxed text-foreground/70 mb-8 flex-1">
             {writeup.summary}
           </p>
 
           <Link
             href={`/writeups/${writeup.id}`}
-            className="inline-flex items-center justify-between font-mono text-[0.8rem] font-bold tracking-widest uppercase text-primary mt-auto pt-5 border-t border-primary-500/10 group-hover:border-primary-500/30 transition-all no-underline"
+            className="inline-flex items-center justify-between font-mono text-[0.8rem] font-bold tracking-widest uppercase text-primary mt-auto pt-5 border-t border-primary-500/10 group-hover:border-primary-500/30 transition-all no-underline min-h-[44px]"
           >
             <span>Read Full Report</span>
             <span className="transform transition-transform duration-300 group-hover:translate-x-2">{"→"}</span>

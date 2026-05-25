@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -157,16 +158,16 @@ export function ActiveNav() {
                     return (
                       <motion.li 
                         key={item.label}
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 0, x: -12 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.05 }}
+                        transition={{ delay: i * 0.03 }}
                         onClick={() => setIsOpen(false)}
                       >
                         <a
                           href={item.href}
                           className={`group relative flex items-center gap-4 py-2 no-underline`}
                         >
-                          <span className={`text-4xl font-sans font-black uppercase tracking-tighter transition-all duration-300 ${isActive ? "text-white translate-x-2" : "text-white/20 group-hover:text-white/40"}`}>
+                          <span className={`text-3xl sm:text-4xl font-sans font-black uppercase tracking-tighter transition-all duration-200 ${isActive ? "text-white translate-x-2" : "text-white/20 group-hover:text-white/40"}`}>
                             {item.label}
                           </span>
                           {isActive && (

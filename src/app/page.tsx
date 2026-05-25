@@ -38,10 +38,10 @@ const ACHIEVEMENT_PHOTOS = [
 
 // Refined reveal config — tighter, more intentional
 const makeReveal = (reducedMotion: boolean) => ({
-  initial: reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 20, filter: "blur(2px)" },
+  initial: reducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 14, filter: "blur(1px)" },
   whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
-  transition: reducedMotion ? { duration: 0 } : { duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.05 },
-  viewport: { once: true, amount: 0.1 },
+  transition: reducedMotion ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+  viewport: { once: true, amount: 0.08 },
 });
 
 export default function Home() {
@@ -105,7 +105,7 @@ export default function Home() {
         <div className="page-noise" aria-hidden />
 
         {/* ── Header ── */}
-        <header className="top-nav" style={{ backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <header className="top-nav flex" style={{ backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
           <p className="brand-mark" style={{ letterSpacing: "0.05em", fontWeight: 700 }}>{profile.name}</p>
           <ActiveNav />
         </header>
@@ -137,48 +137,48 @@ export default function Home() {
                 00
               </div>
               
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full relative z-10">
+              <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full relative z-10">
 
                 {/* ── Text column ── */}
                 <div className="w-full flex-col css-stagger-item text-left lg:col-span-8">
 
                   {/* Title Area */}
-                  <div className="relative mb-8 pb-4 pl-1 mt-6">
-                    <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl lg:text-[7.5rem] font-black uppercase tracking-tighter leading-none mb-4 text-white">
+                  <div className="relative mb-5 pb-3 pl-1 mt-4">
+                    <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[6.5rem] font-black uppercase tracking-tighter leading-none mb-3 text-white">
                       MEET KHALIL
                     </h1>
-                    <div className="h-[2px] w-20 bg-gradient-to-r from-amber-500 to-orange-600" />
+                    <div className="h-[2px] w-16 bg-gradient-to-r from-amber-500 to-orange-600" />
                   </div>
 
                   {/* Role rotator */}
-                  <h2 className="text-lg md:text-xl font-mono text-zinc-400 mb-10 uppercase tracking-[0.2em] pb-4 inline-flex items-center gap-3 min-h-[1.5em]">
+                  <h2 className="text-base md:text-lg font-mono text-zinc-400 mb-6 uppercase tracking-[0.15em] pb-2 inline-flex items-center gap-3 min-h-[1.5em]">
                     <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={roles[roleIdx]}
-                        initial={{ opacity: 0, y: 8, filter: "blur(4px)" }}
+                        initial={{ opacity: 0, y: 6, filter: "blur(3px)" }}
                         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, y: -8, filter: "blur(4px)" }}
-                        transition={{ duration: 0.45, ease: "easeOut" }}
+                        exit={{ opacity: 0, y: -6, filter: "blur(3px)" }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                       >
                         {roles[roleIdx]}
                       </motion.span>
                     </AnimatePresence>
                   </h2>
 
-                  {/* Terminal block - Restored Original Content */}
-                  <div className="relative mb-8 md:mb-12 max-w-6xl">
+                  {/* Terminal block */}
+                  <div className="relative mb-6 md:mb-8 max-w-5xl">
                     <LiveTerminal />
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4">
-                    <a className="btn-primary" href="#projects">{profile.cta.primary}</a>
-                    <a className="btn-secondary" href="#contact">{profile.cta.secondary}</a>
+                    <a className="btn-primary focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#projects">{profile.cta.primary}</a>
+                    <a className="btn-secondary focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#contact">{profile.cta.secondary}</a>
                   </div>
                 </div>
 
-                {/* ── Photo Row - Static Side-by-Side Highlights ── */}
-                <div className="lg:col-span-4 flex flex-row items-center gap-4 h-auto lg:h-full pt-4 lg:pt-12 self-start lg:translate-x-4 overflow-x-auto lg:overflow-visible pb-8 lg:pb-0 scrollbar-hide w-full max-w-[100vw] -mx-6 px-6 lg:mx-0 lg:px-0">
+                {/* ── Photo Row ── */}
+                <div className="lg:col-span-4 flex flex-row items-center gap-3 h-auto lg:h-full pt-2 lg:pt-8 self-start lg:translate-x-4 pb-4 lg:pb-0 w-full justify-center lg:justify-start">
                   {[
                     { src: "/media/photo.jpg", rotate: "-2deg" },
                     { src: "/media/teamm.jpeg", rotate: "1deg" },
@@ -186,21 +186,19 @@ export default function Home() {
                   ].map((img, i) => (
                     <motion.div 
                       key={i}
-                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                      initial={{ opacity: 0, scale: 0.9, y: 15 }}
                       whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ delay: 0.1 * i, duration: 0.8 }}
+                      transition={{ delay: 0.08 * i, duration: 0.5 }}
                       viewport={{ once: true }}
-                      className="relative w-[140px] sm:w-[160px] aspect-[4/5] rounded-xl overflow-hidden border-[0.5px] border-white/20 shadow-2xl hover:scale-105 transition-all duration-500 bg-black group shrink-0"
-                      style={{ 
-                        rotate: img.rotate
-                      }}
+                      className={`relative w-[110px] sm:w-[130px] md:w-[150px] aspect-[4/5] rounded-xl overflow-hidden border border-white/15 shadow-xl hover:scale-105 hover:border-white/25 transition-all duration-300 bg-black group shrink-0 ${i === 2 ? 'hidden sm:block' : ''}`}
+                      style={{ rotate: img.rotate }}
                     >
                       <img 
                         src={img.src} 
                         alt="Profile Context" 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-50" />
                     </motion.div>
                   ))}
                 </div>
@@ -225,22 +223,32 @@ export default function Home() {
           <motion.div {...(reveal as any)} className="section-flow relative">
             <SectionShell id="achievements" eyebrow="Milestones" title="Key Achievements" index="02">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
-                <AchievementPhotoStrip photos={ACHIEVEMENT_PHOTOS} />
+                <div className="lg:col-span-12">
+                  <AchievementPhotoStrip photos={ACHIEVEMENT_PHOTOS} />
+                </div>
                 <div className="lg:col-span-4 hidden lg:flex flex-col gap-10 mt-2">
                   {ACHIEVEMENT_PHOTOS.map((src, idx) => (
-                    <motion.div key={idx} className="relative w-full rounded-xl overflow-hidden border border-primary-500/25 shadow-lg group aspect-video">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent z-10 pointer-events-none" />
-                      <img src={src} alt="Achievement" className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700" />
+                    <motion.div key={idx} className="relative w-full rounded-xl overflow-hidden border border-amber-500/20 shadow-lg group aspect-video"
+                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                      transition={{ delay: 0.1 * idx, duration: 0.8 }}
+                      viewport={{ once: true }}>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
+                      <img src={src} alt="Achievement" className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700" />
                     </motion.div>
                   ))}
                 </div>
-                <div className="lg:col-span-8 relative border-l border-primary-500/25 ml-4 md:ml-8 pl-8 md:pl-12 space-y-10">
+                <div className="lg:col-span-8 relative lg:border-l-2 lg:border-amber-500/20 lg:ml-8 lg:pl-12 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-6 lg:gap-12 pb-6 lg:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 lg:mx-0 w-screen lg:w-auto">
                   {achievements.map((achievement, idx) => (
-                    <div key={idx} className="relative group p-6 rounded-xl border border-white/5 bg-white/[0.02]">
-                      <div className="absolute w-3 h-3 rounded-full bg-amber-500 -left-[2.35rem] md:-left-[3.35rem] top-8" />
-                      <span className="text-[10px] font-mono text-amber-500 uppercase tracking-widest mb-4 block">{achievement.highlight}</span>
-                      <h3 className="text-xl font-bold text-white mb-2">{achievement.title}</h3>
-                      <p className="text-zinc-400 text-sm">{achievement.detail}</p>
+                    <div key={idx} className="relative group p-6 rounded-2xl border-t-[3px] border-l border-r border-b lg:border-t lg:border-t-white/10 lg:hover:border-amber-500/30 border-t-amber-500/50 border-x-white/5 border-b-white/5 bg-white/[0.02] hover:bg-amber-500/[0.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.1)] transition-all duration-500 backdrop-blur-sm w-[85vw] sm:w-[320px] lg:w-auto snap-center shrink-0 whitespace-normal">
+                      
+                      {/* Desktop Timeline Dot */}
+                      <div className="hidden lg:block absolute w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.6)] -left-[3.45rem] top-8" />
+                      <div className="hidden lg:block absolute -left-[3.45rem] top-8 w-3 h-3 rounded-full bg-amber-500 animate-ping opacity-75" />
+                      
+                      <span className="text-[10px] md:text-[11px] font-mono text-amber-500 uppercase tracking-[0.2em] mb-4 block font-bold">{achievement.highlight}</span>
+                      <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-zinc-400 transition-all">{achievement.title}</h3>
+                      <p className="text-zinc-400 text-sm md:text-base leading-relaxed group-hover:text-zinc-300 transition-colors w-full break-words">{achievement.detail}</p>
                     </div>
                   ))}
                 </div>
@@ -266,32 +274,32 @@ export default function Home() {
                 Verified training and formal credentials that back the practical offensive-security work shown in this portfolio.
               </p>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 mb-8">
                 {certifications.map((cert, idx) => (
-                  <article
-                    key={cert.name}
-                    className="group bg-black/50 border border-primary-500/15 rounded-xl p-6 backdrop-blur-sm hover:border-primary-500/45 transition-all duration-300 hover:bg-black/60"
-                    style={{ animationDelay: `${idx * 0.08}s` }}
-                  >
-                    <div className="flex items-start justify-between mb-4 gap-3">
-                      <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-amber-500 mt-0.5">
-                        {cert.issuer}
+                    <article
+                      key={cert.name}
+                      className="group bg-black/50 border border-primary-500/15 rounded-xl p-5 md:p-8 backdrop-blur-sm hover:border-primary-500/45 transition-all duration-300 hover:bg-black/60"
+                      style={{ animationDelay: `${idx * 0.08}s` }}
+                    >
+                      <div className="flex items-start justify-between mb-5 gap-3">
+                        <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-amber-500 mt-0.5">
+                          {cert.issuer}
+                        </p>
+                        {cert.logo && (
+                          <img src={cert.logo} alt={cert.issuer} className="h-8 md:h-10 object-contain rounded bg-white/5 p-1" />
+                        )}
+                      </div>
+                      <h3 className="text-lg md:text-xl font-orbitron font-bold text-white mb-3 leading-snug group-hover:text-primary-300 transition-colors">
+                        {cert.name}
+                      </h3>
+                      <p className="text-zinc-500 text-[13px] md:text-[14px] leading-relaxed mb-6">
+                        {cert.description}
                       </p>
-                      {cert.logo && (
-                        <img src={cert.logo} alt={cert.issuer} className="h-8 object-contain rounded bg-white/5 p-1" />
-                      )}
-                    </div>
-                    <h3 className="text-lg font-orbitron font-bold text-white mb-3 leading-snug group-hover:text-primary-300 transition-colors">
-                      {cert.name}
-                    </h3>
-                    <p className="text-zinc-500 text-[13px] leading-relaxed mb-5">
-                      {cert.description}
-                    </p>
-                    <a
+                      <a
                       href={cert.verifyUrl || cert.localFile}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-primary-400 hover:text-white transition-colors border-b border-primary-500/20 hover:border-primary-400 pb-0.5"
+                      className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-primary-400 hover:text-white transition-colors border-b border-primary-500/20 hover:border-primary-400 pb-0.5 min-h-[44px]"
                     >
                       View Certificate <span>→</span>
                     </a>
@@ -336,13 +344,13 @@ export default function Home() {
           </motion.div>
 
           {/* ===== SKILLS ===== */}
-          <motion.div {...(reveal as any)} className="section-flow relative overflow-hidden rounded-3xl border border-primary-800/20">
+          <motion.div {...(reveal as any)} className="section-flow relative overflow-hidden rounded-2xl md:rounded-3xl border border-primary-800/20">
             <SectionShell id="skills" eyebrow="Tooling" title="Core Skills" index="05">
-              <div className="skills-grid relative z-10">
+              <div className="skills-grid relative z-10 flex flex-row lg:grid overflow-x-auto lg:overflow-visible gap-4 md:gap-6 pb-6 lg:pb-0 snap-x snap-mandatory scrollbar-hide w-[calc(100vw-3rem)] -mx-6 px-6 lg:w-auto lg:mx-0 lg:px-0">
                 {skillGroups.map((group, groupIdx) => (
                   <article
                     key={group.title}
-                    className="skills-card bg-black/55 backdrop-blur-md border border-primary-500/15 hover:border-primary-500/50 transition-all duration-400 p-7 rounded-xl relative group overflow-hidden"
+                    className="skills-card bg-black/55 backdrop-blur-md border border-primary-500/15 hover:border-primary-500/50 transition-all duration-400 p-5 md:p-7 rounded-xl relative group overflow-hidden min-w-[280px] sm:min-w-[320px] lg:min-w-0 snap-center shrink-0"
                     style={{ animation: `skillCardEntry 0.5s ease-out ${groupIdx * 0.07}s both` }}
                   >
                     <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-400 bg-gradient-to-br from-primary-500/4 to-purple-500/4 pointer-events-none" />
@@ -355,7 +363,7 @@ export default function Home() {
                           key={skill.name}
                           type="button"
                           aria-pressed={selectedSkillName === skill.name && isSkillAlertVisible}
-                          className={`rounded-full border px-3.5 py-1.5 text-[12px] font-mono transition-all cursor-pointer hover:scale-[1.03] active:scale-95 ${selectedSkillName === skill.name && isSkillAlertVisible
+                          className={`rounded-full border px-3.5 py-1.5 text-[12px] font-mono transition-all cursor-pointer hover:scale-[1.03] active:scale-95 min-h-[36px] flex items-center ${selectedSkillName === skill.name && isSkillAlertVisible
                               ? "bg-primary-500/25 text-primary-200 border-primary-400/80 shadow-[0_0_12px_rgba(var(--primary-rgb),0.4)]"
                               : "bg-transparent text-primary-300/70 border-primary-600/30 hover:border-primary-400/70 hover:text-primary-200"
                             }`}
@@ -432,7 +440,7 @@ export default function Home() {
                         <p className="text-primary-400 font-mono text-[10px] uppercase tracking-[0.2em] font-bold">{contact.label}</p>
                         <p className="text-zinc-400 text-sm mt-0.5 group-hover:text-zinc-300 transition-colors">{contact.value}</p>
                       </div>
-                      <span className="ml-auto text-zinc-600 group-hover:text-amber-500 group-hover:translate-x-1 transition-all duration-300 text-sm">→</span>
+                      <span className="ml-auto text-zinc-600 group-hover:text-amber-500 group-hover:translate-x-1.5 transition-all duration-300 ease-out text-sm">→</span>
                     </a>
                   ))}
                 </div>
@@ -495,20 +503,20 @@ export default function Home() {
                           type="email"
                           name="email"
                           placeholder="Your Email"
-                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all"
+                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 focus:ring-1 focus:ring-primary-400/40 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all"
                           required
                         />
                         <textarea
                           name="message"
                           placeholder="Your message..."
                           rows={4}
-                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all resize-none"
+                          className="w-full p-4 bg-black/50 border border-primary-600/30 hover:border-primary-500/60 focus:border-primary-400/80 focus:ring-1 focus:ring-primary-400/40 rounded-lg text-primary-200 placeholder-zinc-600 outline-none font-mono text-sm transition-all resize-none"
                           required
                         />
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="mt-1 px-6 py-4 bg-amber-500/8 border-2 border-amber-500/80 hover:bg-amber-500 hover:text-black hover:border-amber-500 text-amber-400 font-mono uppercase tracking-[0.18em] text-sm transition-all duration-300 rounded-lg font-bold flex items-center justify-center gap-2 disabled:opacity-40"
+                          className="mt-1 px-6 py-4 bg-amber-500/8 border-2 border-amber-500/80 hover:bg-amber-500 hover:text-black hover:border-amber-500 text-amber-400 font-mono uppercase tracking-[0.18em] text-sm transition-all duration-300 rounded-lg font-bold flex items-center justify-center gap-2 disabled:opacity-40 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                         >
                           {isSubmitting ? "Sending..." : <>Send Message <span>→</span></>}
                         </button>
