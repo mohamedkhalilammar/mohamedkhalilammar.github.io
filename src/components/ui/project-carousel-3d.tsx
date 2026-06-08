@@ -32,7 +32,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
 
         {/* Header */}
         <div className="flex items-center gap-4 md:gap-6 mb-8">
-          <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-amber-500 font-bold whitespace-nowrap">
+          <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-primary-400 font-bold whitespace-nowrap">
             Project Architectures
           </span>
           <div className="flex-1 h-px bg-white/10" />
@@ -62,8 +62,8 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                 {/* Icon badge */}
                 <div className="flex items-center gap-4 mb-4 md:mb-6">
                   <div className="flex items-center gap-3 rounded-md px-3 py-1.5 border text-[9px] font-mono font-black uppercase tracking-[0.3em]"
-                    style={{ background: "rgba(245, 158, 11, 0.05)", borderColor: "rgba(245, 158, 11, 0.3)", color: "var(--accent)" }}>
-                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                    style={{ background: "rgba(129, 140, 248, 0.05)", borderColor: "rgba(129, 140, 248, 0.3)", color: "var(--accent)" }}>
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
                     {current.icon || "PROJECT_CORE"}
                   </div>
                   <div className="h-px flex-1 bg-white/[0.05]" />
@@ -72,7 +72,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                 {/* Name */}
                 <h2 className="font-sans text-2xl md:text-4xl lg:text-5xl font-black uppercase leading-[0.95] tracking-tighter mb-3 md:mb-5 text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                   {current.name.split(" ").map((word, i) => (
-                    <span key={i} className={i % 2 !== 0 ? "text-amber-500" : ""}>
+                    <span key={i} className={i % 2 !== 0 ? "text-primary-400" : ""}>
                       {word}{" "}
                     </span>
                   ))}
@@ -90,12 +90,12 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
 
               {/* Right Side: intelligence Summary */}
               <div className="w-full lg:w-[55%] relative p-5 md:p-10 lg:p-12 rounded-2xl md:rounded-3xl bg-white/[0.01] border border-white/[0.04] backdrop-blur-3xl overflow-hidden min-h-0">
-                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-amber-500/30 rounded-tl-2xl md:rounded-tl-3xl" />
-                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-amber-500/30 rounded-br-2xl md:rounded-br-3xl" />
+                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-400/30 rounded-tl-2xl md:rounded-tl-3xl" />
+                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-400/30 rounded-br-2xl md:rounded-br-3xl" />
                 
                 <div className="flex items-center gap-3 mb-4 md:mb-6">
-                  <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-amber-500">Summary</span>
-                  <div className="h-px flex-1 bg-gradient-to-r from-amber-500/20 to-transparent" />
+                  <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-primary-400">Summary</span>
+                  <div className="h-px flex-1 bg-gradient-to-r from-primary-400/20 to-transparent" />
                 </div>
 
                 <p className="text-sm md:text-lg lg:text-xl leading-relaxed text-zinc-400 font-medium mb-6 md:mb-12 relative z-10">
@@ -107,10 +107,10 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                     <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/20 block mb-3">Core Features</span>
                     <div className="flex flex-row sm:grid sm:grid-cols-2 gap-3 md:gap-4 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 sm:mx-0 sm:px-0">
                       {current.features.slice(0, 4).map((f) => (
-                        <div key={f} className="group flex flex-col gap-1.5 p-3 rounded-lg bg-white/[0.02] border border-transparent hover:border-amber-500/20 hover:bg-amber-500/[0.02] transition-all min-w-[240px] sm:min-w-0 snap-center shrink-0">
+                        <div key={f} className="group flex flex-col gap-1.5 p-3 rounded-lg bg-white/[0.02] border border-transparent hover:border-primary-400/20 hover:bg-primary-400/[0.02] transition-all min-w-[240px] sm:min-w-0 snap-center shrink-0">
                           <div className="flex items-center gap-2">
-                            <div className="w-1 h-1 rounded-full bg-amber-500/40 group-hover:bg-amber-500 transition-colors" />
-                            <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-300 group-hover:text-amber-500 transition-colors whitespace-nowrap">Core Aspect</span>
+                            <div className="w-1 h-1 rounded-full bg-primary-400/40 group-hover:bg-primary-400 transition-colors" />
+                            <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-300 group-hover:text-primary-400 transition-colors whitespace-nowrap">Core Aspect</span>
                           </div>
                           <span className="text-[11px] text-zinc-500 group-hover:text-zinc-300 leading-relaxed font-sans line-clamp-3 sm:line-clamp-none">{f}</span>
                         </div>
@@ -139,14 +139,14 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                       width: isActive ? "80px" : "40px",
                       height: "40px",
                       border: isActive ? "2px solid var(--accent)" : "1px solid rgba(255,255,255,0.08)",
-                      background: isActive ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.02)",
+                      background: isActive ? "rgba(129,140,248,0.15)" : "rgba(255,255,255,0.02)",
                       color: isActive ? "var(--accent)" : "rgba(255,255,255,0.3)",
                       transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)",
                       flexShrink: 0,
                     }}
                   >
                     {p.icon ? p.icon.slice(0, 3) : (i + 1)}
-                    {isActive && <motion.div layoutId="active-thumb" className="absolute inset-0 bg-amber-500/5" />}
+                    {isActive && <motion.div layoutId="active-thumb" className="absolute inset-0 bg-primary-400/5" />}
                   </button>
                 );
               })}

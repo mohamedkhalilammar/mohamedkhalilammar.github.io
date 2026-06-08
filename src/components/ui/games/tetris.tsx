@@ -58,7 +58,7 @@ export function TetrisGame() {
     // Grid
     for (let r = 0; r < ROWS; r++)
       for (let c = 0; c < COLS; c++) {
-        ctx.strokeStyle = "rgba(245,158,11,0.06)";
+        ctx.strokeStyle = "rgba(129,140,248,0.06)";
         ctx.lineWidth = 0.5;
         ctx.strokeRect(c * CELL, r * CELL, CELL, CELL);
       }
@@ -262,7 +262,7 @@ export function TetrisGame() {
             ref={canvasRef}
             width={W}
             height={H}
-            style={{ display: "block", borderRadius: 6, border: "1px solid rgba(245,158,11,0.2)" }}
+            style={{ display: "block", borderRadius: 6, border: "1px solid rgba(129,140,248,0.2)" }}
           />
           {status !== "running" && (
             <div className="game-overlay">
@@ -280,7 +280,7 @@ export function TetrisGame() {
           <div>
             <p className="game-label" style={{ marginBottom: 4 }}>NEXT</p>
             <canvas ref={previewRef} width={80} height={80}
-              style={{ borderRadius: 4, border: "1px solid rgba(245,158,11,0.15)" }} />
+              style={{ borderRadius: 4, border: "1px solid rgba(129,140,248,0.15)" }} />
           </div>
           <div>
             <p className="game-label">SCORE</p>

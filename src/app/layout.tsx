@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Karla, Azeret_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Karla, Azeret_Mono, Syne } from "next/font/google";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-heading",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Expressive display face for hero titles — editorial, geometric, memorable
+const syne = Syne({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["700", "800"],
   display: "swap",
 });
 
@@ -37,7 +45,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${bricolage.variable} ${karla.variable} ${azeret.variable} h-full antialiased`}
+      className={`${bricolage.variable} ${karla.variable} ${azeret.variable} ${syne.variable} h-full antialiased`}
     >
       <head>
         <script

@@ -164,8 +164,8 @@ export function Minesweeper() {
         {/* Internal HUD */}
         <div className="absolute -top-12 left-0 right-0 z-40 pointer-events-none flex justify-between items-end px-2">
            <div className="flex flex-col">
-              <span className="text-[9px] font-mono text-amber-500/30 uppercase tracking-[0.2em] font-bold">MINES</span>
-              <span className="text-2xl font-black text-amber-500/80 font-mono tracking-tighter drop-shadow-[0_0_10px_rgba(245,158,11,0.2)]">{flags}</span>
+              <span className="text-[9px] font-mono text-primary-400/30 uppercase tracking-[0.2em] font-bold">MINES</span>
+              <span className="text-2xl font-black text-primary-400/80 font-mono tracking-tighter drop-shadow-[0_0_10px_rgba(129,140,248,0.2)]">{flags}</span>
            </div>
            <div className="flex items-center gap-4">
               <div className="flex flex-col items-end">

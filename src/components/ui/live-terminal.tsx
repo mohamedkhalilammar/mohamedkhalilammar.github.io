@@ -91,7 +91,7 @@ export function LiveTerminal() {
         <div className="bg-white/5 border-b-[0.5px] border-white/10 px-4 md:px-5 py-3 flex items-center justify-between">
           <div className="flex gap-2" aria-hidden>
             <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-red-500/50" />
-            <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-amber-500/50" />
+            <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-primary-400/50" />
             <div className="w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-green-500/50" />
           </div>
           <p className="font-mono text-[8px] md:text-[9px] uppercase tracking-widest text-zinc-500 font-bold truncate ml-4">session://root@khalil-dossier</p>
@@ -116,7 +116,7 @@ export function LiveTerminal() {
             </AnimatePresence>
             {phase === "output" && (
               <li className="flex items-center gap-4 opacity-30 mt-8">
-                 <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                 <div className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse" />
                  <span className="text-[9px] uppercase tracking-widest font-bold">Ingesting_Data...</span>
               </li>
             )}

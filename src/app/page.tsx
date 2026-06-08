@@ -15,6 +15,10 @@ import { ActiveNav } from "@/components/ui/active-nav";
 import { AchievementPhotoStrip } from "@/components/ui/achievement-photo-strip";
 import { ParallaxPhotoColumn } from "@/components/ui/parallax-photo-column";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { CursorAura } from "@/components/ui/cursor-aura";
+import { ScrollProgress } from "@/components/ui/scroll-progress";
+import { Magnetic } from "@/components/ui/magnetic";
+import { KineticHeading } from "@/components/ui/kinetic-heading";
 import { EnhancedFooter } from "@/components/ui/enhanced-footer";
 import { EnhancedSkillModal } from "@/components/ui/enhanced-skill-modal";
 import { ArcadePanel } from "@/components/ui/arcade-panel";
@@ -101,6 +105,8 @@ export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="page-shell">
+        <ScrollProgress />
+        <CursorAura />
         <Sidebar onArcadeOpen={() => setIsArcadeOpen(true)} />
         <div className="page-noise" aria-hidden />
 
@@ -147,12 +153,12 @@ export default function Home() {
                     <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[6.5rem] font-black uppercase tracking-tighter leading-none mb-3 text-white">
                       MEET KHALIL
                     </h1>
-                    <div className="h-[2px] w-16 bg-gradient-to-r from-amber-500 to-orange-600" />
+                    <div className="h-[2px] w-16 bg-gradient-to-r from-primary-400 to-primary-600" />
                   </div>
 
                   {/* Role rotator */}
                   <h2 className="text-base md:text-lg font-mono text-zinc-400 mb-6 uppercase tracking-[0.15em] pb-2 inline-flex items-center gap-3 min-h-[1.5em]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse flex-shrink-0" />
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={roles[roleIdx]}
@@ -172,35 +178,35 @@ export default function Home() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4">
-                    <a className="btn-primary focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#projects">{profile.cta.primary}</a>
+                    <a className="btn-primary focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#projects">{profile.cta.primary}</a>
                     <a className="btn-secondary focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#contact">{profile.cta.secondary}</a>
                   </div>
                 </div>
 
-                {/* ── Photo Row ── */}
-                <div className="lg:col-span-4 flex flex-row items-center gap-3 h-auto lg:h-full pt-2 lg:pt-8 self-start lg:translate-x-4 pb-4 lg:pb-0 w-full justify-center lg:justify-start">
-                  {[
-                    { src: "/media/photo.jpg", rotate: "-2deg" },
-                    { src: "/media/teamm.jpeg", rotate: "1deg" },
-                    { src: "/media/team.jpeg", rotate: "-1deg" }
-                  ].map((img, i) => (
-                    <motion.div 
-                      key={i}
-                      initial={{ opacity: 0, scale: 0.9, y: 15 }}
-                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ delay: 0.08 * i, duration: 0.5 }}
-                      viewport={{ once: true }}
-                      className={`relative w-[110px] sm:w-[130px] md:w-[150px] aspect-[4/5] rounded-xl overflow-hidden border border-white/15 shadow-xl hover:scale-105 hover:border-white/25 transition-all duration-300 bg-black group shrink-0 ${i === 2 ? 'hidden sm:block' : ''}`}
-                      style={{ rotate: img.rotate }}
-                    >
-                      <img 
-                        src={img.src} 
-                        alt="Profile Context" 
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-50" />
-                    </motion.div>
-                  ))}
+                {/* ── Photo Card Deck (diagonal overlap, all clear) ── */}
+                <div className="lg:col-span-4 flex items-center justify-center lg:justify-end self-center pt-8 lg:pt-0 w-full">
+                  <div className="relative h-[360px] w-[300px] sm:h-[440px] sm:w-[400px] scale-90 sm:scale-100" style={{ perspective: 1000 }}>
+                    {[
+                      { src: "/media/team.jpeg", x: -66, y: -56, z: 1 },
+                      { src: "/media/teamm.jpeg", x: 0, y: 0, z: 2 },
+                      { src: "/media/photo.jpg", x: 66, y: 56, z: 3 },
+                    ].map((img, i) => (
+                      <motion.div
+                        key={i}
+                        data-cursor
+                        initial={{ opacity: 0, scale: 0.82, x: img.x, y: img.y + 28, rotate: 0 }}
+                        whileInView={{ opacity: 1, scale: 1, x: img.x, y: img.y, rotate: -6 }}
+                        transition={{ delay: 0.12 * i, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                        viewport={{ once: true }}
+                        whileHover={{ scale: 1.06, y: img.y - 16, rotate: -2, zIndex: 20 }}
+                        className="photo-deck-card absolute left-1/2 top-1/2 w-[200px] sm:w-[250px] aspect-[4/5] -ml-[100px] sm:-ml-[125px] -mt-[125px] sm:-mt-[156px] rounded-2xl overflow-hidden bg-black cursor-pointer"
+                        style={{ zIndex: img.z, transformOrigin: "center center" }}
+                      >
+                        <img src={img.src} alt="Khalil" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -213,7 +219,7 @@ export default function Home() {
                 <h2 className="font-sans text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 leading-none text-white">
                   Featured Projects
                 </h2>
-                <div className="h-[2px] w-16 bg-gradient-to-r from-amber-500 to-orange-600" />
+                <div className="h-[2px] w-16 bg-gradient-to-r from-primary-400 to-primary-600" />
               </div>
               <ProjectCarousel3D projects={projects} />
             </SectionShell>
@@ -228,7 +234,7 @@ export default function Home() {
                 </div>
                 <div className="lg:col-span-4 hidden lg:flex flex-col gap-10 mt-2">
                   {ACHIEVEMENT_PHOTOS.map((src, idx) => (
-                    <motion.div key={idx} className="relative w-full rounded-xl overflow-hidden border border-amber-500/20 shadow-lg group aspect-video"
+                    <motion.div key={idx} className="relative w-full rounded-xl overflow-hidden border border-primary-400/20 shadow-lg group aspect-video"
                       initial={{ opacity: 0, scale: 0.9, y: 20 }}
                       whileInView={{ opacity: 1, scale: 1, y: 0 }}
                       transition={{ delay: 0.1 * idx, duration: 0.8 }}
@@ -238,15 +244,15 @@ export default function Home() {
                     </motion.div>
                   ))}
                 </div>
-                <div className="lg:col-span-8 relative lg:border-l-2 lg:border-amber-500/20 lg:ml-8 lg:pl-12 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-6 lg:gap-12 pb-6 lg:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 lg:mx-0 w-screen lg:w-auto">
+                <div className="lg:col-span-8 relative lg:border-l-2 lg:border-primary-400/20 lg:ml-8 lg:pl-12 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-6 lg:gap-12 pb-6 lg:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 lg:mx-0 w-screen lg:w-auto">
                   {achievements.map((achievement, idx) => (
-                    <div key={idx} className="relative group p-6 rounded-2xl border-t-[3px] border-l border-r border-b lg:border-t lg:border-t-white/10 lg:hover:border-amber-500/30 border-t-amber-500/50 border-x-white/5 border-b-white/5 bg-white/[0.02] hover:bg-amber-500/[0.02] hover:shadow-[0_0_30px_rgba(245,158,11,0.1)] transition-all duration-500 backdrop-blur-sm w-[85vw] sm:w-[320px] lg:w-auto snap-center shrink-0 whitespace-normal">
+                    <div key={idx} className="relative group p-6 rounded-2xl border-t-[3px] border-l border-r border-b lg:border-t lg:border-t-white/10 lg:hover:border-primary-400/30 border-t-primary-400/50 border-x-white/5 border-b-white/5 bg-white/[0.02] hover:bg-primary-400/[0.02] hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-500 backdrop-blur-sm w-[85vw] sm:w-[320px] lg:w-auto snap-center shrink-0 whitespace-normal">
                       
                       {/* Desktop Timeline Dot */}
-                      <div className="hidden lg:block absolute w-3 h-3 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.6)] -left-[3.45rem] top-8" />
-                      <div className="hidden lg:block absolute -left-[3.45rem] top-8 w-3 h-3 rounded-full bg-amber-500 animate-ping opacity-75" />
+                      <div className="hidden lg:block absolute w-3 h-3 rounded-full bg-primary-400 shadow-[0_0_10px_rgba(129,140,248,0.6)] -left-[3.45rem] top-8" />
+                      <div className="hidden lg:block absolute -left-[3.45rem] top-8 w-3 h-3 rounded-full bg-primary-400 animate-ping opacity-75" />
                       
-                      <span className="text-[10px] md:text-[11px] font-mono text-amber-500 uppercase tracking-[0.2em] mb-4 block font-bold">{achievement.highlight}</span>
+                      <span className="text-[10px] md:text-[11px] font-mono text-primary-400 uppercase tracking-[0.2em] mb-4 block font-bold">{achievement.highlight}</span>
                       <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-zinc-400 transition-all">{achievement.title}</h3>
                       <p className="text-zinc-400 text-sm md:text-base leading-relaxed group-hover:text-zinc-300 transition-colors w-full break-words">{achievement.detail}</p>
                     </div>
@@ -282,7 +288,7 @@ export default function Home() {
                       style={{ animationDelay: `${idx * 0.08}s` }}
                     >
                       <div className="flex items-start justify-between mb-5 gap-3">
-                        <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-amber-500 mt-0.5">
+                        <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-primary-400 mt-0.5">
                           {cert.issuer}
                         </p>
                         {cert.logo && (
@@ -314,7 +320,7 @@ export default function Home() {
                       <img src={learningPath.logo} alt={learningPath.provider} className="h-14 object-contain rounded bg-white/5 p-1.5" />
                     )}
                     <div>
-                      <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-amber-500 mb-2">Learning Path</p>
+                      <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-primary-400 mb-2">Learning Path</p>
                       <h3 className="text-xl font-orbitron font-bold text-white">{learningPath.name}</h3>
                       <p className="text-zinc-500 text-sm mt-1">{learningPath.provider} · {learningPath.status} · {learningPath.progress}</p>
                     </div>
@@ -433,14 +439,14 @@ export default function Home() {
                       className="contact-card group flex items-center gap-5 p-5 border border-primary-500/20 hover:border-primary-400/60 bg-black/35 hover:bg-black/55 rounded-xl transition-all duration-300"
                       style={{ animation: `contactCardIn 0.5s ease-out ${idx * 0.08}s both` }}
                     >
-                      <span className="text-amber-500 opacity-70 group-hover:opacity-100 transition-opacity flex-shrink-0">
+                      <span className="text-primary-400 opacity-70 group-hover:opacity-100 transition-opacity flex-shrink-0">
                         {contact.icon}
                       </span>
                       <div>
                         <p className="text-primary-400 font-mono text-[10px] uppercase tracking-[0.2em] font-bold">{contact.label}</p>
                         <p className="text-zinc-400 text-sm mt-0.5 group-hover:text-zinc-300 transition-colors">{contact.value}</p>
                       </div>
-                      <span className="ml-auto text-zinc-600 group-hover:text-amber-500 group-hover:translate-x-1.5 transition-all duration-300 ease-out text-sm">→</span>
+                      <span className="ml-auto text-zinc-600 group-hover:text-primary-400 group-hover:translate-x-1.5 transition-all duration-300 ease-out text-sm">→</span>
                     </a>
                   ))}
                 </div>
@@ -516,7 +522,7 @@ export default function Home() {
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="mt-1 px-6 py-4 bg-amber-500/8 border-2 border-amber-500/80 hover:bg-amber-500 hover:text-black hover:border-amber-500 text-amber-400 font-mono uppercase tracking-[0.18em] text-sm transition-all duration-300 rounded-lg font-bold flex items-center justify-center gap-2 disabled:opacity-40 active:scale-95 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+                          className="mt-1 px-6 py-4 bg-primary-400/8 border-2 border-primary-400/80 hover:bg-primary-400 hover:text-black hover:border-primary-400 text-primary-300 font-mono uppercase tracking-[0.18em] text-sm transition-all duration-300 rounded-lg font-bold flex items-center justify-center gap-2 disabled:opacity-40 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
                         >
                           {isSubmitting ? "Sending..." : <>Send Message <span>→</span></>}
                         </button>
@@ -534,7 +540,7 @@ export default function Home() {
                 <div className="bg-white/[0.02] border border-white/5 rounded-xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 relative group hover:bg-white/[0.04] transition-colors">
                    <div className="relative z-10">
                       <h2 className="text-4xl font-sans font-black text-white uppercase tracking-tighter mb-2 italic">
-                         TAKE A <span className="text-amber-500">BREAK</span>
+                         TAKE A <span className="text-primary-300">BREAK</span>
                       </h2>
                       <p className="text-zinc-500 font-mono text-xs uppercase tracking-widest">
                          Visit the arcade for a quick game.
@@ -544,9 +550,9 @@ export default function Home() {
                    <div className="flex items-center gap-6">
                       <div className="hidden lg:flex gap-4">
                         {[
-                          { id: "SNAKE", label: "Snake", color: "text-emerald-500", border: "border-emerald-500/10", bg: "bg-emerald-500/5" },
-                          { id: "RUNNER", label: "Runner", color: "text-blue-500", border: "border-blue-500/10", bg: "bg-blue-500/5" },
-                          { id: "MINESWEEPER", label: "Minesweeper", color: "text-rose-500", border: "border-rose-500/10", bg: "bg-rose-500/5" }
+                          { id: "SNAKE", label: "Snake", color: "text-primary-300", border: "border-primary-500/15", bg: "bg-primary-500/5" },
+                          { id: "RUNNER", label: "Runner", color: "text-indigo-300", border: "border-indigo-500/15", bg: "bg-indigo-500/5" },
+                          { id: "MINESWEEPER", label: "Minesweeper", color: "text-violet-300", border: "border-violet-500/15", bg: "bg-violet-500/5" }
                         ].map((game, i) => (
                           <motion.div
                             key={i}

@@ -36,8 +36,8 @@ export function EnhancedFooter() {
   return (
     <footer className="site-footer border-t border-white/5 bg-[#050505] py-14 md:py-20 px-6 md:px-8 relative overflow-hidden">
       {/* Decorative background elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-primary-400/20 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-400/5 blur-[100px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto flex flex-col items-center text-center relative z-10">
         <h2 className="brand-mark text-2xl font-black uppercase tracking-[0.2em] mb-12 text-white">
@@ -54,7 +54,7 @@ export function EnhancedFooter() {
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center gap-3 no-underline"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-amber-500 group-hover:border-amber-500/40 group-hover:bg-amber-500/5 group-hover:scale-110 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-primary-400 group-hover:border-primary-400/40 group-hover:bg-primary-400/5 group-hover:scale-110 transition-all duration-300">
                     {social.icon}
                   </div>
                   <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-600 group-hover:text-zinc-300 transition-colors">

@@ -155,7 +155,7 @@ export function EnhancedSkillModal({ skill, isOpen, onClose, modalRef }: Props) 
                   transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
                   style={{
                     height: "100%",
-                    background: "linear-gradient(90deg, rgba(245,158,11,0.7), rgba(245,158,11,1))",
+                    background: "linear-gradient(90deg, rgba(129,140,248,0.7), rgba(129,140,248,1))",
                     borderRadius: "999px",
                   }}
                 />
@@ -188,11 +188,11 @@ export function EnhancedSkillModal({ skill, isOpen, onClose, modalRef }: Props) 
                       style={{
                         padding: "0.25rem 0.65rem",
                         borderRadius: "999px",
-                        border: "1px solid rgba(245,158,11,0.25)",
-                        background: "rgba(245,158,11,0.07)",
+                        border: "1px solid rgba(129,140,248,0.25)",
+                        background: "rgba(129,140,248,0.07)",
                         fontFamily: "monospace",
                         fontSize: "0.75rem",
-                        color: "rgba(245,158,11,0.9)",
+                        color: "rgba(129,140,248,0.9)",
                       }}
                     >
                       {proj.name}

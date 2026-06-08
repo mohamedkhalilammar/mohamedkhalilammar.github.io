@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { KineticHeading } from "@/components/ui/kinetic-heading";
 
 type SectionShellProps = {
   id: string;
@@ -25,9 +26,10 @@ export function SectionShell({ id, eyebrow, title, children, index }: SectionShe
 
       <div className="relative mt-4">
         {title && (
-          <h2 className="text-2xl md:text-5xl font-black mb-6 md:mb-10 tracking-tighter uppercase drop-shadow-sm">
-            {title}
-          </h2>
+          <KineticHeading
+            text={title}
+            className="text-2xl md:text-5xl font-black mb-6 md:mb-10 tracking-tighter uppercase drop-shadow-sm"
+          />
         )}
         
         <div className="min-h-[80px]">

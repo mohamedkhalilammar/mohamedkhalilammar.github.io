@@ -60,9 +60,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       <header className="fixed top-0 left-0 right-0 z-50 px-4 py-4 md:px-12 md:py-6 flex justify-between items-center pointer-events-none">
         <Link 
           href="/#projects" 
-          className="group flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
+          className="group flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-primary-400/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500 group-hover:-translate-x-1.5 transition-transform duration-500">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-primary-400 group-hover:-translate-x-1.5 transition-transform duration-500">
             <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
           <span className="font-mono text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] text-white/40 group-hover:text-white transition-colors">
@@ -72,12 +72,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
         <Link 
           href={`/project/${nextSlug}`} 
-          className="group flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-amber-500/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
+          className="group flex items-center gap-2 md:gap-3 px-4 py-2.5 md:px-6 md:py-3 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.04] hover:border-primary-400/30 transition-all duration-500 backdrop-blur-sm pointer-events-auto shadow-2xl"
         >
           <span className="font-mono text-[9px] md:text-[10px] uppercase font-bold tracking-[0.2em] md:tracking-[0.3em] text-white/40 group-hover:text-white transition-colors">
             Next
           </span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-amber-500 group-hover:translate-x-1.5 transition-transform duration-500">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-primary-400 group-hover:translate-x-1.5 transition-transform duration-500">
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </Link>
@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
           <div className="flex flex-col gap-4 md:gap-6">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="px-2 py-0.5 md:px-3 md:py-1 rounded bg-white/5 border border-white/10 text-[8px] md:text-[10px] font-mono font-bold text-amber-500 uppercase tracking-[0.3em]">
+              <div className="px-2 py-0.5 md:px-3 md:py-1 rounded bg-white/5 border border-white/10 text-[8px] md:text-[10px] font-mono font-bold text-primary-400 uppercase tracking-[0.3em]">
                 Project Overview
               </div>
               <div className="h-px w-12 md:w-24 bg-white/10" />
@@ -101,7 +101,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
             <h1 className="font-sans text-4xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tighter leading-[0.95] md:leading-[0.85] mb-6 md:mb-8 drop-shadow-2xl">
               {project.name.split(" ").map((word, i) => (
-                <span key={i} className={i % 2 !== 0 ? "text-amber-500" : ""}>
+                <span key={i} className={i % 2 !== 0 ? "text-primary-400" : ""}>
                   {word}{" "}
                 </span>
               ))}
@@ -160,12 +160,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                   { title: "Implementation Strategy", content: project.challenges },
                   { title: "Technical Outcome", content: project.impact }
                 ].filter(s => s.content).map((section, idx) => (
-                  <div key={idx} className="group p-8 rounded-2xl bg-white/[0.015] border border-white/5 hover:border-amber-500/30 transition-all duration-500 relative overflow-hidden h-full"> 
-                    <div className="absolute top-0 right-0 p-4 font-mono text-3xl font-black text-white/[0.02] group-hover:text-amber-500/10 italic select-none">
+                  <div key={idx} className="group p-8 rounded-2xl bg-white/[0.015] border border-white/5 hover:border-primary-400/30 transition-all duration-500 relative overflow-hidden h-full"> 
+                    <div className="absolute top-0 right-0 p-4 font-mono text-3xl font-black text-white/[0.02] group-hover:text-primary-400/10 italic select-none">
                       0{idx + 1}
                     </div>
-                    <h2 className="font-sans text-xl font-black uppercase tracking-tighter text-amber-500 mb-6 flex items-center gap-3">
-                      <span className="w-2 h-2 rounded-full bg-amber-500/50" />
+                    <h2 className="font-sans text-xl font-black uppercase tracking-tighter text-primary-400 mb-6 flex items-center gap-3">
+                      <span className="w-2 h-2 rounded-full bg-primary-400/50" />
                       {section.title}
                     </h2>
                     <p className="text-lg leading-relaxed text-zinc-400 font-medium group-hover:text-zinc-200 transition-colors">
@@ -177,12 +177,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
               {project.features && (
                 <div className="mt-12 p-10 md:p-12 rounded-[2rem] bg-white/[0.02] border border-white/[0.06] relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 w-48 h-48 bg-amber-500/5 blur-[80px] group-hover:bg-amber-500/10 transition-all" />
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-primary-400/5 blur-[80px] group-hover:bg-primary-400/10 transition-all" />
                   <h2 className="font-sans text-3xl font-black uppercase tracking-tighter text-white mb-10">System Features</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
                     {project.features.map((feature, i) => (
                       <div key={feature} className="flex items-center gap-4 group/item">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500/30 group-hover/item:bg-amber-500 transition-all" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary-400/30 group-hover/item:bg-primary-400 transition-all" />
                         <span className="text-zinc-400 font-medium group-hover/item:text-white transition-colors">{feature}</span>
                       </div>
                     ))}
@@ -209,7 +209,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                   <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {project.stack.map(tech => (
                       <li key={tech} className="flex items-center gap-3 group/li">
-                        <div className="w-1.5 h-1.5 rounded-full bg-amber-500/20 group-hover/li:bg-amber-500 group-hover/li:scale-150 transition-all" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-primary-400/20 group-hover/li:bg-primary-400 group-hover/li:scale-150 transition-all" />
                         <span className="font-mono text-xs text-white/60 group-hover/li:text-white transition-colors tracking-wide">{tech}</span>
                       </li>
                     ))}
@@ -247,11 +247,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                     { step: "02", title: "Cognitive Config", cmd: "cp .env.example .env && nano .env", desc: "Inject Groq API keys and define behavioral security policies." },
                     { step: "03", title: "Containerized Orchestration", cmd: "docker compose up -d --build", desc: "Spin up the Cowrie, FastAPI, and Wazuh stack in isolated zones." }
                   ].map((item, i) => (
-                    <div key={i} className="group p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-amber-500/30 transition-all duration-500 relative overflow-hidden">
-                      <div className="absolute top-0 right-0 p-4 font-mono text-4xl font-black text-white/[0.02] group-hover:text-amber-500/10 transition-colors uppercase italic">{item.step}</div>
+                    <div key={i} className="group p-8 rounded-3xl bg-white/[0.02] border border-white/5 hover:border-primary-400/30 transition-all duration-500 relative overflow-hidden">
+                      <div className="absolute top-0 right-0 p-4 font-mono text-4xl font-black text-white/[0.02] group-hover:text-primary-400/10 transition-colors uppercase italic">{item.step}</div>
                       <div className="relative z-10">
                         <h4 className="font-sans text-lg font-bold text-white mb-4 uppercase tracking-tighter">{item.title}</h4>
-                        <div className="bg-[#0c1117] rounded-xl overflow-hidden border border-white/10 shadow-inner mb-6 group/code transition-all duration-300 hover:border-amber-500/20">
+                        <div className="bg-[#0c1117] rounded-xl overflow-hidden border border-white/10 shadow-inner mb-6 group/code transition-all duration-300 hover:border-primary-400/20">
                           <div className="bg-white/5 border-b border-white/5 px-4 py-2 flex items-center justify-between">
                             <div className="flex gap-1.5">
                               <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
@@ -259,17 +259,17 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                               <div className="w-1.5 h-1.5 rounded-full bg-zinc-800" />
                             </div>
                             <div className="flex items-center gap-2">
-                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-amber-500/40">
+                              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary-400/40">
                                 <polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" />
                               </svg>
                               <span className="font-mono text-[8px] uppercase tracking-widest text-white/20 font-bold">bash://terminal</span>
                             </div>
                           </div>
                           <div className="p-5 font-mono text-[12px] md:text-[13px] leading-relaxed relative flex items-start group-hover/code:bg-white/[0.01] transition-colors">
-                            <span className="text-amber-500/40 mr-4 select-none mt-1">$</span>
-                            <code className="text-zinc-200 block break-all selection:bg-amber-500/30">
+                            <span className="text-primary-400/40 mr-4 select-none mt-1">$</span>
+                            <code className="text-zinc-200 block break-all selection:bg-primary-400/30">
                               {item.cmd.split(' ').map((word, i) => (
-                                <span key={i} className={i === 0 ? "text-amber-500 font-bold" : "text-zinc-300"}>
+                                <span key={i} className={i === 0 ? "text-primary-400 font-bold" : "text-zinc-300"}>
                                   {word}{" "}
                                 </span>
                               ))}
@@ -287,7 +287,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                   <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03] pointer-events-none" />
                   
                   <div className="relative z-10 max-w-5xl">
-                    <h2 className="font-sans text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-16 px-2 border-l-4 border-amber-500">
+                    <h2 className="font-sans text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-16 px-2 border-l-4 border-primary-400">
                       System Capabilities
                     </h2>
                     
@@ -300,10 +300,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                       ].map((cap, i) => (
                         <div key={i} className="group space-y-4">
                           <h4 className="font-sans text-xl font-black text-white uppercase tracking-tighter flex items-center gap-4">
-                            <span className="w-2 h-2 bg-amber-500 rounded-full" />
+                            <span className="w-2 h-2 bg-primary-400 rounded-full" />
                             {cap.title}
                           </h4>
-                          <p className="text-zinc-400 leading-relaxed font-medium pl-6 border-l border-white/5 group-hover:border-amber-500/30 transition-colors">
+                          <p className="text-zinc-400 leading-relaxed font-medium pl-6 border-l border-white/5 group-hover:border-primary-400/30 transition-colors">
                             {cap.desc}
                           </p>
                         </div>
@@ -313,15 +313,15 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                 </div>
 
                 {/* Safety Protocol */}
-                <div className="p-8 rounded-2xl bg-amber-500/5 border border-amber-500/20 flex flex-col md:flex-row gap-8 items-center md:items-start max-w-4xl mx-auto">
-                   <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-amber-500">
+                <div className="p-8 rounded-2xl bg-primary-400/5 border border-primary-400/20 flex flex-col md:flex-row gap-8 items-center md:items-start max-w-4xl mx-auto">
+                   <div className="w-16 h-16 rounded-full bg-primary-400/20 flex items-center justify-center shrink-0">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-primary-400">
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0zM12 9v4M12 17h.01" />
                       </svg>
                    </div>
                    <div>
-                     <h4 className="font-mono text-xs font-black uppercase tracking-widest text-amber-500 mb-2">Security Advisory</h4>
-                     <p className="text-sm text-amber-500/80 font-medium leading-relaxed">
+                     <h4 className="font-mono text-xs font-black uppercase tracking-widest text-primary-400 mb-2">Security Advisory</h4>
+                     <p className="text-sm text-primary-400/80 font-medium leading-relaxed">
                         This is an active deception lab platform. These services should only be hosted in strictly firewalled or host-only environments. Do not deploy on the public internet without proper sandboxing or isolation protocols.
                      </p>
                    </div>
@@ -329,8 +329,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               </div>
             ) : (
               <div className="project-markdown-block p-8 md:p-16 border border-white/5 bg-gradient-to-b from-white/[0.02] to-transparent rounded-[3rem] w-full relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 blur-[120px] pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/5 blur-[100px] pointer-events-none" />
+                <div className="absolute top-0 right-0 w-96 h-96 bg-primary-400/5 blur-[120px] pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-400/5 blur-[100px] pointer-events-none" />
                 <div className="prose prose-invert prose-amber prose-lg leading-relaxed max-w-none relative z-10">
                   <ReactMarkdown rehypePlugins={[rehypeRaw]}>{markdownContent}</ReactMarkdown>
                 </div>
@@ -341,20 +341,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
         {/* NEXT PROJECT CTA */}
         <div className="mt-40 pt-20 border-t border-white/5 flex flex-col items-center text-center">
-          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-amber-500/60 mb-6">Continue Exploration</p>
+          <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-primary-400/60 mb-6">Continue Exploration</p>
           <Link 
             href={`/project/${nextSlug}`}
             className="group relative flex flex-col items-center"
           >
-            <h3 className="font-sans text-4xl md:text-6xl font-black text-white/40 group-hover:text-amber-500 transition-all duration-500 uppercase tracking-tighter">
+            <h3 className="font-sans text-4xl md:text-6xl font-black text-white/40 group-hover:text-primary-400 transition-all duration-500 uppercase tracking-tighter">
               Next Project
             </h3>
             <div className="flex items-center gap-4 mt-4">
-              <span className="h-px w-12 bg-white/10 group-hover:bg-amber-500/50 transition-all" />
+              <span className="h-px w-12 bg-white/10 group-hover:bg-primary-400/50 transition-all" />
               <span className="font-sans text-xl md:text-2xl font-bold text-white group-hover:scale-110 transition-transform duration-500">
                 {nextProject.name}
               </span>
-              <span className="h-px w-12 bg-white/10 group-hover:bg-amber-500/50 transition-all" />
+              <span className="h-px w-12 bg-white/10 group-hover:bg-primary-400/50 transition-all" />
             </div>
           </Link>
         </div>

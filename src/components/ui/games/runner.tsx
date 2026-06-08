@@ -200,8 +200,8 @@ export function RunnerGame() {
       <div className="relative w-full aspect-[2/1] bg-zinc-950/40 border border-white/5 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden">
         {/* Floating Internal Score */}
         <div className="absolute top-6 right-8 z-40 pointer-events-none select-none text-right">
-          <span className="text-[10px] font-mono text-amber-500/30 tracking-[0.3em] font-bold">DISTANCE</span>
-          <div className="text-4xl font-mono font-black text-amber-500/80 tracking-tighter drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+          <span className="text-[10px] font-mono text-primary-400/30 tracking-[0.3em] font-bold">DISTANCE</span>
+          <div className="text-4xl font-mono font-black text-primary-400/80 tracking-tighter drop-shadow-[0_0_15px_rgba(129,140,248,0.2)]">
             {score.toString().padStart(5, '0')}m
           </div>
           <div className="text-[9px] font-mono text-zinc-600 mt-1 uppercase tracking-widest">BEST: {highScore}m</div>
@@ -210,7 +210,7 @@ export function RunnerGame() {
         <canvas ref={canvasRef} width={900} height={450} className="w-full h-full" />
         
         {/* Subtle Cyber Grid lines on Canvas over everything */}
-        <div className="absolute inset-0 pointer-events-none opacity-5 shadow-[inset_0_0_100px_rgba(245,158,11,0.2)]" />
+        <div className="absolute inset-0 pointer-events-none opacity-5 shadow-[inset_0_0_100px_rgba(129,140,248,0.2)]" />
 
         <AnimatePresence>
           {(status === "idle" || status === "dead") && (

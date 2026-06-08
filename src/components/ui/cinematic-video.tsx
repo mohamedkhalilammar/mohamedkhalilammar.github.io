@@ -43,7 +43,7 @@ export function CinematicVideo({ url, title }: { url: string; title: string }) {
                 onClick={() => setShowIframe(true)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                className="w-20 h-20 rounded-full bg-amber-500 flex items-center justify-center shadow-2xl shadow-amber-500/20"
+                className="w-20 h-20 rounded-full bg-primary-400 flex items-center justify-center shadow-2xl shadow-primary-400/20"
               >
                 <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-black border-b-[10px] border-b-transparent ml-1" />
               </motion.button>

@@ -19,8 +19,8 @@ export default function ArcadePage() {
         <header className="top-nav" style={{ position: "sticky", top: 0, zIndex: 100, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(20px)", margin: 0, borderRadius: 0, borderTop: "none", borderLeft: "none", borderRight: "none" }}>
           <div className="flex items-center justify-between w-full max-w-[1700px] mx-auto px-8 py-3">
             <Link href="/" className="brand-mark group flex items-center gap-3">
-              <span className="text-amber-500 group-hover:-translate-x-1 transition-transform font-bold">←</span>
-              <span className="font-orbitron font-black tracking-tighter text-xl text-white">KHALIL <span className="text-amber-500">AMMAR</span></span>
+              <span className="text-primary-400 group-hover:-translate-x-1 transition-transform font-bold">←</span>
+              <span className="font-orbitron font-black tracking-tighter text-xl text-white">KHALIL <span className="text-primary-400">AMMAR</span></span>
             </Link>
 
           </div>

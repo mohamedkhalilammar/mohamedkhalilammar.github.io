@@ -23,7 +23,7 @@ export function ScrollToTop() {
       {visible && (
         <motion.button
           key="scroll-top"
-          className="scroll-top-btn hover:scale-110 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          className="scroll-top-btn hover:scale-110 focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           aria-label="Scroll to top"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           initial={{ opacity: 0, scale: 0.6, y: 20 }}

@@ -47,7 +47,7 @@ export function Pong() {
 
     // Center line dashes
     ctx.setLineDash([8, 12]);
-    ctx.strokeStyle = "rgba(245,158,11,0.15)";
+    ctx.strokeStyle = "rgba(129,140,248,0.15)";
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(W / 2, 0); ctx.lineTo(W / 2, H);
@@ -55,14 +55,14 @@ export function Pong() {
     ctx.setLineDash([]);
 
     // Score text
-    ctx.fillStyle = "rgba(245,158,11,0.25)";
+    ctx.fillStyle = "rgba(129,140,248,0.25)";
     ctx.font = "bold 48px monospace";
     ctx.textAlign = "center";
     ctx.fillText(`${s.ps}`, W / 2 - 60, 55);
     ctx.fillText(`${s.as}`, W / 2 + 60, 55);
 
     // Labels
-    ctx.fillStyle = "rgba(245,158,11,0.4)";
+    ctx.fillStyle = "rgba(129,140,248,0.4)";
     ctx.font = "bold 9px monospace";
     ctx.fillText("PLAYER", W / 2 - 60, 68);
     ctx.fillText("AI", W / 2 + 60, 68);
@@ -103,7 +103,7 @@ export function Pong() {
     ctx.shadowBlur = 0;
 
     // Border glow
-    ctx.strokeStyle = "rgba(245,158,11,0.1)";
+    ctx.strokeStyle = "rgba(129,140,248,0.1)";
     ctx.lineWidth = 1;
     ctx.strokeRect(0, 0, W, H);
   }, []);
@@ -239,7 +239,7 @@ export function Pong() {
                 <p className="text-4xl font-black uppercase tracking-tighter italic text-white/80">
                   {ps >= 7 ? "YOU WIN!" : "AI WINS"}
                 </p>
-                <p className="text-xl font-mono font-black text-amber-500/60 mt-1">{ps} — {as_}</p>
+                <p className="text-xl font-mono font-black text-primary-400/60 mt-1">{ps} — {as_}</p>
               </div>
             )}
             <button className="btn-primary !py-3 !px-12 !text-xs" onClick={start}>

@@ -142,9 +142,9 @@ export function ArcadePanel({ isOpen, onClose }: ArcadePanelProps) {
                     <button
                       key={game.id}
                       onClick={() => setActiveGame(game.id)}
-                      className="group relative flex flex-col items-center text-center p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-amber-500/40 hover:bg-white/[0.06] transition-all duration-300"
+                      className="group relative flex flex-col items-center text-center p-8 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary-400/40 hover:bg-white/[0.06] transition-all duration-300"
                     >
-                      <div className="mb-6 p-5 rounded-full bg-white/[0.03] text-zinc-400 group-hover:text-amber-500 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(245,158,11,0.1)] transition-all duration-300 border border-transparent group-hover:border-amber-500/10">
+                      <div className="mb-6 p-5 rounded-full bg-white/[0.03] text-zinc-400 group-hover:text-primary-400 group-hover:scale-110 group-hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-300 border border-transparent group-hover:border-primary-400/10">
                         {game.icon}
                       </div>
                       <h4 className="font-sans text-sm font-black text-white/80 uppercase tracking-widest group-hover:text-white transition-colors">
@@ -152,7 +152,7 @@ export function ArcadePanel({ isOpen, onClose }: ArcadePanelProps) {
                       </h4>
                       
                       <div className="mt-6">
-                        <span className="text-[9px] font-mono font-bold text-amber-500 opacity-0 group-hover:opacity-100 transition-opacity tracking-widest">
+                        <span className="text-[9px] font-mono font-bold text-primary-400 opacity-0 group-hover:opacity-100 transition-opacity tracking-widest">
                           PRESS TO PLAY
                         </span>
                       </div>

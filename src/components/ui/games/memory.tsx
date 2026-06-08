@@ -238,8 +238,8 @@ export function MemoryGame() {
       <div className="relative">
         <div className="absolute -top-12 left-0 right-0 z-40 pointer-events-none flex justify-between items-end px-2">
            <div className="flex flex-col">
-              <span className="text-[9px] font-mono text-amber-500/30 uppercase font-bold tracking-widest">PLAYER</span>
-              <span className="text-2xl font-black text-amber-500/80 font-mono tracking-tighter">{playerScore}</span>
+              <span className="text-[9px] font-mono text-primary-400/30 uppercase font-bold tracking-widest">PLAYER</span>
+              <span className="text-2xl font-black text-primary-400/80 font-mono tracking-tighter">{playerScore}</span>
            </div>
            <div className="flex flex-col items-center">
               <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-[0.2em] mb-1">
@@ -285,7 +285,7 @@ export function MemoryGame() {
                           transform: "rotateY(180deg)",
                           borderColor: card.matched 
                             ? card.matchedBy === "player" ? "rgba(52,211,153,0.3)" : "rgba(239,68,68,0.3)"
-                            : "rgba(245,158,11,0.2)"
+                            : "rgba(129,140,248,0.2)"
                         }}
                       >
                         <span className="text-2xl">{card.symbol}</span>

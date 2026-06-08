@@ -22,14 +22,14 @@ export function MiniGamesSection() {
   return (
     <section className="flex-grow flex flex-col pt-4" id="games">
       {/* Header + Tabs Row */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8 mb-8 border-b border-amber-500/10 pb-8">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8 mb-8 border-b border-primary-400/10 pb-8">
         <div className="flex flex-wrap gap-2">
           {GAMES.map(g => (
             <button
               key={g.id}
               className={`px-6 py-3 font-mono text-[10px] font-black tracking-[0.25em] transition-all duration-300 rounded-sm border ${active === g.id
-                  ? "bg-amber-500 text-black border-amber-500 shadow-[0_0_25px_rgba(245,158,11,0.4)]"
-                  : "bg-transparent text-zinc-500 border-white/5 hover:border-amber-500/40 hover:text-white"
+                  ? "bg-primary-400 text-black border-primary-400 shadow-[0_0_25px_rgba(129,140,248,0.4)]"
+                  : "bg-transparent text-zinc-500 border-white/5 hover:border-primary-400/40 hover:text-white"
                 }`}
               onClick={() => setActive(g.id)}
             >
@@ -49,7 +49,7 @@ export function MiniGamesSection() {
           <div className="flex items-center justify-between px-10 py-5 bg-white/[0.03] border-b border-white/[0.05]">
             <div className="flex items-center gap-5">
               <span className="text-3xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">{GAMES.find(g => g.id === active)?.icon}</span>
-              <h3 className="text-amber-500 font-black font-mono text-[11px] tracking-[0.4em] uppercase leading-none flex items-center gap-3">
+              <h3 className="text-primary-400 font-black font-mono text-[11px] tracking-[0.4em] uppercase leading-none flex items-center gap-3">
                 {GAMES.find(g => g.id === active)?.label}
               </h3>
             </div>

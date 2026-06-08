@@ -44,12 +44,12 @@ export function ProjectGallery({ name, screenshots, screenshotCaptions }: Projec
               {/* Photo Display */}
               <div 
                 onClick={() => setCurrentIndex(i)}
-                className="relative w-full rounded-[2rem] overflow-hidden bg-black/40 border border-white/10 cursor-zoom-in hover:border-amber-500/40 transition-colors shadow-2xl min-h-[200px]"
+                className="relative w-full rounded-[2rem] overflow-hidden bg-black/40 border border-white/10 cursor-zoom-in hover:border-primary-400/40 transition-colors shadow-2xl min-h-[200px]"
               >
                 <img src={img} alt={screenshotCaptions?.[i] || ""} className="w-full h-auto block group-hover:scale-[1.03] transition-transform duration-700" />
                 
                 {/* Subtle Hover Overlay */}
-                <div className="absolute inset-0 bg-amber-500/0 group-hover:bg-amber-500/5 transition-colors pointer-events-none" />
+                <div className="absolute inset-0 bg-primary-400/0 group-hover:bg-primary-400/5 transition-colors pointer-events-none" />
                 
                 {/* Zoom Icon */}
                 <div className="absolute top-6 right-6 p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -61,7 +61,7 @@ export function ProjectGallery({ name, screenshots, screenshotCaptions }: Projec
 
               {/* Caption */}
               {screenshotCaptions?.[i] && (
-                <p className="text-zinc-400 font-sans text-sm font-medium leading-relaxed px-4 border-l border-amber-500/30 group-hover:text-zinc-200 transition-colors tracking-tight">
+                <p className="text-zinc-400 font-sans text-sm font-medium leading-relaxed px-4 border-l border-primary-400/30 group-hover:text-zinc-200 transition-colors tracking-tight">
                   {screenshotCaptions[i]}
                 </p>
               )}

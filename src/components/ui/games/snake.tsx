@@ -139,8 +139,8 @@ export function SnakeGame() {
       <div className="relative w-full aspect-square bg-zinc-950/20 border border-white/5 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden cursor-crosshair">
         {/* Floating Internal Score */}
         <div className="absolute top-6 left-8 z-40 pointer-events-none select-none flex flex-col">
-          <span className="text-[10px] font-mono text-amber-500/30 tracking-[0.3em] font-bold">SCORE</span>
-          <span className="text-4xl font-mono font-black text-amber-500/80 tracking-tighter drop-shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+          <span className="text-[10px] font-mono text-primary-400/30 tracking-[0.3em] font-bold">SCORE</span>
+          <span className="text-4xl font-mono font-black text-primary-400/80 tracking-tighter drop-shadow-[0_0_15px_rgba(129,140,248,0.2)]">
             {score.toString().padStart(4, '0')}
           </span>
           <span className="text-[9px] font-mono text-zinc-600 mt-1 uppercase tracking-widest">BEST: {highScore}</span>
@@ -156,7 +156,7 @@ export function SnakeGame() {
         {game.current.snake.map((p, i) => (
           <div 
             key={`${i}-${p.x}-${p.y}`}
-            className={`absolute ${i === 0 ? 'bg-amber-500/80 z-20' : 'bg-zinc-400/30 z-10'}`}
+            className={`absolute ${i === 0 ? 'bg-primary-400/80 z-20' : 'bg-zinc-400/30 z-10'}`}
             style={{ 
               left: `${p.x * 2.5}%`, 
               top: `${p.y * 2.5}%`, 
@@ -164,7 +164,7 @@ export function SnakeGame() {
               height: '2.5%', 
               border: '1px solid rgba(255,255,255,0.05)', 
               borderRadius: i === 0 ? '4px' : '2px', 
-              boxShadow: i === 0 ? '0 0 10px rgba(245,158,11,0.3)' : 'none' 
+              boxShadow: i === 0 ? '0 0 10px rgba(129,140,248,0.3)' : 'none' 
             }}
           />
         ))}
