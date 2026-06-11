@@ -1,9 +1,72 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { initAudio, sfx } from "./audio";
 
-const SYMBOLS = ["⚡", "🔥", "💀", "👾", "🛸", "🔮", "💎", "🎯", "🧬", "🌀"];
+/** Ten distinct SVG glyphs, each with its own color — replaces the emoji deck. */
+const GLYPHS: Record<string, { color: string; icon: ReactNode }> = {
+  bolt: {
+    color: "#fbbf24",
+    icon: <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" />,
+  },
+  flame: {
+    color: "#fb7185",
+    icon: <path d="M12 2c1.5 4 5 5.5 5 10a5 5 0 11-10 0c0-1.8.8-3 1.8-4.6.5 1.6 1.7 2.1 1.7 2.1C9.8 6.8 11 4.6 12 2z" />,
+  },
+  skull: {
+    color: "#e4e4e7",
+    icon: (
+      <>
+        <path d="M12 3a7 7 0 00-7 7c0 2.8 1.8 4.2 2 5.6V19h10v-3.4c.2-1.4 2-2.8 2-5.6a7 7 0 00-7-7z" />
+        <circle cx="9.4" cy="10.5" r="1.5" fill="#0a0c18" />
+        <circle cx="14.6" cy="10.5" r="1.5" fill="#0a0c18" />
+      </>
+    ),
+  },
+  bug: {
+    color: "#34d399",
+    icon: (
+      <>
+        <ellipse cx="12" cy="13" rx="5" ry="6" />
+        <circle cx="12" cy="6" r="2.5" />
+        <path stroke="#34d399" strokeWidth="1.5" strokeLinecap="round" fill="none" d="M7 10L4 8M7 14H3.5M7.5 17L5 19.5M17 10l3-2M17 14h3.5M16.5 17l2.5 2.5" />
+      </>
+    ),
+  },
+  rocket: {
+    color: "#22d3ee",
+    icon: <path d="M12 2c3 2.2 4.2 6 4.2 9.2l2.3 3.4-3.4-1c-.8 1.9-5.4 1.9-6.2 0l-3.4 1 2.3-3.4C7.8 8 9 4.2 12 2zm0 6.5a1.6 1.6 0 100 3.2 1.6 1.6 0 000-3.2z" />,
+  },
+  gem: {
+    color: "#a78bfa",
+    icon: <path d="M7 3h10l4 5.5L12 21 3 8.5 7 3z" />,
+  },
+  target: {
+    color: "#f87171",
+    icon: (
+      <>
+        <circle cx="12" cy="12" r="9" fill="none" stroke="#f87171" strokeWidth="2" />
+        <circle cx="12" cy="12" r="5" fill="none" stroke="#f87171" strokeWidth="2" />
+        <circle cx="12" cy="12" r="1.8" />
+      </>
+    ),
+  },
+  wave: {
+    color: "#60a5fa",
+    icon: <path fill="none" stroke="#60a5fa" strokeWidth="2.2" strokeLinecap="round" d="M2 12c2.5-5 5-5 7.5 0s5 5 7.5 0 3-4 5-1" />,
+  },
+  star: {
+    color: "#fde047",
+    icon: <path d="M12 2l2.6 6.6L21.5 9.3l-5 4.6 1.6 6.9L12 17.2 5.9 20.8l1.6-6.9-5-4.6 6.9-.7z" />,
+  },
+  moon: {
+    color: "#c4b5fd",
+    icon: <path d="M20.5 13.5A8.5 8.5 0 1110.5 3.5a7 7 0 0010 10z" />,
+  },
+};
+
+const SYMBOLS = Object.keys(GLYPHS);
 
 function makeFullDeck() {
   return [...SYMBOLS, ...SYMBOLS];
@@ -110,9 +173,11 @@ export function MemoryGame() {
     }
 
     timerRef.current = setTimeout(() => {
+      sfx("flip");
       syncCards(cardsRef.current.map(c => c.id === pick1 ? { ...c, flipped: true } : c));
 
       timerRef.current = setTimeout(() => {
+        sfx("flip");
         syncCards(cardsRef.current.map(c => c.id === pick2 ? { ...c, flipped: true } : c));
 
         timerRef.current = setTimeout(() => {
@@ -120,6 +185,7 @@ export function MemoryGame() {
           const c2 = cardsRef.current.find(c => c.id === pick2)!;
 
           if (c1.symbol === c2.symbol) {
+            sfx("aiMatch");
             syncCards(cardsRef.current.map(c =>
               c.id === pick1 || c.id === pick2 ? { ...c, matched: true, matchedBy: "ai", flipped: false } : c
             ));
@@ -161,6 +227,7 @@ export function MemoryGame() {
     const newFlipped = [...flippedRef.current, id];
     flippedRef.current = newFlipped;
 
+    sfx("flip");
     syncCards(cardsRef.current.map(c => c.id === id ? { ...c, flipped: true } : c));
 
     if (newFlipped.length === 2) {
@@ -175,6 +242,7 @@ export function MemoryGame() {
 
       if (cardA.symbol === cardB.symbol) {
         timerRef.current = setTimeout(() => {
+          sfx("match");
           syncCards(cardsRef.current.map(c =>
             c.id === a || c.id === b ? { ...c, matched: true, matchedBy: "player", flipped: false } : c
           ));
@@ -195,6 +263,7 @@ export function MemoryGame() {
         }, 300);
       } else {
         timerRef.current = setTimeout(() => {
+          sfx("mismatch");
           syncCards(cardsRef.current.map(c =>
             c.id === a || c.id === b ? { ...c, flipped: false } : c
           ));
@@ -207,7 +276,18 @@ export function MemoryGame() {
     }
   }, [locked, isAiTurn, totalPairs, doAiTurn]);
 
+  // end-of-game jingle based on who won
+  useEffect(() => {
+    if (status !== "won") return;
+    const t = setTimeout(() => {
+      sfx(playerScoreRef.current >= aiScoreRef.current ? "win" : "lose");
+    }, 250);
+    return () => clearTimeout(t);
+  }, [status]);
+
   const init = useCallback(() => {
+    initAudio();
+    sfx("ui");
     if (timerRef.current) clearTimeout(timerRef.current);
     const deck = shuffle(makeFullDeck()).map((symbol, i) => ({
       id: i, symbol, flipped: false, matched: false, matchedBy: null,
@@ -288,7 +368,9 @@ export function MemoryGame() {
                             : "rgba(129,140,248,0.2)"
                         }}
                       >
-                        <span className="text-2xl">{card.symbol}</span>
+                        <svg viewBox="0 0 24 24" className={`w-7 h-7 ${card.matched ? "mem-pop" : ""}`} fill={GLYPHS[card.symbol].color} style={{ filter: card.matched ? `drop-shadow(0 0 6px ${GLYPHS[card.symbol].color})` : undefined }} aria-hidden>
+                          {GLYPHS[card.symbol].icon}
+                        </svg>
                         {card.matched && (
                           <span className={`text-[7px] font-mono font-black mt-1 uppercase ${card.matchedBy === "player" ? "text-green-500/80" : "text-red-500/80"}`}>
                             {card.matchedBy === "player" ? "YOU" : "AI"}

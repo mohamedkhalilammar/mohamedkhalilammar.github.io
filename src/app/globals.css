@@ -656,25 +656,6 @@ a:hover {
   background: var(--accent);
 }
 
-.hero-section h1 {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  line-height: 1.1;
-  color: var(--foreground);
-  margin: 0 0 1.2rem;
-  text-transform: uppercase;
-}
-
-.hero-section h1 span {
-  display: block;
-  color: var(--accent-alt);
-  font-weight: 500;
-  font-family: var(--font-body);
-  font-size: clamp(1.2rem, 3vw, 2.2rem);
-  margin-top: 0.5rem;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
 .hero-subheadline {
   font-size: 1.15rem;
   color: var(--foreground);
@@ -3148,11 +3129,6 @@ html.amber-light .project-markdown-block pre {
     min-height: auto;
   }
 
-  .hero-section h1 {
-    font-size: 2.5rem !important;
-    margin-bottom: 0.5rem;
-  }
-
   .hero-content {
     padding-top: 0.5rem !important;
     padding-bottom: 0 !important;
@@ -3252,10 +3228,6 @@ html.amber-light .project-markdown-block pre {
 @media (min-width: 768px) and (max-width: 1023px) {
   .hero-terminal {
     height: 500px !important;
-  }
-
-  .hero-section h1 {
-    font-size: 3.5rem !important;
   }
 
   .skills-grid {
@@ -3444,6 +3416,16 @@ html.amber-light .project-markdown-block pre {
   color: #0a0a0a;
 }
 
+.cursor-aura-reticle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform, width, height;
+  filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.5));
+}
+
 .cursor-aura-dot {
   position: fixed;
   top: 0;
@@ -3457,4 +3439,400 @@ html.amber-light .project-markdown-block pre {
   background: #a5b4fc;
   box-shadow: 0 0 10px rgba(129, 140, 248, 0.7);
   will-change: transform;
+}
+/* ===============================
+   CYBER FX II — ticker, radar, palette trigger
+   =============================== */
+
+/* Infinite achievement marquee — duplicated track, seamless -50% loop */
+.cyber-ticker-track {
+  animation: ticker-scroll 36s linear infinite;
+  will-change: transform;
+}
+
+.cyber-ticker:hover .cyber-ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker-scroll {
+  to { transform: translateX(-50%); }
+}
+
+/* Radar sweep rotation + contact blip ping */
+.radar-sweep-wedge {
+  transform-origin: 100px 100px;
+  animation: radar-rotate 4.5s linear infinite;
+}
+
+@keyframes radar-rotate {
+  to { transform: rotate(360deg); }
+}
+
+.radar-blip {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: radar-blip-ping 4.5s ease-out infinite;
+}
+
+@keyframes radar-blip-ping {
+  0% { transform: scale(1); opacity: 0.9; }
+  30% { transform: scale(3.2); opacity: 0; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+
+/* Header command-palette trigger */
+.palette-trigger {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  color: rgba(244, 245, 251, 0.55);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(196, 181, 253, 0.14);
+  border-radius: 9999px;
+  padding: 0.4rem 0.9rem;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.palette-trigger:hover,
+.palette-trigger:focus-visible {
+  color: var(--accent-alt);
+  border-color: rgba(196, 181, 253, 0.4);
+  background: rgba(129, 140, 248, 0.08);
+  outline: none;
+}
+
+.palette-trigger kbd {
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  padding: 0.1rem 0.4rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cyber-ticker-track {
+    animation: none;
+  }
+
+  .radar-sweep-wedge,
+  .radar-blip {
+    animation: none;
+  }
+}
+
+/* ===============================
+   CIRCUIT PULSE — light travelling along CircuitDivider traces
+   =============================== */
+.circuit-pulse {
+  stroke-dasharray: 70 1390;
+  stroke-dashoffset: 1460;
+  animation: circuit-pulse-travel 5.5s linear infinite;
+}
+
+@keyframes circuit-pulse-travel {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .circuit-pulse {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}
+
+/* ===============================
+   SECTION LIFE — hover sheen + cursor spotlight
+   =============================== */
+
+/* diagonal light sweep across a card on hover (use inside a .group) */
+.card-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.card-sheen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(196, 181, 253, 0.08), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.7s ease;
+}
+
+.group:hover .card-sheen::before {
+  left: 130%;
+}
+
+/* radial glow that follows the cursor (set --mx/--my from JS) */
+.spotlight-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(129, 140, 248, 0.12),
+    transparent 70%
+  );
+}
+
+.spotlight-card:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-sheen::before {
+    display: none;
+  }
+}
+
+/* ===============================
+   CARD SHEEN — diagonal light sweep on hover (achievements)
+   =============================== */
+.card-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card-sheen::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -130%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(165, 180, 252, 0.12), transparent);
+  transform: skewX(-18deg);
+}
+
+.group:hover .card-sheen {
+  opacity: 1;
+}
+
+.group:hover .card-sheen::before {
+  animation: card-sheen-sweep 0.9s ease-out forwards;
+}
+
+@keyframes card-sheen-sweep {
+  to { left: 130%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .card-sheen::before {
+    animation: none;
+  }
+}
+
+/* ===============================
+   HERO DISPLAY — extra-heavy oversized title
+   =============================== */
+.hero-display {
+  font-weight: 900;
+  -webkit-text-stroke: 1px currentColor; /* fatten the glyphs for true heavy weight */
+  text-shadow: 0 0 60px rgba(129, 140, 248, 0.18);
+}
+
+/* keep the stroke from muddying the gradient fill on the second line */
+.hero-display .bg-clip-text {
+  -webkit-text-stroke: 0;
+}
+
+/* ===============================
+   GAME PREVIEWS — animated SVG scenes on the arcade cabinets
+   =============================== */
+
+/* snake travels along its path */
+.gp-snake {
+  stroke-dasharray: 55 260;
+  animation: gp-snake-travel 3.2s linear infinite;
+}
+
+@keyframes gp-snake-travel {
+  to { stroke-dashoffset: -315; }
+}
+
+/* generic pulsing dot (food, pickups) */
+.gp-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gp-pulse-beat 1.2s ease-in-out infinite;
+}
+
+@keyframes gp-pulse-beat {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.45); opacity: 0.7; }
+}
+
+/* runner: player hops, obstacles slide, ground scrolls */
+.gp-jumper {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: gp-jump 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes gp-jump {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  18% { transform: translateY(0) scaleY(0.82); }
+  45% { transform: translateY(-34px) scaleY(1.05); }
+  72% { transform: translateY(0) scaleY(0.92); }
+}
+
+.gp-obstacles {
+  animation: gp-obstacle-slide 2.8s linear infinite;
+}
+
+@keyframes gp-obstacle-slide {
+  to { transform: translateX(-310px); }
+}
+
+.gp-ground {
+  animation: gp-ground-scroll 1.1s linear infinite;
+}
+
+@keyframes gp-ground-scroll {
+  to { stroke-dashoffset: -24; }
+}
+
+/* mines: sonar rings + waving flag */
+.gp-sonar {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gp-sonar-ring 2.4s ease-out infinite;
+}
+
+.gp-sonar-late {
+  animation-delay: 1.2s;
+}
+
+@keyframes gp-sonar-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+.gp-flag {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: gp-flag-wave 2s ease-in-out infinite;
+}
+
+@keyframes gp-flag-wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-6deg); }
+}
+
+/* pong: ball bounces corner to corner, paddles track it */
+.gp-ball {
+  animation: gp-ball-x 2.2s linear infinite alternate, gp-ball-y 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes gp-ball-x {
+  from { transform: translateX(28px); }
+  to { transform: translateX(172px); }
+}
+
+@keyframes gp-ball-y {
+  from { transform: translateY(28px); }
+  to { transform: translateY(92px); }
+}
+
+.gp-paddle-l {
+  animation: gp-paddle-track 1.5s ease-in-out infinite alternate;
+}
+
+.gp-paddle-r {
+  animation: gp-paddle-track 1.5s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes gp-paddle-track {
+  from { transform: translateY(-16px); }
+  to { transform: translateY(20px); }
+}
+
+/* memory: cards flip over */
+.gp-card-flip {
+  animation: gp-flip 2.6s ease-in-out infinite;
+}
+
+@keyframes gp-flip {
+  0%, 35%, 100% { transform: scaleX(1); }
+  45%, 90% { transform: scaleX(-1); }
+}
+
+/* tetris: piece falls in steps and locks */
+.gp-tetro {
+  animation: gp-tetro-fall 2.2s steps(6, end) infinite;
+}
+
+@keyframes gp-tetro-fall {
+  0% { transform: translateY(0); opacity: 1; }
+  85% { transform: translateY(56px); opacity: 1; }
+  92% { transform: translateY(56px); opacity: 0.5; }
+  100% { transform: translateY(56px); opacity: 0; }
+}
+
+/* cabinet focus ring uses the game accent */
+.game-cabinet:focus-visible {
+  --tw-ring-color: var(--g-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gp-snake,
+  .gp-pulse,
+  .gp-jumper,
+  .gp-obstacles,
+  .gp-ground,
+  .gp-sonar,
+  .gp-flag,
+  .gp-ball,
+  .gp-paddle-l,
+  .gp-paddle-r,
+  .gp-card-flip,
+  .gp-tetro {
+    animation: none;
+  }
+}
+
+/* ===============================
+   GAME JUICE — minesweeper reveal pop, memory match pop
+   =============================== */
+.ms-pop {
+  animation: ms-pop-in 0.18s ease-out;
+}
+
+@keyframes ms-pop-in {
+  0% { transform: scale(0.6); opacity: 0.3; }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.mem-pop {
+  animation: mem-pop-beat 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mem-pop-beat {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.45) rotate(6deg); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-pop,
+  .mem-pop {
+    animation: none;
+  }
 }

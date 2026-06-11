@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { initAudio, sfx } from "./audio";
 
+const BEST_KEY = "arcade-tetris-best";
 const COLS = 10, ROWS = 20, CELL = 22;
 const W = COLS * CELL, H = ROWS * CELL;
 
@@ -40,11 +42,17 @@ export function TetrisGame() {
     score: 0, lines: 0, level: 1,
     running: false, dead: false,
     dropTimer: 0,
+    clearFlash: 0,
   });
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [score, setScore] = useState(0);
   const [lines, setLines] = useState(0);
+  const [best, setBest] = useState(0);
   const [status, setStatus] = useState<"idle" | "running" | "dead">("idle");
+
+  useEffect(() => {
+    try { setBest(Number(localStorage.getItem(BEST_KEY)) || 0); } catch { /* private mode */ }
+  }, []);
 
   const drawBoard = useCallback(() => {
     const canvas = canvasRef.current;
@@ -107,6 +115,12 @@ export function TetrisGame() {
         ctx.strokeRect(rx + 1, ry + 1, CELL - 2, CELL - 2);
       })
     );
+
+    // line-clear flash
+    if (s.clearFlash > 0) {
+      ctx.fillStyle = `rgba(232,121,249,${s.clearFlash * 0.25})`;
+      ctx.fillRect(0, 0, W, H);
+    }
   }, []);
 
   const drawPreview = useCallback(() => {
@@ -159,11 +173,31 @@ export function TetrisGame() {
     while (newBoard.length < ROWS) newBoard.unshift(Array(COLS).fill(0));
 
     const pts = [0, 100, 300, 500, 800];
+    const prevLevel = s.level;
     s.score += (pts[cleared] ?? 0) * s.level;
     s.lines += cleared;
     s.level = Math.floor(s.lines / 10) + 1;
     setScore(s.score);
     setLines(s.lines);
+    setBest((b) => {
+      if (s.score > b) {
+        try { localStorage.setItem(BEST_KEY, String(s.score)); } catch { /* private mode */ }
+        return s.score;
+      }
+      return b;
+    });
+
+    // juice: sounds + flash for clears
+    if (cleared === 4) sfx("tetrisClear");
+    else if (cleared > 0) sfx("lineClear");
+    else sfx("softdrop");
+    if (s.level > prevLevel) sfx("levelup");
+    if (cleared > 0) {
+      s.clearFlash = 0.5 + cleared * 0.15;
+      for (let i = 1; i <= 6; i++) {
+        setTimeout(() => { s.clearFlash = Math.max(0, s.clearFlash - 0.18); drawBoard(); }, i * 45);
+      }
+    }
 
     s.board = newBoard;
     s.piece = s.next;
@@ -173,11 +207,12 @@ export function TetrisGame() {
 
     if (collides(s.board, s.piece.shape, s.px, s.py)) {
       s.running = false; s.dead = true;
+      sfx("die");
       setStatus("dead");
       if (timerRef.current) clearInterval(timerRef.current);
     }
     drawPreview();
-  }, [drawPreview]);
+  }, [drawPreview, drawBoard]);
 
   const drop = useCallback(() => {
     const s = stateRef.current;
@@ -206,6 +241,7 @@ export function TetrisGame() {
     const s = stateRef.current;
     const rotated = rotate(s.piece.shape);
     if (!collides(s.board, rotated, s.px, s.py)) {
+      sfx("rotate");
       s.piece = { ...s.piece, shape: rotated };
       drawBoard();
     }
@@ -214,10 +250,13 @@ export function TetrisGame() {
   const hardDrop = useCallback(() => {
     const s = stateRef.current;
     while (!collides(s.board, s.piece.shape, s.px, s.py + 1)) s.py++;
+    sfx("harddrop");
     lock(); drawBoard();
   }, [lock, drawBoard]);
 
   const start = useCallback(() => {
+    initAudio();
+    sfx("ui");
     const s = stateRef.current;
     s.board = emptyBoard(); s.piece = randPiece(); s.next = randPiece();
     s.px = 3; s.py = 0; s.score = 0; s.lines = 0; s.level = 1;
@@ -293,6 +332,10 @@ export function TetrisGame() {
           <div>
             <p className="game-label">LEVEL</p>
             <p className="game-score" style={{ fontSize: "1rem" }}>{stateRef.current.level}</p>
+          </div>
+          <div>
+            <p className="game-label">BEST</p>
+            <p className="game-score" style={{ fontSize: "1rem", color: "#e879f9" }}>{best}</p>
           </div>
         </div>
       </div>

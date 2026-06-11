@@ -107,6 +107,45 @@ export function CursorAura() {
         {label && <span className="cursor-aura-label">{label}</span>}
       </motion.div>
 
+      {/* Rotating SVG reticle — rides the trailing ring, spins continuously,
+          and unfurls when hovering an interactive element */}
+      <motion.svg
+        aria-hidden
+        className="cursor-aura-reticle"
+        viewBox="0 0 100 100"
+        style={{ left: ringX, top: ringY, translateX: "-50%", translateY: "-50%" }}
+        animate={{
+          width: hovering ? 86 : 58,
+          height: hovering ? 86 : 58,
+          opacity: hovering ? 0.95 : 0.4,
+          rotate: 360,
+        }}
+        transition={{
+          rotate: { duration: 8, repeat: Infinity, ease: "linear" },
+          width: { type: "spring", stiffness: 300, damping: 26 },
+          height: { type: "spring", stiffness: 300, damping: 26 },
+          opacity: { duration: 0.25 },
+        }}
+      >
+        <circle
+          cx="50"
+          cy="50"
+          r="44"
+          fill="none"
+          stroke="rgba(165,180,252,0.7)"
+          strokeWidth="1.5"
+          strokeDasharray="10 14"
+          strokeLinecap="round"
+        />
+        {/* four corner ticks */}
+        <g stroke="rgba(196,181,253,0.9)" strokeWidth="2" strokeLinecap="round">
+          <line x1="50" y1="2" x2="50" y2="12" />
+          <line x1="50" y1="88" x2="50" y2="98" />
+          <line x1="2" y1="50" x2="12" y2="50" />
+          <line x1="88" y1="50" x2="98" y2="50" />
+        </g>
+      </motion.svg>
+
       {/* Precise dot */}
       <motion.div
         aria-hidden

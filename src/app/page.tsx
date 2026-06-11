@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { SectionShell } from "@/components/sections/section-shell";
 import { CyberPulseScene } from "@/components/three/cyber-pulse-scene";
-import { LiveTerminal } from "@/components/ui/live-terminal";
+import { AboutGrid } from "@/components/ui/about-grid";
 import { Sidebar } from "@/components/ui/sidebar";
 import { ProjectCarousel3D } from "@/components/ui/project-carousel-3d";
 import { WriteupGrid3D } from "@/components/ui/writeup-grid-3d";
@@ -22,13 +22,18 @@ import { KineticHeading } from "@/components/ui/kinetic-heading";
 import { EnhancedFooter } from "@/components/ui/enhanced-footer";
 import { EnhancedSkillModal } from "@/components/ui/enhanced-skill-modal";
 import { ArcadePanel } from "@/components/ui/arcade-panel";
+import { CircuitDivider } from "@/components/ui/circuit-divider";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { MatrixRain } from "@/components/ui/matrix-rain";
+import { CyberTicker } from "@/components/ui/cyber-ticker";
+import { StatCounters } from "@/components/ui/stat-counters";
+import { RadarSweep } from "@/components/ui/radar-sweep";
+import { BootSequence } from "@/components/ui/boot-sequence";
+import { ScrollSpine } from "@/components/ui/scroll-spine";
+import { HeroTitle } from "@/components/ui/hero-title";
+import { HeroPhotoCollage } from "@/components/ui/hero-photo-collage";
 import { achievements, certifications, ctfWriteups, ctfIdentity, learningPath, profile, projects, skillGroups } from "@/data/portfolio";
 
-
-const commands = [
-  { cmd: "whoami --profile", out: "Name: Khalil Ammar\nAge: 21\nRole: Offensive Security Engineer\nEducation: INSAT ICT 3rd-Year" },
-  { cmd: "cat /etc/profile.about", out: profile.about }
-];
 
 const ACHIEVEMENT_PHOTOS = [
   "/media/team.jpeg",
@@ -54,6 +59,7 @@ export default function Home() {
   const modalRef = useRef<HTMLDivElement | null>(null);
   const modalTriggerRef = useRef<HTMLElement | null>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -50]);
 
   const allSkills = useMemo(
     () => skillGroups.flatMap((group) => group.items.map((item) => ({ ...item, group: group.title }))),
@@ -75,6 +81,9 @@ export default function Home() {
   const { scrollY } = useScroll();
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [isArcadeOpen, setIsArcadeOpen] = useState(false);
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+  const [isMatrixOn, setIsMatrixOn] = useState(false);
+  const [bootDone, setBootDone] = useState(false);
 
   useEffect(() => scrollY.onChange(v => setShowScrollTop(v > 1000)), [scrollY]);
 
@@ -105,7 +114,9 @@ export default function Home() {
   return (
     <MotionConfig reducedMotion="user">
       <div className="page-shell">
+        <BootSequence onDone={() => setBootDone(true)} />
         <ScrollProgress />
+        <ScrollSpine />
         <CursorAura />
         <Sidebar onArcadeOpen={() => setIsArcadeOpen(true)} />
         <div className="page-noise" aria-hidden />
@@ -114,11 +125,23 @@ export default function Home() {
         <header className="top-nav flex" style={{ backdropFilter: "blur(20px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
           <p className="brand-mark" style={{ letterSpacing: "0.05em", fontWeight: 700 }}>{profile.name}</p>
           <ActiveNav />
+          <button
+            type="button"
+            onClick={() => setIsPaletteOpen(true)}
+            aria-label="Open command palette (Ctrl+K)"
+            className="palette-trigger hidden md:inline-flex items-center gap-2 cursor-pointer"
+          >
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="7" />
+              <path strokeLinecap="round" d="M20 20l-3.5-3.5" />
+            </svg>
+            <kbd>Ctrl K</kbd>
+          </button>
         </header>
 
         <main>
-          {/* ===== CINEMATIC ENTRANCE ===== */}
-          <CreativeEntrance4D />
+          {/* ===== CINEMATIC ENTRANCE (re-keyed so its reveal replays after boot) ===== */}
+          <CreativeEntrance4D key={bootDone ? "post-boot" : "pre-boot"} />
 
           {/* ===== HERO ===== */}
           <section
@@ -133,11 +156,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ── BOLD TACTICAL DIVIDER (Synchronized with SectionShell) ── */}
-            <div className="absolute top-0 left-0 w-full h-px bg-white/10" />
-            <div className="absolute top-0 left-0 w-32 h-[3px] bg-white/20" />
+            {/* ── CIRCUIT TRACE DIVIDER (Synchronized with SectionShell) ── */}
+            <CircuitDivider className="absolute top-0 left-0 w-full" />
 
-            <div className="hero-content reveal-stagger w-full max-w-6xl mx-auto px-6 relative z-10 py-12 mt-4 md:mt-8">
+            <motion.div
+              style={reducedMotion ? undefined : { y: heroY }}
+              className="hero-content reveal-stagger w-full max-w-6xl mx-auto px-6 relative z-10 py-12 mt-4 md:mt-8"
+            >
               {/* Background Index Watermark - Hero 00 */}
               <div className="absolute top-4 left-4 md:top-6 md:left-6 font-sans text-[6rem] md:text-[12rem] font-black text-white/[0.03] leading-none select-none pointer-events-none tracking-tighter">
                 00
@@ -148,69 +173,65 @@ export default function Home() {
                 {/* ── Text column ── */}
                 <div className="w-full flex-col css-stagger-item text-left lg:col-span-8">
 
-                  {/* Title Area */}
-                  <div className="relative mb-5 pb-3 pl-1 mt-4">
-                    <h1 className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[6.5rem] font-black uppercase tracking-tighter leading-none mb-3 text-white">
-                      MEET KHALIL
-                    </h1>
-                    <div className="h-[2px] w-16 bg-gradient-to-r from-primary-400 to-primary-600" />
-                  </div>
-
-                  {/* Role rotator */}
-                  <h2 className="text-base md:text-lg font-mono text-zinc-400 mb-6 uppercase tracking-[0.15em] pb-2 inline-flex items-center gap-3 min-h-[1.5em]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse flex-shrink-0" />
+                  {/* Role eyebrow */}
+                  <h2 className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-zinc-400 uppercase tracking-[0.25em] mb-2 min-h-[1.6em]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse flex-shrink-0" aria-hidden />
                     <AnimatePresence mode="wait">
                       <motion.span
                         key={roles[roleIdx]}
-                        initial={{ opacity: 0, y: 6, filter: "blur(3px)" }}
-                        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                        exit={{ opacity: 0, y: -6, filter: "blur(3px)" }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                       >
                         {roles[roleIdx]}
                       </motion.span>
                     </AnimatePresence>
                   </h2>
 
-                  {/* Terminal block */}
-                  <div className="relative mb-6 md:mb-8 max-w-5xl">
-                    <LiveTerminal />
-                  </div>
+                  {/* Title */}
+                  <HeroTitle />
+
+                  {/* Lead line */}
+                  <motion.p
+                    initial={reducedMotion ? false : { opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    className="text-zinc-400 text-base md:text-lg leading-relaxed max-w-md mb-8"
+                  >
+                    {profile.subheadline}
+                  </motion.p>
 
                   <div className="flex flex-wrap items-center gap-4">
-                    <a className="btn-primary focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#projects">{profile.cta.primary}</a>
-                    <a className="btn-secondary focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#contact">{profile.cta.secondary}</a>
+                    <Magnetic strength={0.25}>
+                      <a className="btn-primary focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#projects">{profile.cta.primary}</a>
+                    </Magnetic>
+                    <Magnetic strength={0.25}>
+                      <a className="btn-secondary focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#contact">{profile.cta.secondary}</a>
+                    </Magnetic>
                   </div>
                 </div>
 
-                {/* ── Photo Card Deck (diagonal overlap, all clear) ── */}
-                <div className="lg:col-span-4 flex items-center justify-center lg:justify-end self-center pt-8 lg:pt-0 w-full">
-                  <div className="relative h-[360px] w-[300px] sm:h-[440px] sm:w-[400px] scale-90 sm:scale-100" style={{ perspective: 1000 }}>
-                    {[
-                      { src: "/media/team.jpeg", x: -66, y: -56, z: 1 },
-                      { src: "/media/teamm.jpeg", x: 0, y: 0, z: 2 },
-                      { src: "/media/photo.jpg", x: 66, y: 56, z: 3 },
-                    ].map((img, i) => (
-                      <motion.div
-                        key={i}
-                        data-cursor
-                        initial={{ opacity: 0, scale: 0.82, x: img.x, y: img.y + 28, rotate: 0 }}
-                        whileInView={{ opacity: 1, scale: 1, x: img.x, y: img.y, rotate: -6 }}
-                        transition={{ delay: 0.12 * i, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                        viewport={{ once: true }}
-                        whileHover={{ scale: 1.06, y: img.y - 16, rotate: -2, zIndex: 20 }}
-                        className="photo-deck-card absolute left-1/2 top-1/2 w-[200px] sm:w-[250px] aspect-[4/5] -ml-[100px] sm:-ml-[125px] -mt-[125px] sm:-mt-[156px] rounded-2xl overflow-hidden bg-black cursor-pointer"
-                        style={{ zIndex: img.z, transformOrigin: "center center" }}
-                      >
-                        <img src={img.src} alt="Khalil" className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent" />
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
+                {/* ── Photo bento collage (floating + cursor parallax) ── */}
+                <HeroPhotoCollage />
               </div>
-            </div>
+
+              {/* ── About cards — all visible, no expanding ── */}
+              <div className="relative z-10 mt-16 md:mt-24">
+                <div className="mb-8 md:mb-12">
+                  <h2 className="font-sans text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 leading-none text-white">
+                    About
+                  </h2>
+                  <div className="h-[2px] w-16 bg-gradient-to-r from-primary-400 to-primary-600" />
+                </div>
+                <AboutGrid />
+              </div>
+            </motion.div>
           </section>
+
+          {/* ===== ACHIEVEMENT TICKER ===== */}
+          <CyberTicker />
 
           {/* ===== PROJECTS ===== */}
           <motion.div {...(reveal as any)} className="section-flow">
@@ -228,6 +249,14 @@ export default function Home() {
           {/* ===== ACHIEVEMENTS ===== */}
           <motion.div {...(reveal as any)} className="section-flow relative">
             <SectionShell id="achievements" eyebrow="Milestones" title="Key Achievements" index="02">
+              <StatCounters
+                items={[
+                  { value: ctfIdentity.stats.eventsEntered, suffix: "+", label: "CTF Events Entered" },
+                  { value: ctfIdentity.stats.challengesSolved, label: "Challenges Solved" },
+                  { value: 2, suffix: "x", label: "First-Place Finishes" },
+                  { value: 1, prefix: "Top ", suffix: "%", label: "TryHackMe Worldwide" },
+                ]}
+              />
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
                 <div className="lg:col-span-12">
                   <AchievementPhotoStrip photos={ACHIEVEMENT_PHOTOS} />
@@ -246,16 +275,29 @@ export default function Home() {
                 </div>
                 <div className="lg:col-span-8 relative lg:border-l-2 lg:border-primary-400/20 lg:ml-8 lg:pl-12 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-6 lg:gap-12 pb-6 lg:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 lg:mx-0 w-screen lg:w-auto">
                   {achievements.map((achievement, idx) => (
-                    <div key={idx} className="relative group p-6 rounded-2xl border-t-[3px] border-l border-r border-b lg:border-t lg:border-t-white/10 lg:hover:border-primary-400/30 border-t-primary-400/50 border-x-white/5 border-b-white/5 bg-white/[0.02] hover:bg-primary-400/[0.02] hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-all duration-500 backdrop-blur-sm w-[85vw] sm:w-[320px] lg:w-auto snap-center shrink-0 whitespace-normal">
-                      
+                    <motion.div
+                      key={idx}
+                      initial={reducedMotion ? false : { opacity: 0, x: 32 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.55, delay: idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                      className="relative group p-6 rounded-2xl border-t-[3px] border-l border-r border-b lg:border-t lg:border-t-white/10 lg:hover:border-primary-400/30 border-t-primary-400/50 border-x-white/5 border-b-white/5 bg-white/[0.02] hover:bg-primary-400/[0.02] hover:shadow-[0_0_30px_rgba(129,140,248,0.1)] transition-colors duration-500 backdrop-blur-sm w-[85vw] sm:w-[320px] lg:w-auto snap-center shrink-0 whitespace-normal"
+                    >
+                      {/* hover sheen sweep */}
+                      <span className="card-sheen" aria-hidden />
+                      {/* ghost rank numeral */}
+                      <span className="absolute top-4 right-5 text-4xl md:text-5xl font-black tabular-nums text-white/[0.04] group-hover:text-primary-400/15 transition-colors duration-500 select-none pointer-events-none" aria-hidden>
+                        {String(idx + 1).padStart(2, "0")}
+                      </span>
+
                       {/* Desktop Timeline Dot */}
                       <div className="hidden lg:block absolute w-3 h-3 rounded-full bg-primary-400 shadow-[0_0_10px_rgba(129,140,248,0.6)] -left-[3.45rem] top-8" />
                       <div className="hidden lg:block absolute -left-[3.45rem] top-8 w-3 h-3 rounded-full bg-primary-400 animate-ping opacity-75" />
-                      
+
                       <span className="text-[10px] md:text-[11px] font-mono text-primary-400 uppercase tracking-[0.2em] mb-4 block font-bold">{achievement.highlight}</span>
                       <h3 className="text-xl md:text-2xl font-bold text-white mb-3 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-zinc-400 transition-all">{achievement.title}</h3>
                       <p className="text-zinc-400 text-sm md:text-base leading-relaxed group-hover:text-zinc-300 transition-colors w-full break-words">{achievement.detail}</p>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
@@ -282,34 +324,39 @@ export default function Home() {
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8 mb-8">
                 {certifications.map((cert, idx) => (
-                    <article
+                    <motion.article
                       key={cert.name}
-                      className="group bg-black/50 border border-primary-500/15 rounded-xl p-5 md:p-8 backdrop-blur-sm hover:border-primary-500/45 transition-all duration-300 hover:bg-black/60"
-                      style={{ animationDelay: `${idx * 0.08}s` }}
+                      initial={reducedMotion ? false : { opacity: 0, y: 28 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      whileHover={reducedMotion ? undefined : { y: -6 }}
+                      transition={{ duration: 0.55, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                      className="group relative bg-black/50 border border-primary-500/15 rounded-xl p-5 md:p-8 backdrop-blur-sm hover:border-primary-500/45 transition-colors duration-300 hover:bg-black/60 hover:shadow-[0_20px_50px_-18px_rgba(129,140,248,0.3)]"
                     >
+                      <span className="card-sheen" aria-hidden />
                       <div className="flex items-start justify-between mb-5 gap-3">
                         <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-primary-400 mt-0.5">
                           {cert.issuer}
                         </p>
                         {cert.logo && (
-                          <img src={cert.logo} alt={cert.issuer} className="h-8 md:h-10 object-contain rounded bg-white/5 p-1" />
+                          <img src={cert.logo} alt={cert.issuer} className="h-8 md:h-10 object-contain rounded bg-white/5 p-1 transition-transform duration-500 group-hover:scale-110" />
                         )}
                       </div>
                       <h3 className="text-lg md:text-xl font-orbitron font-bold text-white mb-3 leading-snug group-hover:text-primary-300 transition-colors">
                         {cert.name}
                       </h3>
-                      <p className="text-zinc-500 text-[13px] md:text-[14px] leading-relaxed mb-6">
+                      <p className="text-zinc-500 text-[13px] md:text-[14px] leading-relaxed mb-6 group-hover:text-zinc-400 transition-colors duration-300">
                         {cert.description}
                       </p>
                       <a
                       href={cert.verifyUrl || cert.localFile}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-primary-400 hover:text-white transition-colors border-b border-primary-500/20 hover:border-primary-400 pb-0.5 min-h-[44px]"
+                      className="group/link inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-primary-400 hover:text-white transition-colors border-b border-primary-500/20 hover:border-primary-400 pb-0.5 min-h-[44px]"
                     >
-                      View Certificate <span>→</span>
+                      View Certificate <span className="transition-transform duration-300 group-hover/link:translate-x-1">→</span>
                     </a>
-                  </article>
+                  </motion.article>
                 ))}
               </div>
 
@@ -356,8 +403,13 @@ export default function Home() {
                 {skillGroups.map((group, groupIdx) => (
                   <article
                     key={group.title}
-                    className="skills-card bg-black/55 backdrop-blur-md border border-primary-500/15 hover:border-primary-500/50 transition-all duration-400 p-5 md:p-7 rounded-xl relative group overflow-hidden min-w-[280px] sm:min-w-[320px] lg:min-w-0 snap-center shrink-0"
+                    className="skills-card spotlight-card bg-black/55 backdrop-blur-md border border-primary-500/15 hover:border-primary-500/50 transition-all duration-400 p-5 md:p-7 rounded-xl relative group overflow-hidden min-w-[280px] sm:min-w-[320px] lg:min-w-0 snap-center shrink-0"
                     style={{ animation: `skillCardEntry 0.5s ease-out ${groupIdx * 0.07}s both` }}
+                    onMouseMove={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      e.currentTarget.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+                      e.currentTarget.style.setProperty("--my", `${e.clientY - rect.top}px`);
+                    }}
                   >
                     <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-400 bg-gradient-to-br from-primary-500/4 to-purple-500/4 pointer-events-none" />
                     <h3 className="font-mono text-primary-300/90 font-semibold uppercase tracking-[0.15em] text-[11px] mb-4 relative z-10">
@@ -365,8 +417,12 @@ export default function Home() {
                     </h3>
                     <div className="mt-2 flex flex-wrap gap-2 relative z-10">
                       {group.items.map((skill, idx) => (
-                        <button
+                        <motion.button
                           key={skill.name}
+                          initial={reducedMotion ? false : { opacity: 0, scale: 0.85 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true, amount: 0.4 }}
+                          transition={{ duration: 0.3, delay: idx * 0.03, ease: [0.16, 1, 0.3, 1] }}
                           type="button"
                           aria-pressed={selectedSkillName === skill.name && isSkillAlertVisible}
                           className={`rounded-full border px-3.5 py-1.5 text-[12px] font-mono transition-all cursor-pointer hover:scale-[1.03] active:scale-95 min-h-[36px] flex items-center ${selectedSkillName === skill.name && isSkillAlertVisible
@@ -380,7 +436,7 @@ export default function Home() {
                           }}
                         >
                           {skill.name}
-                        </button>
+                        </motion.button>
                       ))}
                     </div>
                   </article>
@@ -449,6 +505,7 @@ export default function Home() {
                       <span className="ml-auto text-zinc-600 group-hover:text-primary-400 group-hover:translate-x-1.5 transition-all duration-300 ease-out text-sm">→</span>
                     </a>
                   ))}
+                  <RadarSweep />
                 </div>
 
                 {/* Contact form */}
@@ -495,7 +552,16 @@ export default function Home() {
                         className="flex flex-col items-center justify-center py-12 text-center"
                       >
                         <div className="w-14 h-14 rounded-full bg-green-500/15 border-2 border-green-500/60 flex items-center justify-center mb-6">
-                          <span className="text-green-400 text-xl">✓</span>
+                          <svg viewBox="0 0 24 24" className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden>
+                            <motion.path
+                              d="M5 13l4 4L19 7"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              initial={{ pathLength: 0 }}
+                              animate={{ pathLength: 1 }}
+                              transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 }}
+                            />
+                          </svg>
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2 uppercase tracking-widest font-orbitron">Sent</h3>
                         <p className="text-zinc-500 text-sm max-w-[220px]">I'll get back to you shortly.</p>
@@ -588,10 +654,19 @@ export default function Home() {
           />
         )}
         
-        <ArcadePanel 
-          isOpen={isArcadeOpen} 
-          onClose={() => setIsArcadeOpen(false)} 
+        <ArcadePanel
+          isOpen={isArcadeOpen}
+          onClose={() => setIsArcadeOpen(false)}
         />
+
+        <CommandPalette
+          isOpen={isPaletteOpen}
+          onOpen={() => setIsPaletteOpen(true)}
+          onClose={() => setIsPaletteOpen(false)}
+          onArcade={() => setIsArcadeOpen(true)}
+          onBreach={() => setIsMatrixOn(true)}
+        />
+        <MatrixRain active={isMatrixOn} onExit={() => setIsMatrixOn(false)} />
       </div>
     </MotionConfig>
   );

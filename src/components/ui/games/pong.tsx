@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { initAudio, sfx } from "./audio";
 
 const W = 480, H = 280;
 const PAD_W = 10, PAD_H = 60, BALL_R = 7;
-const PAD_SPEED = 4, AI_SPEED = 3.2;
+const PAD_SPEED = 4;
+const PLAYER_COLOR = "#22d3ee"; // matches the arcade cabinet
+const AI_COLOR = "#fb7185";
 
 export function Pong() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -16,6 +19,9 @@ export function Pong() {
     bx: W / 2, by: H / 2,
     vx: 4, vy: 3,
     ps: 0, as: 0,             // scores
+    rally: 0,                 // hits this exchange — drives speed + AI skill
+    flash: 0,                 // screen flash on score
+    trail: [] as { x: number; y: number }[],
     particles: [] as { x: number; y: number; vx: number; vy: number; life: number; color: string }[],
   });
   const rafRef = useRef<number | null>(null);
@@ -44,6 +50,19 @@ export function Pong() {
 
     ctx.fillStyle = "#080c10";
     ctx.fillRect(0, 0, W, H);
+
+    // subtle court glow
+    const court = ctx.createRadialGradient(W / 2, H / 2, 20, W / 2, H / 2, W / 2);
+    court.addColorStop(0, "rgba(34,211,238,0.05)");
+    court.addColorStop(1, "transparent");
+    ctx.fillStyle = court;
+    ctx.fillRect(0, 0, W, H);
+
+    // score flash
+    if (s.flash > 0) {
+      ctx.fillStyle = `rgba(255,255,255,${s.flash * 0.12})`;
+      ctx.fillRect(0, 0, W, H);
+    }
 
     // Center line dashes
     ctx.setLineDash([8, 12]);
@@ -78,20 +97,31 @@ export function Pong() {
     ctx.globalAlpha = 1;
 
     // Player paddle
-    ctx.fillStyle = "#f59e0b";
-    ctx.shadowColor = "#f59e0b";
+    ctx.fillStyle = PLAYER_COLOR;
+    ctx.shadowColor = PLAYER_COLOR;
     ctx.shadowBlur = 16;
     ctx.beginPath();
     ctx.roundRect(14, s.py, PAD_W, PAD_H, 4);
     ctx.fill();
 
     // AI paddle
-    ctx.fillStyle = "#f87171";
-    ctx.shadowColor = "#f87171";
+    ctx.fillStyle = AI_COLOR;
+    ctx.shadowColor = AI_COLOR;
     ctx.shadowBlur = 16;
     ctx.beginPath();
     ctx.roundRect(W - 14 - PAD_W, s.ay, PAD_W, PAD_H, 4);
     ctx.fill();
+
+    // Ball trail (afterimages)
+    s.trail.forEach((tp, i) => {
+      const a = (i / s.trail.length) * 0.35;
+      ctx.globalAlpha = a;
+      ctx.fillStyle = PLAYER_COLOR;
+      ctx.beginPath();
+      ctx.arc(tp.x, tp.y, BALL_R * (0.4 + (i / s.trail.length) * 0.6), 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
 
     // Ball
     ctx.fillStyle = "#ffffff";
@@ -101,6 +131,14 @@ export function Pong() {
     ctx.arc(s.bx, s.by, BALL_R, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
+
+    // rally counter
+    if (s.rally >= 4) {
+      ctx.fillStyle = "rgba(34,211,238,0.5)";
+      ctx.font = "bold 11px monospace";
+      ctx.textAlign = "center";
+      ctx.fillText(`RALLY x${s.rally}`, W / 2, H - 14);
+    }
 
     // Border glow
     ctx.strokeStyle = "rgba(129,140,248,0.1)";
@@ -117,18 +155,27 @@ export function Pong() {
     if (keysRef.current["ArrowDown"] || keysRef.current["s"]) s.py += PAD_SPEED;
     s.py = Math.max(0, Math.min(H - PAD_H, s.py));
 
-    // AI tracking
+    // AI tracking — gets sharper as the rally grows, drifts when ball moves away
+    const aiSpeed = 2.6 + Math.min(2.2, s.rally * 0.18);
     const aiCenter = s.ay + PAD_H / 2;
-    if (aiCenter < s.by - 4) s.ay = Math.min(s.ay + AI_SPEED, H - PAD_H);
-    else if (aiCenter > s.by + 4) s.ay = Math.max(s.ay - AI_SPEED, 0);
+    const target = s.vx > 0 ? s.by : H / 2; // only chases when ball approaches
+    if (aiCenter < target - 6) s.ay = Math.min(s.ay + aiSpeed, H - PAD_H);
+    else if (aiCenter > target + 6) s.ay = Math.max(s.ay - aiSpeed, 0);
 
     // Ball movement
     s.bx += s.vx;
     s.by += s.vy;
 
+    // trail
+    s.trail.push({ x: s.bx, y: s.by });
+    if (s.trail.length > 8) s.trail.shift();
+
+    // decay flash
+    if (s.flash > 0) s.flash -= 0.06;
+
     // Top/bottom bounce
-    if (s.by - BALL_R <= 0) { s.by = BALL_R; s.vy = Math.abs(s.vy); spawnParticles(s.bx, BALL_R, "#60a5fa"); }
-    if (s.by + BALL_R >= H) { s.by = H - BALL_R; s.vy = -Math.abs(s.vy); spawnParticles(s.bx, H - BALL_R, "#60a5fa"); }
+    if (s.by - BALL_R <= 0) { s.by = BALL_R; s.vy = Math.abs(s.vy); sfx("wall"); spawnParticles(s.bx, BALL_R, "#60a5fa"); }
+    if (s.by + BALL_R >= H) { s.by = H - BALL_R; s.vy = -Math.abs(s.vy); sfx("wall"); spawnParticles(s.bx, H - BALL_R, "#60a5fa"); }
 
     // Player paddle collision
     if (
@@ -139,7 +186,9 @@ export function Pong() {
       s.vx = Math.abs(s.vx) * 1.05;
       const rel = (s.by - (s.py + PAD_H / 2)) / (PAD_H / 2);
       s.vy = rel * 5;
-      spawnParticles(s.bx, s.by, "#f59e0b");
+      s.rally++;
+      sfx("paddle");
+      spawnParticles(s.bx, s.by, PLAYER_COLOR);
     }
 
     // AI paddle collision
@@ -151,7 +200,9 @@ export function Pong() {
       s.vx = -Math.abs(s.vx) * 1.05;
       const rel = (s.by - (s.ay + PAD_H / 2)) / (PAD_H / 2);
       s.vy = rel * 5;
-      spawnParticles(s.bx, s.by, "#f87171");
+      s.rally++;
+      sfx("paddle");
+      spawnParticles(s.bx, s.by, AI_COLOR);
     }
 
     // Cap speed
@@ -162,11 +213,15 @@ export function Pong() {
     if (s.bx < 0) {
       s.as++;
       setAs(s.as);
+      sfx("point");
+      s.flash = 1; s.rally = 0; s.trail = [];
       resetBall(s, 1);
     }
     if (s.bx > W) {
       s.ps++;
       setPs(s.ps);
+      sfx("point");
+      s.flash = 1; s.rally = 0; s.trail = [];
       resetBall(s, -1);
     }
 
@@ -174,6 +229,7 @@ export function Pong() {
     if (s.ps >= 7 || s.as >= 7) {
       s.running = false;
       s.dead = true;
+      sfx(s.ps >= 7 ? "win" : "lose");
       setStatus("dead");
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       draw(); return;
@@ -194,12 +250,15 @@ export function Pong() {
   }
 
   const start = useCallback(() => {
+    initAudio();
+    sfx("ui");
     const s = stateRef.current;
     s.py = H / 2 - PAD_H / 2;
     s.ay = H / 2 - PAD_H / 2;
     s.bx = W / 2; s.by = H / 2;
     s.vx = 4; s.vy = 3;
     s.ps = 0; s.as = 0;
+    s.rally = 0; s.flash = 0; s.trail = [];
     s.running = true; s.dead = false;
     s.particles = [];
     setPs(0); setAs(0); setStatus("running");

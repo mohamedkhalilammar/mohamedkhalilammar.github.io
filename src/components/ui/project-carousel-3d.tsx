@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Project } from "@/data/portfolio";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+
+const AUTO_ADVANCE_MS = 7000;
 
 export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const reduced = useReducedMotion();
+
+  // Auto-advance; any manual change of currentIdx restarts the timer
+  useEffect(() => {
+    if (reduced || isPaused || !projects?.length) return;
+    const t = setTimeout(() => setCurrentIdx((p) => (p + 1) % projects.length), AUTO_ADVANCE_MS);
+    return () => clearTimeout(t);
+  }, [currentIdx, isPaused, reduced, projects?.length]);
 
   if (!projects || projects.length === 0) return null;
 
@@ -14,7 +25,25 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
   const slug = current.name.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
 
   return (
-    <div className="relative w-full rounded-[1.5rem] md:rounded-[2rem] overflow-hidden border border-[color:var(--line-strong)]" style={{ minHeight: "auto", background: "rgba(255, 255, 255, 0.05)" }}>
+    <div
+      className="relative w-full rounded-[1.5rem] md:rounded-[2rem] overflow-hidden border border-[color:var(--line-strong)]"
+      style={{ minHeight: "auto", background: "rgba(255, 255, 255, 0.05)" }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* ── AUTO-ADVANCE PROGRESS ── */}
+      {!reduced && (
+        <div className="absolute top-0 left-0 right-0 h-[2px] z-20 bg-white/5" aria-hidden>
+          <motion.div
+            key={`${currentIdx}-${isPaused}`}
+            className="h-full bg-gradient-to-r from-primary-400 to-primary-200"
+            initial={{ width: "0%" }}
+            animate={isPaused ? { width: "0%" } : { width: "100%" }}
+            transition={isPaused ? { duration: 0.3 } : { duration: AUTO_ADVANCE_MS / 1000, ease: "linear" }}
+          />
+        </div>
+      )}
+
       {/* ── SUBTLE BACKGROUND ── */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(var(--primary-rgb),0.12), transparent 50%, rgba(var(--primary-rgb),0.06))" }} />

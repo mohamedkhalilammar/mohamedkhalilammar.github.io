@@ -1,76 +1,109 @@
 "use client";
 
 import { useState } from "react";
-import { SnakeGame } from "./games/snake";
-import { Minesweeper } from "./games/minesweeper";
-import { RunnerGame } from "./games/runner";
-import { TetrisGame } from "./games/tetris";
-import { Pong } from "./games/pong";
-import { MemoryGame } from "./games/memory";
+import { AnimatePresence, motion } from "framer-motion";
+import { GameCabinetGrid } from "./game-cabinet-grid";
+import { GameStage } from "./game-stage";
+import { GAME_CATALOG } from "./games/catalog";
 
-const GAMES = [
-  { id: "snake",   label: "SNAKE",    icon: "🐍" },
-  { id: "runner",  label: "RUNNER",   icon: "🏃" },
-  { id: "minesweeper", label: "MINES", icon: "💣" },
-  { id: "pong",    label: "PONG",     icon: "🏓" },
-  { id: "memory",  label: "MEMORY",   icon: "🃏" },
-];
+const EASE = [0.16, 1, 0.3, 1] as const;
 
+/**
+ * MiniGamesSection — the /arcade page experience: a hero strip, the cabinet
+ * grid, and (when a game is chosen) the full accent-tinted game stage with a
+ * quick-switch rail of the other games.
+ */
 export function MiniGamesSection() {
-  const [active, setActive] = useState("snake");
+  const [activeGame, setActiveGame] = useState<string | null>(null);
+  const activeMeta = GAME_CATALOG.find((g) => g.id === activeGame);
 
   return (
-    <section className="flex-grow flex flex-col pt-4" id="games">
-      {/* Header + Tabs Row */}
-      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-8 mb-8 border-b border-primary-400/10 pb-8">
-        <div className="flex flex-wrap gap-2">
-          {GAMES.map(g => (
+    <section className="flex-grow flex flex-col pt-6 pb-4" id="games">
+      {/* Header */}
+      <div className="mb-8 md:mb-10">
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: EASE }}
+          className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-primary-400 mb-3"
+        >
+          {activeGame ? "Now playing" : "Six machines. No quarters needed."}
+        </motion.p>
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.08, ease: EASE }}
+            className="font-sans text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none"
+            style={{ color: activeMeta?.accent ?? "#fff" }}
+          >
+            {activeMeta?.label ?? "The Arcade"}
+          </motion.h1>
+
+          {activeGame && (
             <button
-              key={g.id}
-              className={`px-6 py-3 font-mono text-[10px] font-black tracking-[0.25em] transition-all duration-300 rounded-sm border ${active === g.id
-                  ? "bg-primary-400 text-black border-primary-400 shadow-[0_0_25px_rgba(129,140,248,0.4)]"
-                  : "bg-transparent text-zinc-500 border-white/5 hover:border-primary-400/40 hover:text-white"
-                }`}
-              onClick={() => setActive(g.id)}
+              onClick={() => setActiveGame(null)}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg ring-1 ring-white/10 hover:ring-white/25 hover:bg-white/5 transition-all text-zinc-400 hover:text-white font-mono text-[10px] font-bold uppercase tracking-[0.2em] cursor-pointer"
             >
-              {g.label}
+              <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 8H3M7 4L3 8l4 4" />
+              </svg>
+              All games
             </button>
-          ))}
+          )}
         </div>
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: "6rem" }}
+          transition={{ duration: 0.8, delay: 0.3, ease: EASE }}
+          className="mt-5 h-[2px] rounded-full"
+          style={{ background: `linear-gradient(90deg, ${activeMeta?.accent ?? "#818cf8"}, transparent)` }}
+        />
       </div>
 
-      {/* Game Stage - Full Width */}
-      <div className="flex-grow relative group mb-12">
-        {/* Stage Frame Decorations */}
+      <AnimatePresence mode="wait">
+        {!activeGame ? (
+          <motion.div
+            key="menu"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            <GameCabinetGrid onSelect={setActiveGame} />
+          </motion.div>
+        ) : (
+          <motion.div
+            key={activeGame}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="flex flex-col gap-6"
+          >
+            <GameStage gameId={activeGame} />
 
-
-        <div className="h-full flex flex-col border border-white/5 bg-black/45 backdrop-blur-3xl overflow-hidden rounded-xl shadow-2xl relative">
-          {/* Internal Game Info Strip */}
-          <div className="flex items-center justify-between px-10 py-5 bg-white/[0.03] border-b border-white/[0.05]">
-            <div className="flex items-center gap-5">
-              <span className="text-3xl filter drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">{GAMES.find(g => g.id === active)?.icon}</span>
-              <h3 className="text-primary-400 font-black font-mono text-[11px] tracking-[0.4em] uppercase leading-none flex items-center gap-3">
-                {GAMES.find(g => g.id === active)?.label}
-              </h3>
+            {/* quick-switch rail */}
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-zinc-600 mr-2">
+                Switch
+              </span>
+              {GAME_CATALOG.filter((g) => g.id !== activeGame).map((game) => (
+                <button
+                  key={game.id}
+                  onClick={() => setActiveGame(game.id)}
+                  className="px-4 py-2 rounded-lg ring-1 ring-white/10 hover:bg-white/5 transition-all font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 hover:text-white cursor-pointer"
+                  style={{ ["--g-accent" as string]: game.accent }}
+                  onMouseEnter={(e) => (e.currentTarget.style.boxShadow = `inset 0 0 0 1px ${game.accent}66, 0 0 20px -8px ${game.accent}88`)}
+                  onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "")}
+                >
+                  {game.label}
+                </button>
+              ))}
             </div>
-          </div>
-
-          {/* Render Area - Expanded with CRT FX */}
-          <div className="flex-grow flex items-center justify-center p-6 md:p-16 relative">
-             {/* CRT Overlay Effect */}
-             <div className="absolute inset-0 pointer-events-none opacity-10 mix-blend-overlay z-10" 
-                  style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 3px, transparent 3px)" }} />
-             
-             <div className="w-full h-full max-w-[1500px] flex items-center justify-center relative translate-z-0">
-                {active === "snake"      && <SnakeGame />}
-                {active === "runner"     && <RunnerGame />}
-                {active === "minesweeper"&& <Minesweeper />}
-                {active === "pong"       && <Pong />}
-                {active === "memory"     && <MemoryGame />}
-             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

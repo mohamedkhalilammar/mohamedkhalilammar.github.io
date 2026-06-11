@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { KineticHeading } from "@/components/ui/kinetic-heading";
+import { CircuitDivider } from "@/components/ui/circuit-divider";
 
 type SectionShellProps = {
   id: string;
@@ -13,9 +14,8 @@ export function SectionShell({ id, eyebrow, title, children, index }: SectionShe
   return (
     <section id={id} className="relative py-10 md:py-20 px-5 md:px-10 lg:px-12 max-w-[1400px] mx-auto group mt-2 md:mt-12">
       
-      {/* ── TACTICAL DIVIDER ── */}
-      <div className="absolute top-0 left-0 w-full h-px bg-white/10" />
-      <div className="absolute top-0 left-0 w-20 h-[2px] bg-white/20" />
+      {/* ── CIRCUIT TRACE DIVIDER ── */}
+      <CircuitDivider className="absolute -top-3 left-0 w-full" />
       
       {/* Background Index Watermark */}
       {index && (
