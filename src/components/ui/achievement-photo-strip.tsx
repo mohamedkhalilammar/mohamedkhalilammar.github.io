@@ -21,7 +21,7 @@ interface Props {
 
 export function AchievementPhotoStrip({ photos }: Props) {
   return (
-    <div className="lg:hidden mb-10 overflow-x-auto overflow-y-hidden scroll-smooth achievement-strip-scroll relative w-full">
+    <div className="lg:hidden mb-10 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory achievement-strip-scroll relative w-full">
       <div
         className="flex gap-4 px-6 pb-4"
         style={{ width: "max-content" }}
@@ -29,11 +29,11 @@ export function AchievementPhotoStrip({ photos }: Props) {
         {photos.map((src, i) => (
           <motion.div
             key={src + i}
-            initial={{ opacity: 0, scale: 0.92 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, x: 36, scale: 0.94 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: i * 0.06 }}
-            className="relative flex-shrink-0 w-[220px] h-[155px] rounded-2xl overflow-hidden border border-primary-500/25 shadow-lg group/photo"
+            transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
+            className="relative flex-shrink-0 snap-center w-[220px] h-[155px] rounded-2xl overflow-hidden border border-primary-500/25 shadow-lg group/photo"
           >
             <img
               src={src}

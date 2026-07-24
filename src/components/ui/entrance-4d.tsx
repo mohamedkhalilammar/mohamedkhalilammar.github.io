@@ -15,13 +15,18 @@ const AUTO_MS = 5200;
 
 export function CreativeEntrance4D() {
   const reducedMotion = useReducedMotion();
-  const [current, setCurrent] = useState(0);
+  // slide index + travel direction so transitions can wipe from the right side
+  const [slide, setSlide] = useState<{ idx: number; dir: 1 | -1 }>({ idx: 0, dir: 1 });
+  const current = slide.idx;
 
   const advance = useCallback((dir: 1 | -1) => {
-    setCurrent((c) => (c + dir + BG_PHOTOS.length) % BG_PHOTOS.length);
+    setSlide((s) => ({ idx: (s.idx + dir + BG_PHOTOS.length) % BG_PHOTOS.length, dir }));
   }, []);
 
-  const goTo = useCallback((idx: number) => setCurrent(idx), []);
+  const goTo = useCallback(
+    (idx: number) => setSlide((s) => ({ idx, dir: idx >= s.idx ? 1 : -1 })),
+    []
+  );
 
   // Autoplay — resets on any slide change so the progress bar stays in sync
   useEffect(() => {
@@ -49,8 +54,14 @@ export function CreativeEntrance4D() {
     >
       {/* ── Full-bleed photo background ── */}
       <div className="absolute inset-0 z-0" aria-hidden>
-        <AnimatePresence initial={false} mode="sync">
-          <BgPhoto key={current} src={BG_PHOTOS[current]} reducedMotion={!!reducedMotion} />
+        <AnimatePresence initial={false} mode="sync" custom={slide.dir}>
+          <BgPhoto
+            key={current}
+            src={BG_PHOTOS[current]}
+            idx={current}
+            dir={slide.dir}
+            reducedMotion={!!reducedMotion}
+          />
         </AnimatePresence>
 
         {/* aurora wash + legibility scrims */}
@@ -162,22 +173,71 @@ export function CreativeEntrance4D() {
   );
 }
 
-function BgPhoto({ src, reducedMotion }: { src: string; reducedMotion: boolean }) {
+type BgPhotoProps = {
+  src: string;
+  idx: number;
+  dir: 1 | -1;
+  reducedMotion: boolean;
+};
+
+/**
+ * BgPhoto — cinematic slide: the incoming photo wipes in from the travel
+ * direction (clip-path) while the outgoing one pans away underneath.
+ * Ken Burns alternates per slide (even → slow zoom-in, odd → slow zoom-out)
+ * so consecutive photos never move the same way.
+ */
+function BgPhoto({ src, idx, dir, reducedMotion }: BgPhotoProps) {
+  const zoomIn = idx % 2 === 0;
+
+  const variants = {
+    enter: (d: 1 | -1) =>
+      reducedMotion
+        ? { opacity: 0 }
+        : {
+            clipPath: d === 1 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)",
+            scale: 1.06,
+            filter: "blur(6px)",
+            opacity: 1,
+          },
+    center: {
+      clipPath: "inset(0 0 0 0)",
+      scale: 1,
+      x: 0,
+      filter: "blur(0px)",
+      opacity: 1,
+    },
+    exit: (d: 1 | -1) =>
+      reducedMotion
+        ? { opacity: 0 }
+        : {
+            opacity: 0,
+            scale: 1.07,
+            x: d === 1 ? -60 : 60,
+            filter: "blur(5px)",
+          },
+  };
+
   return (
     <motion.div
       className="absolute inset-0"
-      initial={reducedMotion ? { opacity: 1 } : { opacity: 0, scale: 1.1, filter: "blur(10px)" }}
-      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-      exit={reducedMotion ? { opacity: 0 } : { opacity: 0, scale: 1.04, filter: "blur(6px)" }}
-      transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+      custom={dir}
+      variants={variants}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
     >
       <motion.img
         src={src}
         alt=""
         draggable={false}
-        initial={{ scale: 1.0 }}
-        animate={{ scale: reducedMotion ? 1.0 : 1.08 }}
-        transition={{ duration: AUTO_MS / 1000 + 1.4, ease: "easeOut" }}
+        initial={reducedMotion ? { scale: 1 } : { scale: zoomIn ? 1 : 1.14, x: 0 }}
+        animate={
+          reducedMotion
+            ? { scale: 1 }
+            : { scale: zoomIn ? 1.12 : 1.03, x: zoomIn ? dir * -14 : dir * 10 }
+        }
+        transition={{ duration: AUTO_MS / 1000 + 1.5, ease: "easeOut" }}
         className="h-full w-full object-cover select-none"
         style={{ objectPosition: "center 25%", filter: "contrast(1.04) saturate(0.95) brightness(0.92)" }}
       />

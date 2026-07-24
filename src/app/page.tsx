@@ -32,6 +32,7 @@ import { BootSequence } from "@/components/ui/boot-sequence";
 import { ScrollSpine } from "@/components/ui/scroll-spine";
 import { HeroTitle } from "@/components/ui/hero-title";
 import { HeroPhotoCollage } from "@/components/ui/hero-photo-collage";
+import { TubesCanvas } from "@/components/ui/tubes-canvas";
 import { achievements, certifications, ctfWriteups, ctfIdentity, learningPath, profile, projects, skillGroups } from "@/data/portfolio";
 
 
@@ -154,6 +155,18 @@ export default function Home() {
               <div className="absolute top-1/2 -right-20 -translate-y-1/2 w-[600px] h-full opacity-25">
                 <CyberPulseScene />
               </div>
+              {/* Cursor-chasing tubes behind MEET KHALIL — masked so they dissolve toward the section edges */}
+              <div
+                className="absolute inset-x-0 top-0 h-[80vh] max-h-[860px]"
+                style={{
+                  maskImage:
+                    "radial-gradient(ellipse 85% 75% at 45% 42%, black 35%, rgba(0,0,0,0.5) 60%, transparent 82%)",
+                  WebkitMaskImage:
+                    "radial-gradient(ellipse 85% 75% at 45% 42%, black 35%, rgba(0,0,0,0.5) 60%, transparent 82%)",
+                }}
+              >
+                <TubesCanvas className="absolute inset-0 w-full h-full" />
+              </div>
             </div>
 
             {/* ── CIRCUIT TRACE DIVIDER (Synchronized with SectionShell) ── */}
@@ -238,7 +251,10 @@ export default function Home() {
             <SectionShell id="projects" eyebrow="Work" title="" index="01">
               <div className="mb-8">
                 <h2 className="font-sans text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 leading-none text-white">
-                  Featured Projects
+                  Featured{" "}
+                  <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-[#e0e7ff] via-30% to-primary-500">
+                    Projects
+                  </span>
                 </h2>
                 <div className="h-[2px] w-16 bg-gradient-to-r from-primary-400 to-primary-600" />
               </div>
@@ -264,12 +280,21 @@ export default function Home() {
                 <div className="lg:col-span-4 hidden lg:flex flex-col gap-10 mt-2">
                   {ACHIEVEMENT_PHOTOS.map((src, idx) => (
                     <motion.div key={idx} className="relative w-full rounded-xl overflow-hidden border border-primary-400/20 shadow-lg group aspect-video"
-                      initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                      transition={{ delay: 0.1 * idx, duration: 0.8 }}
-                      viewport={{ once: true }}>
+                      initial={reducedMotion ? { opacity: 0 } : { clipPath: "inset(100% 0 0 0)", opacity: 0.4 }}
+                      whileInView={reducedMotion ? { opacity: 1 } : { clipPath: "inset(0 0 0 0)", opacity: 1 }}
+                      transition={{ delay: 0.08 * idx, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                      viewport={{ once: true, amount: 0.25 }}>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10 pointer-events-none" />
-                      <img src={src} alt="Achievement" className="w-full h-full object-cover group-hover:scale-[1.05] transition-transform duration-700" />
+                      <motion.img
+                        src={src}
+                        alt="Achievement"
+                        initial={reducedMotion ? undefined : { scale: 1.18 }}
+                        whileInView={{ scale: 1 }}
+                        viewport={{ once: true, amount: 0.25 }}
+                        transition={{ delay: 0.08 * idx, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="w-full h-full object-cover group-hover:scale-[1.06] group-hover:brightness-110 transition-[transform,filter] duration-700 ease-out"
+                      />
+                      <span className="card-sheen z-20" aria-hidden />
                     </motion.div>
                   ))}
                 </div>
