@@ -13,7 +13,7 @@ const BLIPS: Array<{ cx: number; cy: number; delay: string }> = [
  */
 export function RadarSweep() {
   return (
-    <div className="relative rounded-xl border border-primary-500/20 bg-black/35 p-5 overflow-hidden">
+    <div className="relative rounded-xl border border-primary-500/20 bg-[var(--surface-raised)] p-5 overflow-hidden">
       <div className="flex items-center justify-between mb-3">
         <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary-400 font-bold">
           Live Recon
@@ -64,7 +64,7 @@ export function RadarSweep() {
         </defs>
       </svg>
 
-      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-600">
+      <p className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--text-faint)]">
         Scanning for internships &amp; CTF teams
       </p>
     </div>

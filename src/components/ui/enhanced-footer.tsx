@@ -1,6 +1,7 @@
 "use client";
 
 import { profile } from "@/data/portfolio";
+import Link from "next/link";
 
 const SOCIALS = [
   {
@@ -34,47 +35,10 @@ const SOCIALS = [
 
 export function EnhancedFooter() {
   return (
-    <footer className="site-footer border-t border-white/5 bg-[#050505] py-14 md:py-20 px-6 md:px-8 relative overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-primary-400/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary-400/5 blur-[100px] pointer-events-none" />
-
-      <div className="max-w-6xl mx-auto flex flex-col items-center text-center relative z-10">
-        <h2 className="brand-mark text-2xl font-black uppercase tracking-[0.2em] mb-12 text-white">
-          {profile.name}
-        </h2>
-
-        <nav aria-label="Social links" className="mb-16">
-          <ul className="flex flex-wrap justify-center gap-6 md:gap-8 list-none p-0 m-0">
-            {SOCIALS.filter((s) => s.href).map((social) => (
-              <li key={social.label}>
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col items-center gap-3 no-underline"
-                >
-                  <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-zinc-400 group-hover:text-primary-400 group-hover:border-primary-400/40 group-hover:bg-primary-400/5 group-hover:scale-110 transition-all duration-300">
-                    {social.icon}
-                  </div>
-                  <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-zinc-600 group-hover:text-zinc-300 transition-colors">
-                    {social.label}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="w-16 h-px bg-white/10 mb-8" />
-
-        <p className="font-mono text-[10px] uppercase tracking-[0.4em] text-zinc-500 mb-2">
-          Developed by {profile.name}
-        </p>
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-zinc-700">
-          © {new Date().getFullYear()}
-        </p>
-      </div>
+    <footer className="refined-footer">
+      <div className="footer-identity"><Link href="/">{profile.name}</Link><p>Security, engineering, and a little curiosity.</p><span>© {new Date().getFullYear()}</span></div>
+      <nav aria-label="Explore the portfolio"><Link href="/#about">About</Link><Link href="/#projects">Projects</Link><Link href="/blog">Blog</Link><Link href="/#achievements">Achievements</Link><Link href="/#certifications">Certifications</Link><Link href="/#skills">Skills</Link><Link href="/arcade">Arcade</Link><a href="/media/CV.pdf" target="_blank" rel="noopener noreferrer">Résumé ↗</a></nav>
+      <nav aria-label="Social links">{SOCIALS.filter(s => s.href).map(s => <a href={s.href} key={s.label} target={s.label === "Email" ? undefined : "_blank"} rel={s.label === "Email" ? undefined : "noopener noreferrer"}>{s.icon}{s.label}<span aria-hidden>↗</span></a>)}</nav>
     </footer>
   );
 }

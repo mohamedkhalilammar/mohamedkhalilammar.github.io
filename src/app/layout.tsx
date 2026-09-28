@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Karla, Azeret_Mono, Syne } from "next/font/google";
 import "./globals.css";
+import "./refinements.css";
+import { THEME_INIT_SCRIPT } from "@/lib/theme";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-heading",
@@ -45,9 +48,13 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
+      suppressHydrationWarning
       className={`${bricolage.variable} ${karla.variable} ${azeret.variable} ${syne.variable} h-full antialiased`}
     >
       <head>
+        {/* Must run before first paint, ahead of every other script, or a
+            visitor on Amber Light gets a full-page flash of Midnight. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -58,7 +65,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col font-body">{children}</body>
+      <body className="min-h-full flex flex-col font-body">
+        <a className="skip-link" href="#main-content">Skip to content</a>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
     </html>
   );
 }

@@ -33,7 +33,7 @@ export function AchievementPhotoStrip({ photos }: Props) {
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex-shrink-0 snap-center w-[220px] h-[155px] rounded-2xl overflow-hidden border border-primary-500/25 shadow-lg group/photo"
+            className="photo-plate relative flex-shrink-0 snap-center w-[220px] h-[155px] rounded-2xl overflow-hidden border border-primary-500/25 shadow-lg group/photo"
           >
             <img
               src={src}
@@ -41,7 +41,7 @@ export function AchievementPhotoStrip({ photos }: Props) {
               className="w-full h-full object-cover object-center brightness-105 group-hover/photo:scale-105 transition-transform duration-500"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--photo-caption-soft)] to-transparent pointer-events-none" />
           </motion.div>
         ))}
       </div>

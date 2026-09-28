@@ -75,7 +75,7 @@ export function BootSequence({ onDone }: { onDone: () => void }) {
         <motion.div
           exit={{ y: "-100%" }}
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-          className="fixed inset-0 z-[10002] bg-[#080a14] flex items-center justify-center select-none cursor-pointer overflow-hidden"
+          className="fixed inset-0 z-[10002] bg-[var(--surface-page)] flex items-center justify-center select-none cursor-pointer overflow-hidden"
           aria-label="Site loading"
         >
           {/* soft ambient glow */}
@@ -96,7 +96,7 @@ export function BootSequence({ onDone }: { onDone: () => void }) {
             <h1 className="font-sans font-black uppercase tracking-[-0.03em] leading-[0.95] text-center text-[clamp(2.8rem,9vw,6.5rem)]">
               <span className="block overflow-hidden pb-[0.05em]">
                 <motion.span
-                  className="block text-white"
+                  className="block text-[var(--text-ink)]"
                   initial={{ y: "110%" }}
                   animate={{ y: "0%" }}
                   transition={{ duration: 0.9, ease: EASE, delay: 0.1 }}
@@ -106,7 +106,7 @@ export function BootSequence({ onDone }: { onDone: () => void }) {
               </span>
               <span className="block overflow-hidden pb-[0.08em]">
                 <motion.span
-                  className="block text-transparent bg-clip-text bg-gradient-to-r from-[#818cf8] via-[#c4b5fd] to-white"
+                  className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-grad-a)] via-[var(--brand-grad-b)] to-[var(--brand-grad-c)]"
                   initial={{ y: "110%" }}
                   animate={{ y: "0%" }}
                   transition={{ duration: 0.9, ease: EASE, delay: 0.22 }}
@@ -123,14 +123,14 @@ export function BootSequence({ onDone }: { onDone: () => void }) {
               transition={{ duration: 0.5, delay: 0.5 }}
               className="flex items-center gap-5 w-[min(320px,70vw)]"
             >
-              <div className="flex-1 h-px bg-white/10 overflow-hidden">
+              <div className="flex-1 h-px bg-[var(--surface-hover)] overflow-hidden">
                 <div
                   ref={barRef}
                   className="h-full w-full origin-left bg-gradient-to-r from-primary-400 to-primary-200"
                   style={{ transform: "scaleX(0)" }}
                 />
               </div>
-              <span className="font-mono text-xs text-zinc-500 tabular-nums w-7 text-right">
+              <span className="font-mono text-xs text-[var(--text-muted)] tabular-nums w-7 text-right">
                 <span ref={percentRef}>00</span>
               </span>
             </motion.div>

@@ -49,10 +49,216 @@
   --noise-opacity: 0.025;
 
   /* Reusable aurora glow shadow for raised surfaces */
-  --shadow-aurora: 0 24px 70px -20px rgba(0, 0, 0, 0.7), 0 0 50px -28px rgba(129, 140, 248, 0.5);
+  --shadow-aurora: 0 24px 70px -20px rgb(var(--shadow-rgb) / 0.7), 0 0 50px -28px rgba(129, 140, 248, 0.5);
 }
 
 
+
+/* ═════════════════════════════════════════════════════════════════════════
+   TWO THEMES — Midnight Aurora (default) + Amber Light (opt-in)
+   Decided 2026-08-25. The switcher is real: `data-theme` on <html>, persisted
+   in localStorage, set pre-paint by an inline script in layout.tsx.
+
+   ── THE ONE RULE ────────────────────────────────────────────────────────
+   Components consume the SEMANTIC tokens below (--surface-*, --text-*,
+   --line-*, --accent-*) and NEVER the raw --amber-* palette, and never a
+   hardcoded `text-white` / `bg-black/40` / `text-zinc-400`. A component that
+   names a raw colour is a component that only works in one theme.
+   ─────────────────────────────────────────────────────────────────────────
+
+   Raw Amber Light palette. Reference values only — consumed by the
+   [data-theme="amber-light"] block, not by components.
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  /* Rebuilt on measured perceptual lightness (L*), not on eyeballed hexes.
+     The first light build put every surface between L* 89 and 99 — a 10-unit
+     band, where a *just-noticeable* step is 2-3. Cards sat 5.8 L* off the
+     ground and wells 4.2, so nothing read as raised or recessed and the page
+     went to beige mush. The scale below spans L* 20-99 and steps deliberately.
+        raised 99.0 | page 89.0 | sunken 83.1 | rule 73.0
+        border 52.8 | inked  32.9 | anchor 20.3                              */
+  --amber-page:      #e6dfd1;  /* L* 89.0 — page ground, warm stock          */
+  --amber-raised:    #fdfcfa;  /* L* 99.0 — cards lift a full 10 L* off it   */
+  --amber-sunken:    #d8cebc;  /* L* 83.1 — wells genuinely recessed         */
+  --amber-inked:     #594b3c;  /* L* 32.9 — mid-tone band, the missing range */
+  --amber-anchor:    #3a2f23;  /* L* 20.3 — the dark mass every screen needs */
+  --amber-on-inked:  #f0e9dc;  /* type on the two dark bands (6.97:1 / 10.8) */
+  --amber-accent-lf: #c7d2fe;  /* accent lifted for use on them (5.64 / 8.74) */
+
+  --amber-ink:       #1c1917;  /* headings + primary text  (13.2:1 on page) */
+  --amber-body:      #48433f;  /* body copy                 (7.4:1 on page) */
+  /* muted is capped by the well: 4.5:1 against sunken (L* 83) forces text to
+     L* <= 37, and body sat at 36 — the two tones had collapsed into one. The
+     gap was reopened downward (body to L* 29) rather than lightening muted. */
+  --amber-muted:     #5c5651;  /* labels, metadata     (5.5 page / 4.6 well) */
+
+  --amber-rule:      #beb29d;  /* hairline dividers                         */
+  --amber-border:    #907b5c;  /* card + input borders  (3.06:1 on the page) */
+
+  --amber-accent:    #4f46e5;  /* fills — white type on it clears 4.6:1     */
+  --amber-accent-t:  #4338ca;  /* accent as small text      (7.1:1 on page) */
+  --amber-accent-sf: #eef2ff;  /* tinted accent surface                     */
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   SEMANTIC LAYER — dark values. `:root` carries these so the site renders
+   Midnight with no data-theme attribute at all (SSR, JS off, pre-hydration).
+   [data-theme="midnight"] repeats them so an explicit choice always wins.
+   ───────────────────────────────────────────────────────────────────────── */
+:root,
+[data-theme="midnight"] {
+  color-scheme: dark;
+
+  --surface-page:     #080a14;
+  --surface-raised:   rgba(0, 0, 0, 0.40);
+  --surface-sunken:   rgba(255, 255, 255, 0.04);
+  --surface-overlay:  rgba(12, 14, 28, 0.85);
+  --scrim:            rgba(0, 0, 0, 0.55);
+  --scrim-strong:     rgba(0, 0, 0, 0.95);
+  --surface-modal:    rgba(12, 15, 31, 0.95);   /* command palette panel */
+  /* Photo veils. These MUST stay translucent — an opaque scrim hides the
+     photograph entirely, which is exactly what happened when the migration
+     dropped the /75 and /45 opacity modifiers. */
+  --photo-veil-strong: color-mix(in srgb, var(--surface-page) 75%, transparent);
+  --photo-veil-mid:    color-mix(in srgb, var(--surface-page) 45%, transparent);
+  --photo-veil-soft:   color-mix(in srgb, var(--surface-page) 55%, transparent);
+  /* Caption scrims sit under text laid ON a photograph. They must follow the
+     caption ink: dark veil under light type, light veil under dark type. */
+  --photo-caption:      rgba(0, 0, 0, 0.80);
+  --photo-caption-soft: rgba(0, 0, 0, 0.40);
+  --surface-hover:    rgba(255, 255, 255, 0.10);
+  --brand-grad-a:     #818cf8;   /* brand wordmark ramp: periwinkle …       */
+  --brand-grad-b:     #c4b5fd;   /* … lavender …                            */
+  --brand-grad-c:     #ffffff;   /* … terminating on the theme's ink        */
+  --sheen:            rgba(255, 255, 255, 0.40);  /* shimmer sweep highlight */
+  --sheen-soft:       rgba(255, 255, 255, 0.06);  /* inset / gradient highlight */
+  --shadow-rgb:       0 0 0;                      /* box-shadow tint */
+
+  --text-ink:         #f4f5fb;
+  --text-body:        #d4d4d8;
+  --text-muted:       #a1a1aa;
+  --text-faint:       rgba(244, 245, 251, 0.56);  /* de-emphasised; 0.38 gave 3.3:1 */
+  --text-whisper:     rgba(255, 255, 255, 0.04);  /* giant watermark numerals */
+  --text-on-accent:   #ffffff;   /* on --accent-fill (#4f46e5, both themes) */
+  --text-on-primary:  #0a0e1a;   /* on --accent / --primary, which flips */
+
+  --line-rule:        rgba(255, 255, 255, 0.06);
+  --line-border:      rgba(255, 255, 255, 0.10);
+
+  --accent-fill:      #4f46e5;
+  --accent-ink:       #a5b4fc;
+  --accent-surface:   rgba(129, 140, 248, 0.12);
+  --accent-lift:      #a5b4fc;   /* accent as type on an inked band          */
+
+  /* Anchor bands. Amber Light needs real dark masses — a light theme has no
+     glow to fill the mid-range, so the value structure has to supply it. On
+     Midnight the ground is already the darkest thing on screen, so these map
+     to the existing raised/sunken look and nothing about dark changes. */
+  --surface-inked:    rgba(0, 0, 0, 0.40);
+  --surface-anchor:   rgba(0, 0, 0, 0.55);
+  --text-on-inked:    #f4f5fb;
+
+  --shadow-raised:    var(--shadow-aurora);
+
+  /* Atmosphere (matrix-rain, tubes, radar, entrance-4d, circuit-divider)
+     is art-directed against black. 1 = render, 0 = suppressed. */
+  --atmosphere:       1;
+}
+
+[data-theme="amber-light"] {
+  color-scheme: light;
+
+  --background:       var(--amber-page);   /* must track --surface-page      */
+  --background-2:     var(--amber-sunken);
+  --foreground:       var(--amber-ink);
+  --surface:          var(--amber-raised);
+  --surface-alt:      var(--amber-sunken);
+
+  --surface-page:     var(--amber-page);     /* L* 89 — warm stock           */
+  --surface-raised:   var(--amber-raised);   /* L* 99 — a full 10 L* above   */
+  --surface-sunken:   var(--amber-sunken);   /* L* 83 — genuinely recessed   */
+  --surface-inked:    var(--amber-inked);    /* L* 33 — mid-tone band        */
+  --surface-anchor:   var(--amber-anchor);   /* L* 20 — the dark mass        */
+  --text-on-inked:    var(--amber-on-inked);
+  --accent-lift:      var(--amber-accent-lf);
+  --surface-overlay:  rgba(255, 253, 249, 0.92);
+  --scrim:            rgba(41, 31, 18, 0.35);
+  --scrim-strong:     rgba(41, 31, 18, 0.88);
+  --surface-modal:    rgba(255, 253, 248, 0.97);
+  /* These were HEAVIER than Midnight's (82/55/62 vs 75/45/55), which is
+     backwards. On black a 75% veil is near-black over an already-dark photo
+     and the image survives it; on cream the same coverage bleaches the
+     photograph to a pale ghost — 18% of a picture. Light needs *less*
+     veil, not more, and leans on the plate grade for legibility instead. */
+  --photo-veil-strong: color-mix(in srgb, var(--surface-page) 58%, transparent);
+  --photo-veil-mid:    color-mix(in srgb, var(--surface-page) 26%, transparent);
+  --photo-veil-soft:   color-mix(in srgb, var(--surface-page) 34%, transparent);
+  --photo-caption:      rgba(250, 246, 239, 0.90);
+  --photo-caption-soft: rgba(250, 246, 239, 0.55);
+  --surface-hover:    #efe9dd;
+  --brand-grad-a:     #6366f1;   /* deepened so the ramp reads on cream     */
+  --brand-grad-b:     #4f46e5;
+  --brand-grad-c:     #1c1917;   /* ends on ink, not white                   */
+  --sheen:            rgba(255, 255, 255, 0.85);
+  --sheen-soft:       rgba(120, 95, 60, 0.07);
+  --shadow-rgb:       60 45 25;                   /* warm, never neutral black */
+
+  --text-ink:         var(--amber-ink);
+  --text-body:        var(--amber-body);
+  --text-muted:       var(--amber-muted);  /* 5.5:1 page / 4.6:1 well       */
+  --text-faint:       rgba(28, 25, 23, 0.72);   /* 0.42 gave 2.65:1 on raised */
+  --text-whisper:     rgba(28, 25, 23, 0.085);  /* ground moved down 5 L*     */
+  --text-on-accent:   #ffffff;
+  --text-on-primary:  #ffffff;   /* --accent is dark indigo here, so ink flips */
+
+  --line-rule:        var(--amber-rule);     /* L* 73                       */
+  --line-border:      var(--amber-border);   /* L* 53 — 3.06:1 on the page  */
+  --line:             var(--amber-rule);
+  --line-strong:      var(--amber-border);
+
+  --accent-fill:      var(--amber-accent);
+  --accent-ink:       var(--amber-accent-t);
+  --accent-surface:   var(--amber-accent-sf);
+
+  --primary:          var(--amber-accent);
+  --primary-alt:      var(--amber-accent-t);
+  --primary-rgb:      79, 70, 229;
+  --lavender-rgb:     67, 56, 202;
+  --accent:           var(--amber-accent);
+  --accent-soft:      var(--amber-accent-sf);
+  --accent-alt:       var(--amber-accent-t);
+
+  --glass-bg:         rgba(255, 253, 248, 0.88);
+  --glass-border:     var(--amber-border);
+  --noise-opacity:    0.018;
+
+  --shadow-aurora:    0 1px 2px rgba(60, 45, 25, 0.06),
+                      0 8px 20px -8px rgba(60, 45, 25, 0.14),
+                      0 28px 56px -28px rgba(60, 45, 25, 0.20);
+  --shadow-raised:    var(--shadow-aurora);
+
+  --atmosphere:       0;
+
+  /* ── The primary ramp, REVERSED ──────────────────────────────────────
+     Dozens of consumers say `text-primary-400` or `bg-primary-900/40` and
+     assume low number = light, high number = dark — correct against black,
+     backwards against cream. Reversing the ramp flips every one of those
+     consumers at once without touching a single component:
+       text-primary-400 → #4338ca   (7.1:1 on cream — the accent-text value)
+       bg-primary-500   → #4f46e5   (the accent-fill value)
+       bg-primary-950   → #e0e7ff   (a pale tint, as the consumer intended)
+     This is the "repoint the ramp, don't chase every consumer" move. */
+  --color-primary-100: #1e1b4b;
+  --color-primary-200: #312e81;
+  --color-primary-300: #3730a3;
+  --color-primary-400: #4338ca;
+  --color-primary-500: #4f46e5;
+  --color-primary-600: #6366f1;
+  --color-primary-700: #818cf8;
+  --color-primary-800: #a5b4fc;
+  --color-primary-900: #c7d2fe;
+  --color-primary-950: #e0e7ff;
+}
 
 @theme inline {
   --color-background: var(--background);
@@ -105,7 +311,7 @@ body::after {
   inset: 0;
   z-index: 9998;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
   opacity: var(--noise-opacity);
   mix-blend-mode: overlay;
 }
@@ -294,11 +500,11 @@ a:hover {
   align-items: center;
   padding: 0.75rem 1.25rem;
   margin: 0 1rem;
-  background: rgba(15, 20, 30, 0.4);
+  background: var(--surface-overlay);
   backdrop-filter: blur(24px) saturate(1.5);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-rule);
   border-radius: 100px;
-  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 32px -8px rgb(var(--shadow-rgb) / 0.15);
   transition: all 0.3s ease;
 }
 
@@ -351,8 +557,8 @@ a:hover {
 
 .nav-link-btn:hover {
   opacity: 1;
-  color: var(--accent);
-  background: rgba(129, 140, 248, 0.08);
+  color: var(--accent-ink);
+  background: var(--accent-surface);
 }
 
 .nav-link-btn.nav-link-active {
@@ -389,7 +595,7 @@ a:hover {
   transform: translateX(calc(100% + 1.5rem));
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
   opacity: 0;
-  box-shadow: -10px 24px 48px rgba(0, 0, 0, 0.35);
+  box-shadow: -10px 24px 48px rgb(var(--shadow-rgb) / 0.35);
   overflow: hidden;
 }
 
@@ -424,7 +630,7 @@ a:hover {
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgb(var(--shadow-rgb) / 0.4);
 }
 
 .sidebar-fab:hover {
@@ -501,7 +707,7 @@ a:hover {
   position: relative;
   width: 100%;
   padding: 1.2rem 1.5rem;
-  background: rgba(22, 32, 38, 0.5);
+  background: var(--surface-raised);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(129, 140, 248, 0.08);
@@ -513,7 +719,7 @@ a:hover {
   letter-spacing: 0.15em;
   transform-style: preserve-3d;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgb(var(--shadow-rgb) / 0.08);
   overflow: hidden;
 }
 
@@ -535,7 +741,7 @@ a:hover {
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+  background: linear-gradient(90deg, transparent, var(--sheen-soft), transparent);
   transform: skewX(-20deg);
   transition: none;
   z-index: 1;
@@ -545,8 +751,8 @@ a:hover {
   transform: perspective(1000px) rotateX(4deg) rotateY(-4deg) translateY(-4px) scale(1.02);
   border-color: rgba(129, 140, 248, 0.28);
   color: var(--foreground);
-  box-shadow: -10px 16px 30px rgba(0, 0, 0, 0.4), 0 0 30px rgba(129, 140, 248, 0.08);
-  background: rgba(22, 32, 38, 0.85);
+  box-shadow: -10px 16px 30px rgb(var(--shadow-rgb) / 0.4), 0 0 30px rgba(129, 140, 248, 0.08);
+  background: var(--surface-raised);
 }
 
 .nav-smooth-btn:hover::before {
@@ -723,7 +929,7 @@ a:hover {
   left: -100%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, var(--sheen), transparent);
   transform: skewX(-25deg);
   transition: 0.75s;
 }
@@ -755,7 +961,7 @@ a:hover {
   letter-spacing: 0.15em;
   font-size: 0.8rem;
   padding: 1.05rem 2.6rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-sunken);
   color: var(--foreground);
   border-radius: 9999px;
   border: 1px solid rgba(196, 181, 253, 0.18);
@@ -802,7 +1008,7 @@ a:hover {
 }
 
 .hero-terminal {
-  background: rgba(10, 14, 23, 0.55);
+  background: var(--surface-raised);
   backdrop-filter: blur(32px) saturate(2);
   border: 1px solid rgba(var(--primary-rgb), 0.3);
   border-radius: var(--radius-xl);
@@ -810,7 +1016,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   box-shadow: 
-    0 40px 100px -20px rgba(0, 0, 0, 0.8),
+    0 40px 100px -20px rgb(var(--shadow-rgb) / 0.8),
     inset 0 0 50px rgba(var(--primary-rgb), 0.1),
     0 0 30px rgba(var(--primary-rgb), 0.15);
   overflow: hidden;
@@ -820,7 +1026,7 @@ a:hover {
 
 .hero-terminal:hover {
   box-shadow: 
-    0 40px 100px -20px rgba(0, 0, 0, 0.8),
+    0 40px 100px -20px rgb(var(--shadow-rgb) / 0.8),
     inset 0 0 50px rgba(var(--primary-rgb), 0.15),
     0 0 50px rgba(var(--primary-rgb), 0.3);
   border-color: rgba(var(--primary-rgb), 0.6);
@@ -835,7 +1041,7 @@ a:hover {
 }
 
 .terminal-chrome {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-sunken);
   padding: 1.2rem 1.8rem;
   display: flex;
   align-items: center;
@@ -1052,7 +1258,7 @@ a:hover {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 6px rgb(var(--shadow-rgb) / 0.08);
   height: 100%;
   width: 100%;
 }
@@ -1063,7 +1269,7 @@ a:hover {
 .skills-card:hover,
 .learning-path-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--accent);
+  box-shadow: 0 20px 40px rgb(var(--shadow-rgb) / 0.3), 0 0 0 1px var(--accent);
   border-color: var(--accent);
   background: var(--surface-alt);
 }
@@ -1100,7 +1306,7 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #0a1410;
+  color: var(--text-on-primary);
   background: var(--accent);
   padding: 0.3rem 0.8rem;
   border-radius: 2px;
@@ -1205,7 +1411,7 @@ a:hover {
 }
 
 .writeup-card {
-  background: rgba(18, 26, 32, 0.75);
+  background: var(--surface-raised);
   border: 1px solid rgba(129, 140, 248, 0.07);
   border-radius: var(--radius-lg);
   padding: 2.2rem;
@@ -1234,7 +1440,7 @@ a:hover {
 
 .writeup-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 24px rgba(129, 140, 248, 0.06);
+  box-shadow: 0 30px 60px rgb(var(--shadow-rgb) / 0.4), 0 0 24px rgba(129, 140, 248, 0.06);
   border-color: rgba(129, 140, 248, 0.18);
 }
 
@@ -1256,7 +1462,7 @@ a:hover {
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #0a1410;
+  color: var(--text-on-primary);
   background: var(--accent);
   padding: 0.25rem 0.6rem;
   border-radius: 2px;
@@ -1332,7 +1538,7 @@ a:hover {
   position: fixed;
   inset: 0;
   z-index: 200;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--surface-raised);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -1347,7 +1553,7 @@ a:hover {
   padding: 3rem;
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 64px rgb(var(--shadow-rgb) / 0.5);
 }
 
 #skill-modal-title {
@@ -1495,7 +1701,7 @@ a:hover {
 
 .badge-header {
   background: var(--accent);
-  color: #0a1410;
+  color: var(--text-on-primary);
   padding: 0.6rem 1.2rem;
   display: flex;
   justify-content: space-between;
@@ -1745,7 +1951,7 @@ a:hover {
 .cyber-card-clip {
   position: absolute;
   inset: 0;
-  background: rgba(14, 20, 24, 0.7);
+  background: var(--surface-raised);
   backdrop-filter: blur(24px) contrast(1.05);
   clip-path: polygon(40px 0, 100% 0, 100% calc(100% - 40px), calc(100% - 40px) 100%, 0 100%, 0 40px);
   overflow: hidden;
@@ -1754,7 +1960,7 @@ a:hover {
 }
 
 .active-cyber-wrapper .cyber-card-clip {
-  background: linear-gradient(160deg, rgba(16, 24, 28, 0.95) 0%, rgba(8, 12, 14, 0.98) 100%);
+  background: linear-gradient(160deg, var(--surface-raised) 0%, var(--surface-sunken) 100%);
   box-shadow: inset 0 0 60px rgba(129, 140, 248, 0.04);
 }
 
@@ -1811,7 +2017,7 @@ a:hover {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  background: linear-gradient(135deg, var(--sheen-soft) 0%, transparent 50%);
   mix-blend-mode: overlay;
   pointer-events: none;
   z-index: 50;
@@ -1975,7 +2181,7 @@ a:hover {
 
 .project-card {
   height: 100%;
-  background: linear-gradient(180deg, var(--surface) 0%, rgba(22, 32, 38, 0.45) 100%);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-sunken) 100%);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   padding: 2.5rem;
@@ -1983,7 +2189,7 @@ a:hover {
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  box-shadow: 0 4px 12px rgb(var(--shadow-rgb) / 0.08), inset 0 1px 0 var(--sheen-soft);
   overflow: hidden;
   z-index: 1;
 }
@@ -2011,7 +2217,7 @@ a:hover {
 
 .project-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgb(var(--shadow-rgb) / 0.3);
 }
 
 .project-card:hover::before {
@@ -2019,7 +2225,7 @@ a:hover {
 }
 
 .project-card:hover::after {
-  background: linear-gradient(180deg, var(--surface) 0%, #101e24 100%);
+  background: linear-gradient(180deg, var(--surface) 0%, var(--surface-sunken) 100%);
 }
 
 .project-card-header {
@@ -2109,7 +2315,7 @@ a:hover {
 .project-card-footer {
   margin-top: auto;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-top: 1px solid var(--line-rule);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2236,14 +2442,14 @@ a:hover {
   border-radius: var(--radius-xl);
   overflow: hidden;
   border: 1px solid var(--line-strong);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
-  background: #0a1014;
+  box-shadow: 0 24px 64px rgb(var(--shadow-rgb) / 0.4);
+  background: var(--surface-sunken);
   max-width: 64rem;
   margin: 0 auto;
 }
 
 .terminal-video-header {
-  background: rgba(8, 12, 16, 0.94);
+  background: var(--surface-overlay);
   padding: 0.8rem 1.2rem;
   display: flex;
   align-items: center;
@@ -2310,7 +2516,7 @@ a:hover {
 
 .screenshot-placeholder {
   aspect-ratio: 16 / 9;
-  background: linear-gradient(135deg, rgba(22, 32, 38, 0.45) 0%, rgba(22, 32, 38, 0.85) 100%);
+  background: linear-gradient(135deg, var(--surface-sunken) 0%, var(--surface-raised) 100%);
   border: 1px dashed var(--line-strong);
   border-radius: var(--radius-lg);
   display: flex;
@@ -2341,7 +2547,7 @@ a:hover {
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--line);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 8px 24px rgb(var(--shadow-rgb) / 0.25);
   position: relative;
 }
 
@@ -2431,7 +2637,7 @@ a:hover {
   border-radius: var(--radius-lg);
   border: 1px solid var(--line);
   height: fit-content;
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 16px 48px rgb(var(--shadow-rgb) / 0.2);
 }
 
 .writeup-prose {
@@ -2521,54 +2727,39 @@ a:hover {
   margin-top: 0.18rem;
 }
 
-[data-theme="amber-light"] .terminal-video-frame,
-html.amber-light .terminal-video-frame {
-  background: #f0ebe0;
-  border-color: rgba(176, 112, 96, 0.25);
-  box-shadow: 0 16px 36px rgba(100, 60, 40, 0.12);
+[data-theme="amber-light"] .terminal-video-frame {
+  background: var(--surface-sunken);
+  border-color: var(--line-border);
+  box-shadow: var(--shadow-raised);
 }
 
-[data-theme="amber-light"] .terminal-video-header,
-html.amber-light .terminal-video-header {
-  background: linear-gradient(90deg, #e8ddd0, #e0d4c4);
-  border-bottom-color: rgba(176, 112, 96, 0.22);
+[data-theme="amber-light"] .terminal-video-header {
+  background: var(--surface-sunken);
+  border-bottom-color: var(--line-border);
 }
 
-[data-theme="amber-light"] .terminal-video-title,
-html.amber-light .terminal-video-title {
-  color: #7a5040;
+[data-theme="amber-light"] .terminal-video-title {
+  color: var(--text-muted);
   text-shadow: none;
 }
 
 [data-theme="amber-light"] .project-detail-icon,
-html.amber-light .project-detail-icon,
 [data-theme="amber-light"] .project-detail-impact,
-html.amber-light .project-detail-impact,
 [data-theme="amber-light"] .project-specs-card,
-html.amber-light .project-specs-card,
 [data-theme="amber-light"] .project-feature-item,
-html.amber-light .project-feature-item,
 [data-theme="amber-light"] .project-quick-item,
-html.amber-light .project-quick-item,
 [data-theme="amber-light"] .project-detail-block,
-html.amber-light .project-detail-block,
 [data-theme="amber-light"] .writeup-brief-card,
-html.amber-light .writeup-brief-card,
 [data-theme="amber-light"] .writeup-methodology,
-html.amber-light .writeup-methodology,
-[data-theme="amber-light"] .writeup-methodology-item,
-html.amber-light .writeup-methodology-item {
-  background: rgba(247, 242, 236, 0.92);
-  border-color: rgba(176, 112, 96, 0.22);
+[data-theme="amber-light"] .writeup-methodology-item {
+  background: var(--surface-raised);
+  border-color: var(--line-border);
 }
 
 [data-theme="amber-light"] .writeup-summary-lead,
-html.amber-light .writeup-summary-lead,
 [data-theme="amber-light"] .writeup-methodology-item p,
-html.amber-light .writeup-methodology-item p,
-[data-theme="amber-light"] .writeup-brief-card p,
-html.amber-light .writeup-brief-card p {
-  color: #4a3020;
+[data-theme="amber-light"] .writeup-brief-card p {
+  color: var(--text-body);
 }
 
 .specs-field {
@@ -2678,23 +2869,19 @@ html.amber-light .writeup-brief-card p {
   padding: 0;
 }
 
-[data-theme="amber-light"] .project-markdown-block,
-html.amber-light .project-markdown-block {
-  color: #3a2818;
+[data-theme="amber-light"] .project-markdown-block {
+  color: var(--text-ink);
 }
 
-[data-theme="amber-light"] .project-markdown-block p,
-html.amber-light .project-markdown-block p {
-  color: #4a3220;
+[data-theme="amber-light"] .project-markdown-block p {
+  color: var(--text-body);
 }
 
 [data-theme="amber-light"] .project-markdown-block code,
-html.amber-light .project-markdown-block code,
-[data-theme="amber-light"] .project-markdown-block pre,
-html.amber-light .project-markdown-block pre {
-  background: #f0e8d8;
-  border-color: rgba(176, 112, 96, 0.22);
-  color: #3a2818;
+[data-theme="amber-light"] .project-markdown-block pre {
+  background: var(--surface-sunken);
+  border-color: var(--line-border);
+  color: var(--text-ink);
 }
 
 @keyframes scanline {
@@ -2774,7 +2961,7 @@ html.amber-light .project-markdown-block pre {
 }
 .nav-link-btn.nav-link-active,
 .nav-link-btn:hover {
-  color: #818cf8;
+  color: var(--accent-ink);
 }
 .nav-link-btn.nav-link-active::after,
 .nav-link-btn:hover::after {
@@ -2835,8 +3022,8 @@ html.amber-light .project-markdown-block pre {
   gap: 0.5rem;
   margin-bottom: 2rem;
   padding: 0.5rem;
-  background: rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--surface-raised);
+  border: 1px solid var(--line-rule);
   border-radius: 12px;
   width: fit-content;
 }
@@ -2878,14 +3065,14 @@ html.amber-light .project-markdown-block pre {
  
 /* ── Stage ────────────────────────────────────────────── */
 .games-stage {
-  background: rgba(8, 12, 16, 0.6);
+  background: var(--surface-raised);
   border: 1px solid rgba(129, 140, 248, 0.12);
   border-radius: 20px;
   overflow: hidden;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   position: relative;
-  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(129, 140, 248, 0.02);
+  box-shadow: 0 32px 80px rgb(var(--shadow-rgb) / 0.5), inset 0 0 60px rgba(129, 140, 248, 0.02);
 }
  
 /* Animated scanline on the stage */
@@ -2911,7 +3098,7 @@ html.amber-light .project-markdown-block pre {
   gap: 1rem;
   padding: 1rem 1.5rem;
   border-bottom: 1px solid rgba(129, 140, 248, 0.1);
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--surface-raised);
   position: relative;
 }
  
@@ -2971,7 +3158,7 @@ html.amber-light .project-markdown-block pre {
   align-items: center;
   gap: 16px;
   padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--surface-raised);
   border: 1px solid rgba(129, 140, 248, 0.12);
   border-radius: 6px;
 }
@@ -3007,7 +3194,7 @@ html.amber-light .project-markdown-block pre {
 .game-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.72);
+  background: var(--scrim);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   display: flex;
@@ -3064,7 +3251,7 @@ html.amber-light .project-markdown-block pre {
   top: 0; left: -100%;
   width: 60%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(90deg, transparent, var(--sheen), transparent);
   transform: skewX(-20deg);
   transition: left 0.5s ease;
 }
@@ -3320,8 +3507,8 @@ html.amber-light .project-markdown-block pre {
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-body);
+  background: var(--surface-sunken);
   border: 1px solid rgba(196, 181, 253, 0.18);
   backdrop-filter: blur(10px);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3336,7 +3523,7 @@ html.amber-light .project-markdown-block pre {
 .entrance-frame {
   border-radius: 30px;
   box-shadow:
-    0 40px 90px -30px rgba(0, 0, 0, 0.8),
+    0 40px 90px -30px rgb(var(--shadow-rgb) / 0.8),
     0 0 70px -30px rgba(129, 140, 248, 0.6);
   border: 1px solid rgba(196, 181, 253, 0.14);
   padding: 6px;
@@ -3354,10 +3541,10 @@ html.amber-light .project-markdown-block pre {
   align-items: center;
   justify-content: center;
   border-radius: 9999px;
-  border: 1px solid rgba(196, 181, 253, 0.2);
-  background: rgba(12, 15, 31, 0.5);
+  border: 1px solid var(--line-border);
+  background: var(--surface-raised);
   backdrop-filter: blur(12px);
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-body);
   opacity: 0;
   transition: opacity 0.3s ease, background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
@@ -3484,9 +3671,11 @@ html.amber-light .project-markdown-block pre {
 .palette-trigger {
   font-family: var(--font-mono), monospace;
   font-size: 0.7rem;
-  color: rgba(244, 245, 251, 0.55);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(196, 181, 253, 0.14);
+  /* was rgba(244,245,251,.55) — hardcoded near-white, so the trigger and its
+     Ctrl-K chip sat at 1.23:1 on the cream ground. */
+  color: var(--text-muted);
+  background: var(--surface-sunken);
+  border: 1px solid var(--line-border);
   border-radius: 9999px;
   padding: 0.4rem 0.9rem;
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
@@ -3504,10 +3693,10 @@ html.amber-light .project-markdown-block pre {
   font-size: 0.62rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--line-border);
   border-radius: 5px;
   padding: 0.1rem 0.4rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-sunken);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3835,4 +4024,618 @@ html.amber-light .project-markdown-block pre {
   .mem-pop {
     animation: none;
   }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   THEME SWITCHER
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line-border);
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease, background 200ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-fill);
+  color: var(--text-ink);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent-fill);
+  outline-offset: 2px;
+}
+
+.theme-toggle-track {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 22px;
+  flex: none;
+  border-radius: 999px;
+  background: var(--accent-surface);
+  border: 1px solid var(--line-border);
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--accent-fill);
+  color: var(--text-on-accent);
+}
+
+.theme-toggle-thumb svg {
+  width: 11px;
+  height: 11px;
+}
+
+/* The label is theme-dependent, so it is blank until mount. Reserve its width
+   up front or the control jitters as the real label lands. */
+.theme-toggle-label {
+  min-width: 6.5ch;
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Cross-fade the palette on switch. Excluded: transform and anything the
+   animation layer drives, so scroll-linked motion is not dragged through a
+   200ms tween on every theme change. */
+:root[data-theme] body,
+:root[data-theme] body * {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 220ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme] body,
+  :root[data-theme] body * {
+    transition-duration: 0ms;
+  }
+}
+
+/* ── Atmosphere gating ───────────────────────────────────────────────────
+   matrix-rain, tubes-canvas, radar-sweep, entrance-4d and circuit-divider are
+   neon/additive effects art-directed against black; on cream they read as
+   artifacts rather than atmosphere. Amber Light is a deliberately calm mode —
+   they are suppressed there rather than ported. Components also check the
+   theme in JS so the canvas work is skipped entirely, not merely hidden;
+   this rule is the belt-and-braces for anything that slips through. */
+[data-theme="amber-light"] .atmosphere-layer {
+  display: none !important;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   THEME-CONDITIONAL LONG-FORM PROSE
+   `prose-invert` is a dark-ground preset — correct on Midnight, and it bleaches
+   body copy to near-white on cream. It cannot simply be dropped (Midnight needs
+   it), so `prose-themed` applies it conditionally.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+.prose-themed {
+  --tw-prose-body: var(--text-body);
+  --tw-prose-headings: var(--text-ink);
+  --tw-prose-lead: var(--text-body);
+  --tw-prose-links: var(--accent-ink);
+  --tw-prose-bold: var(--text-ink);
+  --tw-prose-counters: var(--text-muted);
+  --tw-prose-bullets: var(--line-border);
+  --tw-prose-hr: var(--line-rule);
+  --tw-prose-quotes: var(--text-ink);
+  --tw-prose-quote-borders: var(--accent-fill);
+  --tw-prose-captions: var(--text-muted);
+  --tw-prose-code: var(--text-ink);
+  --tw-prose-pre-code: var(--text-body);
+  --tw-prose-pre-bg: var(--surface-sunken);
+  --tw-prose-th-borders: var(--line-border);
+  --tw-prose-td-borders: var(--line-rule);
+}
+
+/* ── Blend modes invert on a light ground ────────────────────────────────
+   `overlay` grain lightens against dark and blows out against cream;
+   `multiply` photo scrims darken correctly on dark but muddy the warm ground.
+   Both are re-tuned rather than removed — the texture is part of the design. */
+[data-theme="amber-light"] body::after {
+  mix-blend-mode: multiply;
+}
+
+[data-theme="amber-light"] .mix-blend-multiply {
+  mix-blend-mode: soft-light;
+}
+
+[data-theme="amber-light"] .mix-blend-overlay {
+  mix-blend-mode: soft-light;
+}
+
+
+/* ── Per-game accents (data-driven, from games/catalog.tsx) ──────────────
+   The catalogue's colours were chosen against black. On cream the 400-weight
+   neons drop to ~1.5–2.4:1, so the light theme darkens each one against the
+   ink rather than maintaining a second hand-picked palette in the data. */
+.game-accent-text,
+.game-cabinet {
+  --g-ink: var(--g-accent, var(--text-ink));
+  color: var(--g-ink);
+}
+
+[data-theme="amber-light"] .game-accent-text,
+[data-theme="amber-light"] .game-cabinet {
+  --g-ink: color-mix(in oklab, var(--g-accent, var(--text-ink)) 55%, #1c1917);
+  color: var(--g-ink);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   AMBER LIGHT — art direction, not just recolouring
+   The dark theme gets its depth from emitted light: aurora mesh, neon glow,
+   additive blending. None of that translates to paper. Ported literally it
+   produced cream-on-cream with a dusty purple wash over it. These rules give
+   the light theme the structure it actually needs.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* ── The aurora mesh ─────────────────────────────────────────────────────
+   Four indigo/violet radials at 12–20% over the whole page. Luminous on
+   black; on cream it is a grey-purple veil that kills the warmth and flattens
+   every surface underneath. Light mode gets a barely-there warm wash instead. */
+[data-theme="amber-light"] .page-shell::before {
+  background:
+    radial-gradient(42vmax 34vmax at 16% 6%,  rgba(201, 160, 92, 0.10), transparent 62%),
+    radial-gradient(38vmax 32vmax at 88% 20%, rgba(79, 70, 229, 0.055), transparent 64%),
+    radial-gradient(44vmax 38vmax at 72% 92%, rgba(180, 140, 86, 0.075), transparent 62%);
+}
+
+/* The scanline sweep is an emitted-light effect with nothing to emit on paper.
+   `.page-shell::after` is re-cut as ruled margins instead — see "AMBER LIGHT —
+   ITS OWN ATMOSPHERE" at the foot of this file. */
+
+/* ── Primary actions ─────────────────────────────────────────────────────
+   The pastel #a5b4fc→#818cf8 gradient reads as a lit surface on black. On
+   cream it is a washed lavender blob with no authority, and it was on every
+   CTA. Light mode gets a solid, saturated fill that behaves like ink. */
+[data-theme="amber-light"] .btn-primary,
+[data-theme="amber-light"] .btn-primary:focus,
+[data-theme="amber-light"] .entrance-cta-primary,
+[data-theme="amber-light"] .entrance-cta-primary:hover {
+  background: var(--accent-fill);
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(40, 30, 90, 0.18),
+              0 10px 24px -10px rgba(79, 70, 229, 0.45);
+}
+
+[data-theme="amber-light"] .btn-primary:hover,
+[data-theme="amber-light"] .entrance-cta-primary:hover {
+  background: #4338ca;
+}
+
+/* ── Photographs ─────────────────────────────────────────────────────────
+   `bg-primary-900/40` over a photo deepens it on black. With the ramp
+   reversed it becomes pale periwinkle, and blending that onto a photo casts
+   everything lavender. Photos on paper want to be left alone. */
+[data-theme="amber-light"] .mix-blend-multiply,
+[data-theme="amber-light"] .mix-blend-overlay {
+  display: none;
+}
+
+/* ── Glow shadows ────────────────────────────────────────────────────────
+   Periwinkle glow on cream reads as a smudge, not a light source. */
+[data-theme="amber-light"] [class*="shadow-[0_0"] {
+  box-shadow: var(--shadow-aurora) !important;
+}
+
+/* ── Cards and chips ─────────────────────────────────────────────────────
+   Everything sat on --surface-sunken with a hairline that was itself within a
+   few percent of the fill, so pills and chips dissolved into the page. */
+[data-theme="amber-light"] .stat-card,
+[data-theme="amber-light"] .glass-card,
+[data-theme="amber-light"] .surface-card {
+  box-shadow: var(--shadow-aurora);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   AMBER LIGHT — ITS OWN ATMOSPHERE
+   Gating the dark atmosphere off (matrix rain, tubes, radar, circuit traces)
+   left the light theme with the holes the layout was composed around and
+   nothing in them. Light does not get the neon back — it gets the medium it
+   actually is: warm grain, ruled margins, engraved hairlines. Nothing here
+   emits, animates fast, or runs a canvas; Amber Light stays the calm mode.
+   Components: components/ui/paper-atmosphere.tsx.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* Mirror of `.atmosphere-layer` — keeps the paper layer off Midnight even if
+   a call site forgets its <PaperAtmosphere> wrapper. */
+:root:not([data-theme="amber-light"]) .paper-layer {
+  display: none !important;
+}
+
+/* ── Ruled margins ───────────────────────────────────────────────────────
+   The scanline sweep is an emitted-light effect with nothing to emit on
+   paper, so `.page-shell::after` is re-cut as a printer's ruling: hairline
+   column rules and a baseline grid. Masked to the outer eighth of the
+   viewport on each side, so the ruling frames the page as margin furniture
+   and never sits behind body copy — the grid is atmosphere, not a texture
+   the reader has to look through. */
+[data-theme="amber-light"] .page-shell::after {
+  display: block;
+  position: fixed;
+  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  z-index: -1;
+  opacity: 1;
+  animation: none;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, var(--line-border) 30%, transparent) 0 1px,
+      transparent 1px 84px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--line-border) 10%, transparent) 0 1px,
+      transparent 1px 42px
+    );
+  mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.42) 9%,
+    transparent 24%,
+    transparent 76%,
+    rgba(0, 0, 0, 0.42) 91%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.42) 9%,
+    transparent 24%,
+    transparent 76%,
+    rgba(0, 0, 0, 0.42) 91%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* Below the 1400px content shell there is no margin left to rule into — the
+   ruling would run straight under the type. Drop to column rules alone. */
+@media (max-width: 1024px) {
+  [data-theme="amber-light"] .page-shell::after {
+    background-image: repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, var(--line-border) 24%, transparent) 0 1px,
+      transparent 1px 84px
+    );
+    mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.7) 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.7) 0%,
+      transparent 18%,
+      transparent 82%,
+      rgba(0, 0, 0, 0.7) 100%
+    );
+  }
+}
+
+/* ── Paper stain ─────────────────────────────────────────────────────────
+   The drifting orbs are lamps behind the page on Midnight. On cream they read
+   as two grey-mauve bruises. Same geometry, re-inked as the uneven warmth of
+   a pressed sheet: amber and a trace of the accent, both barely there. */
+[data-theme="amber-light"] .page-noise::before {
+  background: #c79a4e;
+  opacity: 0.055;
+}
+
+[data-theme="amber-light"] .page-noise::after {
+  background: #8d7f6a;
+  opacity: 0.045;
+}
+
+/* ── The hero plate ──────────────────────────────────────────────────────
+   Fills the space TubesCanvas and CyberPulseScene held. Radially masked so
+   the engraving dissolves well before it reaches the headline, and drifting
+   over 90s — slow enough to read as the sheet settling, not as motion. */
+/* Positioning is left to the call site — these rules are unlayered and would
+   otherwise beat the Tailwind utilities that place the plate. */
+.paper-field {
+  pointer-events: none;
+  /* --line-border dropped from L* 76 to 53 when the value scale was rebuilt,
+     so the engraving became roughly twice as strong at the same opacity. */
+  opacity: 0.42;
+  mask-image: radial-gradient(
+    ellipse 78% 72% at 50% 48%,
+    transparent 12%,
+    rgba(0, 0, 0, 0.65) 46%,
+    rgba(0, 0, 0, 0.9) 68%,
+    transparent 92%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 78% 72% at 50% 48%,
+    transparent 12%,
+    rgba(0, 0, 0, 0.65) 46%,
+    rgba(0, 0, 0, 0.9) 68%,
+    transparent 92%
+  );
+}
+
+.paper-field-rings {
+  transform-origin: 50% 50%;
+  animation: paper-settle 90s ease-in-out infinite alternate;
+}
+
+@keyframes paper-settle {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  100% {
+    transform: rotate(2.5deg) scale(1.035);
+  }
+}
+
+/* ── Plotted contacts ────────────────────────────────────────────────────
+   The radar blip pings outward from a swept beam. Ink does the opposite: it
+   spreads from the nib and stops. Slower, no repeat-flash rhythm. */
+.paper-bleed {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: paper-bleed 5.2s ease-out infinite;
+  opacity: 0;
+}
+
+@keyframes paper-bleed {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  55% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(3.4);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper-field-rings,
+  .paper-bleed {
+    animation: none;
+  }
+  .paper-bleed {
+    opacity: 0.28;
+  }
+}
+
+/* ── Scroll progress bar ─────────────────────────────────────────────────
+   The gradient and its glow were inline and hardcoded, so the bar stayed a
+   lit periwinkle wire in both themes — a light source on a sheet of paper.
+   Light gets flat ink and a shadow the sheet could actually cast. */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 9999;
+  background: linear-gradient(90deg, #6366f1, #818cf8, #c4b5fd);
+  box-shadow: 0 0 12px rgba(129, 140, 248, 0.6);
+}
+
+[data-theme="amber-light"] .scroll-progress-bar {
+  background: var(--accent-fill);
+  box-shadow: 0 1px 3px rgba(60, 45, 25, 0.25);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   AMBER LIGHT — ANCHOR BANDS
+   Widening the surface scale fixes flatness within a card, but the page still
+   had no dark mass anywhere: the only things below L* 50 were the photographs
+   and the type. A light theme gets no help from glow, so the value structure
+   has to supply the bottom of the range itself.
+
+   These blocks do it by REDEFINING the semantic tokens inside their own
+   scope. Every descendant already reads `var(--text-body)`, `var(--line-rule)`
+   and friends, so one scoped block flips an entire section to a dark treatment
+   without touching a single component. That is what the token layer was for.
+
+   On-band type is tuned against `--surface-inked` (L* 33), the lighter of the
+   two grounds; it then over-performs on `--surface-anchor` (L* 20).
+   ═════════════════════════════════════════════════════════════════════════ */
+
+[data-theme="amber-light"] .site-footer,
+[data-theme="amber-light"] .stat-strip {
+  --text-ink:      #f7f2e8;   /* 7.54:1 on inked, 11.68:1 on anchor */
+  --text-body:     #ddd4c4;   /* 5.72:1 / 8.87:1                    */
+  --text-muted:    #d2c7b4;   /* 5.03:1 / 7.80:1                    */
+  --text-faint:    #cbc0ad;   /* 4.68:1 / 7.26:1 — #c4b9a6 was 4.34 */
+  --text-whisper:  rgba(247, 242, 232, 0.10);
+  --accent-ink:    var(--accent-lift);
+  --line-rule:     rgba(247, 242, 232, 0.14);
+  --line-border:   rgba(247, 242, 232, 0.24);
+  --surface-hover: rgba(247, 242, 232, 0.08);
+  color: var(--text-body);
+
+  /* Headings do NOT read --text-ink. The global `h1,h2,h3,h4,.brand-mark,
+     .hero-eyebrow,.section-eyebrow` rule paints them with --foreground, so
+     without this the footer wordmark rendered near-black on near-black. */
+  --foreground:      #f7f2e8;
+  --text-on-primary: #1c1917;
+
+  /* The primary ramp is REVERSED on Amber Light — `text-primary-400` resolves
+     to #4338ca, correct on cream and unreadable on ink. Inside an anchor band
+     the ground is dark again, so the ramp is flipped back for its subtree.
+     Every `text-primary-400` consumer in these blocks corrects at once. */
+  --color-primary-300: #dbe4ff;
+  --color-primary-400: #c7d2fe;   /* 5.64:1 on inked, 8.74:1 on anchor */
+  --color-primary-500: #a5b4fc;
+  --color-primary-600: #818cf8;
+
+  /* The stat numerals are gradient-clipped text, not a flat colour, so they
+     ignore every token above. On Amber Light the ramp ends on --brand-grad-c
+     = #1c1917 (ink), which is right on cream and invisible on a dark band.
+     All three stops lift; the darkest lands at 5.64:1 on inked. */
+  --brand-grad-a:  #c7d2fe;
+  --brand-grad-b:  #dbe4ff;
+  --brand-grad-c:  #f7f2e8;
+}
+
+/* The page's closing mass. */
+[data-theme="amber-light"] .site-footer {
+  background: var(--surface-anchor);
+  --surface-raised: rgba(247, 242, 232, 0.06);
+  --surface-sunken: rgba(247, 242, 232, 0.09);
+  border-top-color: var(--surface-anchor);
+}
+
+/* The achievements strip, which was four near-white cells on near-white
+   ground — the single flattest element on the page. Inked, it becomes the
+   mid-tone the composition was missing and gives that screen its anchor. */
+[data-theme="amber-light"] .stat-strip {
+  background: color-mix(in srgb, var(--surface-anchor) 55%, var(--surface-inked));
+  border-color: var(--surface-inked);
+  --surface-raised: var(--surface-inked);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+   AMBER LIGHT — PHOTOGRAPHS AS PRINTED PLATES
+   Every photograph on this site was art-directed against black: dark CTF
+   rooms, neon-lit stages, night events. Dropped unaltered onto warm stock
+   they punch cold holes in the page — the one thing on screen that still
+   belongs to the other theme. The earlier passes made this worse, not
+   better: the `bg-primary-900/40 mix-blend-multiply` overlays were disabled
+   wholesale on light, which left the images raw, and the mounts kept
+   shadows like `rgba(0,0,0,0.7)` that read as smudges on cream.
+
+   The fix is not to hide them or wash them out. It is to print them. A plate
+   on warm stock has three properties this rule reproduces:
+
+     1. No true black. Ink density tops out — shadows land on a warm dark,
+        never #000, so the image stops reading as a hole cut in the sheet.
+     2. The paper shows through. Warmth bleeds into the image and the cool
+        neon casts pull back toward the stock's own hue.
+     3. It is mounted, not floating. A hairline rule and a warm, shallow
+        shadow — the shadow a sheet casts, not the glow a screen emits.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* The grade. `--photo-*` are exposed so an individual plate can be re-timed
+   without forking the whole filter chain. */
+[data-theme="amber-light"] {
+  --photo-saturate:   0.80;   /* neons back toward the stock                */
+  --photo-contrast:   0.88;   /* THE key move: lifts blacks off the floor   */
+  --photo-brightness: 1.09;   /* raise it onto the page's value band        */
+  --photo-sepia:      0.17;   /* into the warm family, not a sepia gimmick  */
+}
+
+[data-theme="amber-light"] .photo-plate img,
+[data-theme="amber-light"] .photo-plate--bare {
+  filter:
+    saturate(var(--photo-saturate))
+    contrast(var(--photo-contrast))
+    brightness(var(--photo-brightness))
+    sepia(var(--photo-sepia));
+}
+
+/* Thumbnails carried `opacity-60`, which only ever worked because a
+   multiply overlay sat on top of them. With that overlay gone on light,
+   60% over a near-white card left them ghosts. The grade does the work now. */
+[data-theme="amber-light"] .photo-plate--thumb {
+  opacity: 0.93 !important;
+}
+
+/* The mount. Replaces `shadow-lg` / `rgba(0,0,0,.7)` drops, which are lit
+   surfaces on black and dirt on cream. */
+[data-theme="amber-light"] .photo-plate {
+  border-color: var(--line-border);
+  box-shadow:
+    0 1px 2px rgba(60, 45, 25, 0.10),
+    0 14px 30px -16px rgba(60, 45, 25, 0.34);
+}
+
+/* The paper bleeding in at the edges — what actually stitches a plate into
+   the sheet instead of leaving it pasted on top. Kept off the bare variants,
+   which have no positioned wrapper to hang a pseudo-element on. */
+[data-theme="amber-light"] .photo-plate:not(.photo-plate--bare)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-page) 30%, transparent) 0%,
+      color-mix(in srgb, var(--surface-page) 8%, transparent) 38%,
+      transparent 70%
+    ),
+    radial-gradient(
+      120% 90% at 50% 45%,
+      transparent 55%,
+      color-mix(in srgb, #6b5330 16%, transparent) 100%
+    );
+}
+
+/* Hover already scales and brightens; on paper the plate should also warm
+   very slightly, as if pressed harder. */
+[data-theme="amber-light"] .photo-plate:hover img {
+  --photo-brightness: 1.14;
+  --photo-saturate: 0.88;
+}
+
+/* ── The entrance backdrop ───────────────────────────────────────────────
+   The worst offender, and the first photograph anyone sees. It stacks THREE
+   scrims — an indigo aurora wash, a top-down veil, and a centre vignette —
+   all sized for a dark ground. Compounded on cream they left the picture at
+   roughly a fifth of itself, pink and flat.
+
+   Light re-cuts the veil DIRECTIONALLY instead of uniformly. The wordmark
+   sits left, so that is where the paper stays opaque; the right side, where
+   the subjects actually are, opens up. Type on stock, photograph breathing
+   beside it — rather than one weak wash over everything. */
+[data-theme="amber-light"] .entrance-veil {
+  background:
+    linear-gradient(
+      98deg,
+      color-mix(in srgb, var(--surface-page) 90%, transparent) 0%,
+      color-mix(in srgb, var(--surface-page) 68%, transparent) 26%,
+      color-mix(in srgb, var(--surface-page) 26%, transparent) 52%,
+      color-mix(in srgb, var(--surface-page) 12%, transparent) 78%,
+      color-mix(in srgb, var(--surface-page) 30%, transparent) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 55%,
+      color-mix(in srgb, var(--surface-page) 70%, transparent) 88%,
+      var(--surface-page) 100%
+    );
+}
+
+/* An indigo radial over a photograph on warm stock is the lavender cast the
+   brief already flagged; and a vignette that closes to 26% cream just greys
+   the subjects. Both go — the directional veil carries legibility alone. */
+[data-theme="amber-light"] .entrance-aurora,
+[data-theme="amber-light"] .entrance-vignette {
+  display: none;
 }

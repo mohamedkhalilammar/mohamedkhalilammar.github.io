@@ -35,7 +35,7 @@ export function GameStage({ gameId }: { gameId: string }) {
       initial={{ opacity: 0, scale: 0.985 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.4, ease: EASE }}
-      className="relative rounded-2xl overflow-hidden ring-1 ring-white/10"
+      className="relative rounded-2xl overflow-hidden ring-1 ring-[var(--line-border)]"
       style={{
         ["--g-accent" as string]: meta.accent,
         ["--g-soft" as string]: meta.accentSoft,
@@ -44,7 +44,7 @@ export function GameStage({ gameId }: { gameId: string }) {
       }}
     >
       {/* status strip */}
-      <div className="relative z-20 flex items-center justify-between px-5 md:px-7 py-3 border-b border-white/10 bg-black/40 backdrop-blur-sm">
+      <div className="relative z-20 flex items-center justify-between px-5 md:px-7 py-3 border-b border-[var(--line-border)] bg-[var(--surface-raised)] backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <span className="relative flex w-2 h-2" aria-hidden>
             <span className="absolute inline-flex w-full h-full rounded-full opacity-60 animate-ping" style={{ background: "var(--g-accent)" }} />
@@ -54,7 +54,7 @@ export function GameStage({ gameId }: { gameId: string }) {
             {meta.label} — Live
           </span>
         </div>
-        <span className="hidden sm:inline font-mono text-[9px] uppercase tracking-[0.25em] text-zinc-600">
+        <span className="hidden sm:inline font-mono text-[9px] uppercase tracking-[0.25em] text-[var(--text-faint)]">
           {meta.genre} · {"◆".repeat(meta.difficulty)}
         </span>
       </div>

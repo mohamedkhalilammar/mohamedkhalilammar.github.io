@@ -30,5 +30,10 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "src/components/ui/games/snake",
+    "src/components/ui/games/endless-runner-game",
+    "src/components/ui/games/typescript-types-minesweeper"
+  ]
 }

@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navigationLinks = [
   { label: "About", href: "#about" },
   { label: "Achievements", href: "#achievements" },
-  { label: "Certifications", href: "#certifications" },
   { label: "Projects", href: "#projects" },
-  { label: "CTF", href: "#ctf" },
+  { label: "Blog", href: "#blog" },
+  { label: "Certifications", href: "#certifications" },
   { label: "Skills", href: "#skills" },
   { label: "CV", href: "/media/CV.pdf", target: "_blank", rel: "noopener noreferrer" },
   { label: "Contact", href: "#contact" },
@@ -46,7 +47,7 @@ export function Sidebar({ onArcadeOpen }: { onArcadeOpen?: () => void }) {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 z-60 bg-black/40 backdrop-blur-sm"
+              className="fixed inset-0 z-60 bg-[color:var(--scrim)] backdrop-blur-sm"
               onClick={() => setIsOpen(false)}
             />
             <motion.aside
@@ -61,7 +62,7 @@ export function Sidebar({ onArcadeOpen }: { onArcadeOpen?: () => void }) {
             >
               <div className="sidebar-content !p-6 flex flex-col h-full bg-[color:var(--surface)]">
                 <div>
-                  <p className="text-[0.7rem] uppercase tracking-[0.2em] text-[#a1a1aa] mb-6 font-mono opacity-80 pl-2">Navigation Matrix</p>
+                  <p className="text-[0.7rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)] mb-6 font-mono opacity-80 pl-2">Navigation Matrix</p>
                   <ul className="flex flex-col gap-4 perspective-1000 mt-2 mr-2">
                     {navigationLinks.map((item, i) => (
                       <motion.li 
@@ -99,6 +100,12 @@ export function Sidebar({ onArcadeOpen }: { onArcadeOpen?: () => void }) {
                 </div>
                 
                 <div className="mt-auto pt-8 border-t border-[color:var(--line-strong)] px-2">
+                  <div className="mb-5">
+                    <p className="text-[0.7rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)] mb-3 font-mono opacity-80">
+                      Appearance
+                    </p>
+                    <ThemeToggle />
+                  </div>
                   <div className="flex gap-6 font-mono text-[0.85rem]">
                     <a href="https://linkedin.com/in/khalilammarr" target="_blank" rel="noopener noreferrer" className="text-[color:var(--foreground)] hover:text-[color:var(--accent)] transition-colors">LinkedIn</a>
                     <a href="https://github.com/khalilammarr" target="_blank" rel="noopener noreferrer" className="text-[color:var(--foreground)] hover:text-[color:var(--accent)] transition-colors flex items-center gap-2">

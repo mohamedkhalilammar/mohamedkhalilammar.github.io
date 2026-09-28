@@ -1,0 +1,65 @@
+extends Node3D
+
+# --- ENDLESS RUNNER: CROWD MECHANICS ---
+# This script visually manages the mob of Tunisian retro-models chasing the player.
+# It handles the "palette wrapping", spawning, and the rubber-banding distance.
+
+@export var crowd_templates: Array[PackedScene] # Slots for Police, Teacher, Elderly models
+@export var player_node: Node3D
+
+var crowd_members: Array[Node3D] = []
+var crowd_base_distance: float = 12.0 # How far behind the player the crowd sits when playing well
+
+func _ready():
+    # Connect signals from the player
+    if player_node:
+        player_node.connect("obstacle_hit", Callable(self, "_on_player_stumble"))
+        player_node.connect("game_over", Callable(self, "_on_player_caught"))
+        
+    _spawn_initial_crowd()
+
+func _spawn_initial_crowd():
+    # Spawn 15-20 random members to look like a mob
+    for i in range(20):
+        if crowd_templates.size() == 0:
+            return
+            
+        # 1. Pick a random archetype (Teacher, Police, Elderly)
+        var template = crowd_templates[randi() % crowd_templates.size()]
+        var member = template.instantiate()
+        
+        # 2. Palette Swap logic would go here (randomize shirt materials in Godot)
+        # 3. Randomize scale slightly so they don't look like clones
+        var scale_mod = randf_range(0.9, 1.1)
+        member.scale = Vector3(scale_mod, scale_mod, scale_mod)
+        
+        # 4. Position them randomly in a cluster behind the base distance
+        var random_x = randf_range(-3.0, 3.0)
+        var random_z = randf_range(0.0, 8.0)
+        member.position = Vector3(random_x, 0, crowd_base_distance + random_z)
+        
+        add_child(member)
+        crowd_members.append(member)
+
+func _process(delta):
+    if not player_node: return
+    
+    # Keep the crowd node following the player's Z-axis (running forward)
+    # The crowd slowly falls back (distance gets larger) if the player runs perfectly
+    crowd_base_distance = lerp(crowd_base_distance, 15.0, 0.5 * delta)
+    
+    position.z = player_node.position.z + crowd_base_distance
+
+func _on_player_stumble():
+    # Player hit an obstacle and dropped a water bottle!
+    # The mob surges forward immediately.
+    crowd_base_distance -= 4.0
+    
+    # If they are right on the player's heels, clamp it
+    if crowd_base_distance < 2.0:
+        crowd_base_distance = 2.0
+
+func _on_player_caught():
+    # Player is out of water. The mob engulfs them.
+    # Animate the crowd swarming the player's exact position.
+    crowd_base_distance = 0.0

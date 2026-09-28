@@ -1,0 +1,99 @@
+#region DESIGNER
+<#
+    SOURCE TEMPLATE -- do not hand this to players.
+
+    build.sh strips every region marked as such, substitutes the duration table for
+    @@SEQUENCE@@, and writes the shipped artifact to build/. The durations are generated
+    from src/token.txt by tools/encode_morse.py so the answer lives in exactly one place.
+
+    There is deliberately no token string and no Morse table in the shipped file. The
+    durations ARE the message -- that is unavoidable for any self-contained sender -- but
+    nothing in the file names the encoding, so a reader has to arrive at Morse themselves.
+    See notes/design.md.
+#>
+#endregion DESIGNER
+<#
+    Invoke-KeyboardSelfTest.ps1
+
+    Keyboard input self-test. Drives one key through a fixed timing pattern to check the
+    input stack end to end. Run it with an empty Notepad in front so the output lands
+    somewhere harmless.
+
+    This script presses a key and waits. It does not read the keyboard, touch the disk,
+    the registry or the network, and it starts no other process. Every line is here to be
+    read -- nothing is packed or hidden, so you can satisfy yourself it is safe before you
+    run it. That is deliberate: you should never execute an opaque blob on your own
+    machine, not in a CTF and not anywhere else.
+#>
+
+[CmdletBinding()]
+param(
+#region DESIGNER
+    [double] $Scale = 1.0,     # 0.1 replays a whole run in seconds
+    [switch] $Trace,           # print each element as it is sent
+    [switch] $DryRun,          # do the timing, press nothing
+#endregion DESIGNER
+    [int]    $Repeats = 4
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+# Windows' own "pretend a key was pressed" call. Flag 0 is press, 2 is release.
+Add-Type -Namespace Win32 -Name Kbd -MemberDefinition @'
+[DllImport("user32.dll", SetLastError = true)]
+public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+'@
+
+$VK_K   = 0x4B
+$KEYUP  = 0x0002
+$PAUSE  = 3000     # rest between passes
+$SCALE_FACTOR = 1.0
+#region DESIGNER
+$SCALE_FACTOR = $Scale
+#endregion DESIGNER
+
+function Set-KeyState {
+    param([bool] $Down)
+#region DESIGNER
+    if ($DryRun) { return }
+#endregion DESIGNER
+    [Win32.Kbd]::keybd_event($VK_K, 0, $(if ($Down) { 0 } else { $KEYUP }), [UIntPtr]::Zero)
+}
+
+# Start-Sleep quantises to roughly 15 ms, which is coarse next to the shortest interval
+# below. Sleep the bulk of the wait, then spin the last stretch.
+function Wait-Precise {
+    param([int] $Milliseconds)
+    $sw = [System.Diagnostics.Stopwatch]::StartNew()
+    $coarse = $Milliseconds - 16
+    if ($coarse -gt 0) { Start-Sleep -Milliseconds $coarse }
+    while ($sw.Elapsed.TotalMilliseconds -lt $Milliseconds) { }
+    $sw.Stop()
+}
+
+# Alternating: hold the key this long, then release it this long, then hold, then release.
+# The list starts and ends on a hold.
+$pattern = @(
+@@SEQUENCE@@
+)
+
+for ($pass = 1; $pass -le $Repeats; $pass++) {
+    if ($pass -gt 1) { Wait-Precise -Milliseconds $PAUSE }
+
+    for ($i = 0; $i -lt $pattern.Length; $i += 2) {
+#region DESIGNER
+        if ($Trace) { Write-Host ("  hold {0,4}ms" -f $pattern[$i]) -NoNewline }
+#endregion DESIGNER
+        Set-KeyState -Down $true
+        Wait-Precise -Milliseconds ([int]($pattern[$i] * $SCALE_FACTOR))
+        Set-KeyState -Down $false
+
+        if ($i + 1 -lt $pattern.Length) {
+#region DESIGNER
+            if ($Trace) { Write-Host ("   rest {0,4}ms" -f $pattern[$i + 1]) }
+#endregion DESIGNER
+            Wait-Precise -Milliseconds ([int]($pattern[$i + 1] * $SCALE_FACTOR))
+        }
+    }
+}

@@ -169,7 +169,7 @@ function ParallaxTile({ img, sx, sy, reduced }: TileProps) {
         animate={reduced ? undefined : { y: [0, -img.float, 0] }}
         transition={{ duration: 5 + img.delay * 4, repeat: Infinity, ease: "easeInOut", delay: img.delay }}
         whileHover={reduced ? undefined : { scale: 1.05, rotate: -1.5, zIndex: 30 }}
-        className="relative w-full h-full overflow-hidden rounded-3xl ring-1 ring-white/10 bg-black/30 cursor-pointer"
+        className="relative w-full h-full overflow-hidden rounded-3xl ring-1 ring-[var(--line-border)] bg-[var(--surface-raised)] cursor-pointer"
       >
         <AnimatePresence initial={false} mode="sync">
           <motion.img
@@ -184,9 +184,9 @@ function ParallaxTile({ img, sx, sy, reduced }: TileProps) {
             draggable={false}
           />
         </AnimatePresence>
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080a14]/55 via-transparent to-transparent opacity-70 group-hover:opacity-25 transition-opacity duration-500 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--photo-veil-soft)] via-transparent to-transparent opacity-70 group-hover:opacity-25 transition-opacity duration-500 pointer-events-none" />
         <span className="card-sheen z-10" aria-hidden />
-        <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-white/10 group-hover:ring-primary-300/50 transition-colors duration-500 pointer-events-none" />
+        <div className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-[var(--line-border)] group-hover:ring-primary-300/50 transition-colors duration-500 pointer-events-none" />
       </motion.div>
     </motion.div>
   );

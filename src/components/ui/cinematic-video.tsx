@@ -45,9 +45,9 @@ export function CinematicVideo({ url, title }: { url: string; title: string }) {
                 whileTap={{ scale: 0.95 }}
                 className="w-20 h-20 rounded-full bg-primary-400 flex items-center justify-center shadow-2xl shadow-primary-400/20"
               >
-                <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-black border-b-[10px] border-b-transparent ml-1" />
+                <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-[var(--line-border)] border-b-[10px] border-b-transparent ml-1" />
               </motion.button>
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">Initialize Stream</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[var(--text-muted)]">Initialize Stream</span>
             </div>
           </motion.div>
         )}

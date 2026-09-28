@@ -1,6 +1,4 @@
 import { ReactNode } from "react";
-import { KineticHeading } from "@/components/ui/kinetic-heading";
-import { CircuitDivider } from "@/components/ui/circuit-divider";
 
 type SectionShellProps = {
   id: string;
@@ -12,24 +10,16 @@ type SectionShellProps = {
 
 export function SectionShell({ id, eyebrow, title, children, index }: SectionShellProps) {
   return (
-    <section id={id} className="relative py-10 md:py-20 px-5 md:px-10 lg:px-12 max-w-[1400px] mx-auto group mt-2 md:mt-12">
+    <section id={id} className="portfolio-section">
       
-      {/* ── CIRCUIT TRACE DIVIDER ── */}
-      <CircuitDivider className="absolute -top-3 left-0 w-full" />
+      {/* ── SECTION DIVIDER — circuit trace on Midnight, printer's rule on light ── */}
       
       {/* Background Index Watermark */}
-      {index && (
-        <div className="absolute top-8 left-5 md:top-14 md:left-10 font-sans text-[5rem] md:text-[10rem] font-black text-white/[0.025] leading-none select-none pointer-events-none tracking-tighter">
-          {index}
-        </div>
-      )}
+      <div className="section-kicker"><span className="eyebrow">{eyebrow}</span>{index && <span aria-hidden>{index}</span>}</div>
 
       <div className="relative mt-4">
         {title && (
-          <KineticHeading
-            text={title}
-            className="text-2xl md:text-5xl font-black mb-6 md:mb-10 tracking-tighter uppercase drop-shadow-sm"
-          />
+          <h2 className="section-heading">{title}</h2>
         )}
         
         <div className="min-h-[80px]">

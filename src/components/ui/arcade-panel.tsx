@@ -38,7 +38,7 @@ export function ArcadePanel({ isOpen, onClose }: ArcadePanelProps) {
           style={{ zIndex: 1000 }}
         >
           <motion.div
-            className="custom-modal-content !p-0 overflow-hidden border-white/10"
+            className="custom-modal-content !p-0 overflow-hidden border-[var(--line-border)]"
             role="dialog"
             aria-modal="true"
             aria-label="Arcade"
@@ -51,7 +51,7 @@ export function ArcadePanel({ isOpen, onClose }: ArcadePanelProps) {
             style={{ maxWidth: activeGame ? 1100 : 980, width: "94vw" }}
           >
             {/* Header */}
-            <div className="relative flex items-center justify-between px-6 md:px-8 py-5 bg-white/[0.02] border-b border-white/5 overflow-hidden">
+            <div className="relative flex items-center justify-between px-6 md:px-8 py-5 bg-[var(--surface-sunken)] border-b border-[var(--line-rule)] overflow-hidden">
               {/* faint marquee glow */}
               <div
                 className="absolute inset-0 pointer-events-none opacity-50"
@@ -66,7 +66,7 @@ export function ArcadePanel({ isOpen, onClose }: ArcadePanelProps) {
                 {activeGame && (
                   <button
                     onClick={() => setActiveGame(null)}
-                    className="flex items-center gap-2 px-3 py-2 rounded-lg ring-1 ring-white/10 hover:ring-white/25 hover:bg-white/5 transition-all text-zinc-400 hover:text-white font-mono text-[10px] font-bold uppercase tracking-[0.2em] cursor-pointer"
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg ring-1 ring-[var(--line-border)] hover:ring-[var(--line-border)] hover:bg-[var(--surface-sunken)] transition-all text-[var(--text-muted)] hover:text-[var(--text-ink)] font-mono text-[10px] font-bold uppercase tracking-[0.2em] cursor-pointer"
                   >
                     <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13 8H3M7 4L3 8l4 4" />
@@ -75,12 +75,12 @@ export function ArcadePanel({ isOpen, onClose }: ArcadePanelProps) {
                   </button>
                 )}
                 <div>
-                  <p className="font-mono text-[9px] font-bold uppercase tracking-[0.35em] text-zinc-500">
+                  <p className="font-mono text-[9px] font-bold uppercase tracking-[0.35em] text-[var(--text-muted)]">
                     {activeGame ? "Now playing" : "Pick your poison"}
                   </p>
                   <h3
-                    className="font-sans text-2xl font-black uppercase tracking-tighter mt-0.5"
-                    style={{ color: activeMeta?.accent ?? "#fff" }}
+                    className="font-sans text-2xl font-black uppercase tracking-tighter mt-0.5 game-accent-text"
+                    style={{ ["--g-accent" as string]: activeMeta?.accent ?? "var(--text-ink)" }}
                   >
                     {activeMeta?.label ?? "The Arcade"}
                   </h3>
@@ -89,7 +89,7 @@ export function ArcadePanel({ isOpen, onClose }: ArcadePanelProps) {
               <button
                 onClick={onClose}
                 aria-label="Close arcade"
-                className="relative flex items-center justify-center w-10 h-10 rounded-full ring-1 ring-white/10 hover:ring-white/30 hover:bg-white/5 text-zinc-400 hover:text-white transition-all cursor-pointer"
+                className="relative flex items-center justify-center w-10 h-10 rounded-full ring-1 ring-[var(--line-border)] hover:ring-[var(--line-border)] hover:bg-[var(--surface-sunken)] text-[var(--text-muted)] hover:text-[var(--text-ink)] transition-all cursor-pointer"
               >
                 <svg viewBox="0 0 16 16" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" d="M4 4l8 8M12 4l-8 8" />

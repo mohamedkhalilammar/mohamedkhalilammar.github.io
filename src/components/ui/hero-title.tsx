@@ -21,20 +21,20 @@ export function HeroTitle() {
 
   return (
     <div className="relative mb-6 mt-3">
-      <h1 className="hero-display font-sans font-black uppercase tracking-[-0.045em] leading-[0.84] text-[clamp(4.5rem,14vw,12.5rem)]">
-        <motion.span {...line(0.05)} className="block text-white">
+      <h2 className="hero-display font-sans font-black uppercase tracking-[-0.045em] leading-[0.84] text-[clamp(3.5rem,10vw,8rem)]">
+        <motion.span {...line(0.05)} className="block text-[var(--text-ink)]">
           MEET
         </motion.span>
         <motion.span
           {...line(0.16)}
-          className="block pb-[0.08em] text-transparent bg-clip-text bg-gradient-to-r from-[#818cf8] via-[#c4b5fd] to-white"
+          className="block pb-[0.08em] text-transparent bg-clip-text bg-gradient-to-r from-[var(--brand-grad-a)] via-[var(--brand-grad-b)] to-[var(--brand-grad-c)]"
         >
           KHALIL
         </motion.span>
-      </h1>
+      </h2>
 
       <motion.div
-        className="mt-5 h-[2px] rounded-full bg-gradient-to-r from-primary-400 via-primary-500/60 to-transparent"
+        className="mt-5 mx-auto h-[2px] rounded-full bg-gradient-to-r from-transparent via-primary-400 to-transparent"
         initial={reduced ? { width: "9rem" } : { width: 0 }}
         whileInView={{ width: "9rem" }}
         viewport={{ once: true }}

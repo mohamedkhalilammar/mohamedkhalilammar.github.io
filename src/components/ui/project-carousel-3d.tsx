@@ -32,8 +32,8 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* ── AUTO-ADVANCE PROGRESS ── */}
-      {!reduced && (
-        <div className="absolute top-0 left-0 right-0 h-[2px] z-20 bg-white/5" aria-hidden>
+      {(
+        <div className="motion-reduce:hidden absolute top-0 left-0 right-0 h-[2px] z-20 bg-[var(--surface-sunken)]" aria-hidden>
           <motion.div
             key={`${currentIdx}-${isPaused}`}
             className="h-full bg-gradient-to-r from-primary-400 to-primary-200"
@@ -64,8 +64,8 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
           <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-primary-400 font-bold whitespace-nowrap">
             Project Architectures
           </span>
-          <div className="flex-1 h-px bg-white/10" />
-          <span className="hidden sm:inline font-mono text-[10px] tracking-widest text-white/30">
+          <div className="flex-1 h-px bg-[var(--surface-hover)]" />
+          <span className="hidden sm:inline font-mono text-[10px] tracking-widest text-[var(--text-muted)]">
             PROJECT: {String(currentIdx + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
           </span>
         </div>
@@ -95,11 +95,11 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                     <div className="w-1.5 h-1.5 rounded-full bg-primary-400" />
                     {current.icon || "PROJECT_CORE"}
                   </div>
-                  <div className="h-px flex-1 bg-white/[0.05]" />
+                  <div className="h-px flex-1 bg-[var(--surface-sunken)]" />
                 </div>
 
                 {/* Name */}
-                <h2 className="font-sans text-2xl md:text-4xl lg:text-5xl font-black uppercase leading-[0.95] tracking-tighter mb-3 md:mb-5 text-white drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                <h2 className="font-sans text-2xl md:text-4xl lg:text-5xl font-black uppercase leading-[0.95] tracking-tighter mb-3 md:mb-5 text-[var(--text-ink)] drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                   {current.name.split(" ").map((word, i) => (
                     <span key={i} className={i % 2 !== 0 ? "text-primary-400" : ""}>
                       {word}{" "}
@@ -110,7 +110,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                 {/* Tech stack Tags */}
                 <div className="flex flex-wrap gap-1.5 mb-6 md:mb-8">
                   {current.stack.slice(0, 10).map((tech) => (
-                    <span key={tech} className="px-2 py-1 bg-white/[0.02] border border-white/5 rounded font-mono text-[8px] text-white/40 uppercase tracking-widest">
+                    <span key={tech} className="px-2 py-1 bg-[var(--surface-sunken)] border border-[var(--line-rule)] rounded font-mono text-[8px] text-[var(--text-muted)] uppercase tracking-widest">
                       {tech}
                     </span>
                   ))}
@@ -118,7 +118,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
               </div>
 
               {/* Right Side: intelligence Summary */}
-              <div className="w-full lg:w-[55%] relative p-5 md:p-10 lg:p-12 rounded-2xl md:rounded-3xl bg-white/[0.01] border border-white/[0.04] backdrop-blur-3xl overflow-hidden min-h-0">
+              <div className="w-full lg:w-[55%] relative p-5 md:p-10 lg:p-12 rounded-2xl md:rounded-3xl bg-[var(--surface-sunken)] border border-[var(--line-rule)] backdrop-blur-3xl overflow-hidden min-h-0">
                 <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary-400/30 rounded-tl-2xl md:rounded-tl-3xl" />
                 <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary-400/30 rounded-br-2xl md:rounded-br-3xl" />
                 
@@ -127,21 +127,21 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                   <div className="h-px flex-1 bg-gradient-to-r from-primary-400/20 to-transparent" />
                 </div>
 
-                <p className="text-sm md:text-lg lg:text-xl leading-relaxed text-zinc-400 font-medium mb-6 md:mb-12 relative z-10">
+                <p className="text-sm md:text-lg lg:text-xl leading-relaxed text-[var(--text-muted)] font-medium mb-6 md:mb-12 relative z-10">
                   {current.summary}
                 </p>
 
                 {current.features && current.features.length > 0 && (
                   <div className="space-y-4 md:space-y-6">
-                    <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/20 block mb-3">Core Features</span>
+                    <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[var(--text-muted)] block mb-3">Core Features</span>
                     <div className="flex flex-row sm:grid sm:grid-cols-2 gap-3 md:gap-4 overflow-x-auto sm:overflow-visible pb-4 sm:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 sm:mx-0 sm:px-0">
                       {current.features.slice(0, 4).map((f) => (
-                        <div key={f} className="group flex flex-col gap-1.5 p-3 rounded-lg bg-white/[0.02] border border-transparent hover:border-primary-400/20 hover:bg-primary-400/[0.02] transition-all min-w-[240px] sm:min-w-0 snap-center shrink-0">
+                        <div key={f} className="group flex flex-col gap-1.5 p-3 rounded-lg bg-[var(--surface-sunken)] border border-transparent hover:border-primary-400/20 hover:bg-primary-400/[0.02] transition-all min-w-[240px] sm:min-w-0 snap-center shrink-0">
                           <div className="flex items-center gap-2">
                             <div className="w-1 h-1 rounded-full bg-primary-400/40 group-hover:bg-primary-400 transition-colors" />
-                            <span className="font-mono text-[9px] uppercase tracking-wider text-zinc-300 group-hover:text-primary-400 transition-colors whitespace-nowrap">Core Aspect</span>
+                            <span className="font-mono text-[9px] uppercase tracking-wider text-[var(--text-body)] group-hover:text-primary-400 transition-colors whitespace-nowrap">Core Aspect</span>
                           </div>
-                          <span className="text-[11px] text-zinc-500 group-hover:text-zinc-300 leading-relaxed font-sans line-clamp-3 sm:line-clamp-none">{f}</span>
+                          <span className="text-[11px] text-[var(--text-muted)] group-hover:text-[var(--text-body)] leading-relaxed font-sans line-clamp-3 sm:line-clamp-none">{f}</span>
                         </div>
                       ))}
                     </div>
@@ -153,7 +153,7 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
         </AnimatePresence>
 
         {/* Footer: navigation + CTA */}
-        <div className="mt-8 md:mt-12 lg:mt-auto pt-8 border-t border-white/5 flex flex-col items-center justify-between gap-8 md:gap-10">
+        <div className="mt-8 md:mt-12 lg:mt-auto pt-8 border-t border-[var(--line-rule)] flex flex-col items-center justify-between gap-8 md:gap-10">
           {/* Thumbnail strip - Scrollable on mobile */}
           <div className="w-full overflow-x-auto pb-2 scrollbar-hide">
             <div className="flex gap-3 min-w-max px-2">
@@ -167,9 +167,12 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
                     style={{
                       width: isActive ? "80px" : "40px",
                       height: "40px",
-                      border: isActive ? "2px solid var(--accent)" : "1px solid rgba(255,255,255,0.08)",
-                      background: isActive ? "rgba(129,140,248,0.15)" : "rgba(255,255,255,0.02)",
-                      color: isActive ? "var(--accent)" : "rgba(255,255,255,0.3)",
+                      border: isActive
+                        ? "2px solid var(--accent)"
+                        : "1px solid var(--line-border)",
+                      background: isActive ? "var(--accent-surface)" : "var(--surface-sunken)",
+                      // Was rgba(255,255,255,0.3) — 2.7:1 even on the dark theme.
+                      color: isActive ? "var(--accent-ink)" : "var(--text-muted)",
                       transition: "all 0.6s cubic-bezier(0.16,1,0.3,1)",
                       flexShrink: 0,
                     }}
@@ -187,13 +190,13 @@ export function ProjectCarousel3D({ projects }: { projects: Project[] }) {
               <button 
                 aria-label="Previous Project"
                 onClick={() => setCurrentIdx((p) => (p - 1 + projects.length) % projects.length)}
-                className="w-10 h-10 md:w-12 md:h-12 rounded-xl border border-white/10 flex items-center justify-center text-lg text-white/50 hover:text-white hover:bg-white/5 transition-all active:scale-90">
+                className="w-10 h-10 md:w-12 md:h-12 rounded-xl border border-[var(--line-border)] flex items-center justify-center text-lg text-[var(--text-muted)] hover:text-[var(--text-ink)] hover:bg-[var(--surface-sunken)] transition-all active:scale-90">
                 ←
               </button>
               <button 
                 aria-label="Next Project"
                 onClick={() => setCurrentIdx((p) => (p + 1) % projects.length)}
-                className="w-10 h-10 md:w-12 md:h-12 rounded-xl border border-white/10 flex items-center justify-center text-lg text-white/50 hover:text-white hover:bg-white/5 transition-all active:scale-90">
+                className="w-10 h-10 md:w-12 md:h-12 rounded-xl border border-[var(--line-border)] flex items-center justify-center text-lg text-[var(--text-muted)] hover:text-[var(--text-ink)] hover:bg-[var(--surface-sunken)] transition-all active:scale-90">
                 →
               </button>
             </div>

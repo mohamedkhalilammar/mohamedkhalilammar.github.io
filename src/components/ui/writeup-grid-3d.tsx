@@ -23,7 +23,7 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
       viewport={{ once: true, margin: "-50px" }}
       className="group h-full"
     >
-      <div className="flex flex-col h-full bg-black/40 backdrop-blur-sm border border-primary-500/20 rounded-xl overflow-hidden hover:border-primary-500/50 hover:bg-black/60 transition-all duration-300 hover:-translate-y-2 shadow-sm hover:shadow-[0_15px_30px_rgba(var(--primary-rgb),0.12)] relative">
+      <div className="flex flex-col h-full bg-[var(--surface-raised)] backdrop-blur-sm border border-primary-500/20 rounded-xl overflow-hidden hover:border-primary-500/50 hover:bg-[var(--surface-sunken)] transition-all duration-300 hover:-translate-y-2 shadow-sm hover:shadow-[0_15px_30px_rgba(var(--primary-rgb),0.12)] relative">
 
         {/* Subtle background image header if available */}
         {writeup.mediaUrl && (
@@ -32,14 +32,14 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
             <img
               src={writeup.mediaUrl}
               alt={writeup.title}
-              className="w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
+              className="photo-plate--bare photo-plate--thumb w-full h-full object-cover opacity-60 group-hover:opacity-80 group-hover:scale-105 transition-all duration-500"
             />
           </div>
         )}
 
         <div className="p-5 md:p-8 flex flex-col flex-1 relative z-20">
           <div className="flex items-center justify-between flex-wrap gap-2 mb-5">
-            <span className="font-mono text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-background bg-primary px-3 py-1 rounded shadow-sm">
+            <span className="font-mono text-[10px] md:text-[11px] font-bold tracking-[0.1em] uppercase text-background bg-primary-500 px-3 py-1 rounded shadow-sm">
               {writeup.category}
             </span>
             <span className="font-mono text-[11px] md:text-[12px] text-foreground/50 tracking-wider">
@@ -57,7 +57,7 @@ function WriteupCard({ writeup, index }: { writeup: Writeup; index: number }) {
 
           <Link
             href={`/writeups/${writeup.id}`}
-            className="inline-flex items-center justify-between font-mono text-[0.8rem] font-bold tracking-widest uppercase text-primary mt-auto pt-5 border-t border-primary-500/10 group-hover:border-primary-500/30 transition-all no-underline min-h-[44px]"
+            className="inline-flex items-center justify-between font-mono text-[0.8rem] font-bold tracking-widest uppercase text-primary-300 mt-auto pt-5 border-t border-primary-500/10 group-hover:border-primary-500/30 transition-all no-underline min-h-[44px]"
           >
             <span>Read Full Report</span>
             <span className="transform transition-transform duration-300 group-hover:translate-x-2">{"→"}</span>

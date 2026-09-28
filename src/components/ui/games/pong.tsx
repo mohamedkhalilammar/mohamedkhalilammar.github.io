@@ -284,7 +284,7 @@ export function Pong() {
 
   return (
     <div className="w-full max-w-[800px] mx-auto">
-      <div className="relative p-1 bg-white/[0.02] border border-white/5 rounded-xl shadow-2xl overflow-hidden">
+      <div className="relative p-1 bg-[var(--surface-sunken)] border border-[var(--line-rule)] rounded-xl shadow-2xl overflow-hidden">
         <canvas
           ref={canvasRef}
           width={W}
@@ -292,10 +292,10 @@ export function Pong() {
           className="block w-full h-auto"
         />
         {status !== "running" && (
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 z-30">
+          <div className="absolute inset-0 bg-[var(--surface-raised)] backdrop-blur-md flex flex-col items-center justify-center text-center p-8 z-30">
             {status === "dead" && (
               <div className="mb-6">
-                <p className="text-4xl font-black uppercase tracking-tighter italic text-white/80">
+                <p className="text-4xl font-black uppercase tracking-tighter italic text-[var(--text-body)]">
                   {ps >= 7 ? "YOU WIN!" : "AI WINS"}
                 </p>
                 <p className="text-xl font-mono font-black text-primary-400/60 mt-1">{ps} — {as_}</p>
@@ -304,7 +304,7 @@ export function Pong() {
             <button className="btn-primary !py-3 !px-12 !text-xs" onClick={start}>
               {status === "idle" ? "START" : "REMATCH"}
             </button>
-            <div className="mt-8 text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em]">W / S / ArrowKeys to Move</div>
+            <div className="mt-8 text-[var(--text-muted)] font-mono text-[10px] uppercase tracking-[0.4em]">W / S / ArrowKeys to Move</div>
           </div>
         )}
       </div>

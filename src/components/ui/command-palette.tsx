@@ -4,6 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ctfWriteups, profile, projects } from "@/data/portfolio";
+import { useTheme } from "@/components/ui/theme-provider";
+import { THEME_LABELS, otherTheme } from "@/lib/theme";
 
 type PaletteItem = {
   id: string;
@@ -24,9 +26,9 @@ type CommandPaletteProps = {
 
 const SECTIONS: Array<[string, string]> = [
   ["top", "Home"],
-  ["projects", "Projects"],
   ["achievements", "Achievements"],
-  ["ctf", "Writeups & Breakdowns"],
+  ["projects", "Projects"],
+  ["blog", "The Blog"],
   ["certifications", "Certifications"],
   ["skills", "Core Skills"],
   ["contact", "Contact"],
@@ -64,6 +66,7 @@ const GROUP_ICONS: Record<PaletteItem["group"], React.ReactNode> = {
  */
 export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: CommandPaletteProps) {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -100,6 +103,14 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
     }));
 
     const actions: PaletteItem[] = [
+      {
+        id: "act-theme",
+        label: `Switch to ${THEME_LABELS[otherTheme(theme)]} Theme`,
+        group: "Actions",
+        hint: THEME_LABELS[otherTheme(theme)],
+        keywords: "theme dark light appearance colour color midnight amber",
+        action: toggleTheme,
+      },
       { id: "act-arcade", label: "Open the Arcade", group: "Actions", hint: "Play", keywords: "game snake tetris pong", action: onArcade },
       { id: "act-breach", label: "Initiate Breach Protocol", group: "Actions", hint: "???", keywords: "matrix rain hack easter egg", action: onBreach },
       {
@@ -131,7 +142,7 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
     ];
 
     return [...nav, ...proj, ...writeups, ...actions];
-  }, [router, onArcade, onBreach]);
+  }, [router, onArcade, onBreach, theme, toggleTheme]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -200,7 +211,7 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
-          className="fixed inset-0 z-[10000] bg-black/60 backdrop-blur-sm flex items-start justify-center px-4"
+          className="fixed inset-0 z-[10000] bg-[color:var(--scrim)] backdrop-blur-sm flex items-start justify-center px-4"
           onMouseDown={onClose}
           role="dialog"
           aria-modal="true"
@@ -211,7 +222,7 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-xl mt-[12vh] rounded-2xl border border-primary-500/25 bg-[#0c0f1f]/95 backdrop-blur-xl shadow-[0_24px_70px_-20px_rgba(0,0,0,0.8),0_0_50px_-20px_rgba(129,140,248,0.45)] overflow-hidden"
+            className="w-full max-w-xl mt-[12vh] rounded-2xl border border-[var(--line-border)] bg-[var(--surface-modal)] backdrop-blur-xl shadow-[0_24px_70px_-20px_rgba(0,0,0,0.8),0_0_50px_-20px_rgba(129,140,248,0.45)] overflow-hidden"
             onMouseDown={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-3 px-5 py-4 border-b border-primary-500/15">
@@ -225,12 +236,12 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
                 aria-label="Search commands"
                 className="flex-1 bg-transparent outline-none text-sm font-mono text-primary-100 placeholder-zinc-600"
               />
-              <kbd className="hidden sm:inline-block text-[10px] font-mono text-zinc-500 border border-white/10 rounded px-1.5 py-0.5">ESC</kbd>
+              <kbd className="hidden sm:inline-block text-[10px] font-mono text-[var(--text-muted)] border border-[var(--line-border)] rounded px-1.5 py-0.5">ESC</kbd>
             </div>
 
             <ul ref={listRef} role="listbox" aria-label="Commands" className="max-h-[46vh] overflow-y-auto py-2 px-2">
               {filtered.length === 0 && (
-                <li className="px-4 py-6 text-center font-mono text-xs text-zinc-500 uppercase tracking-widest">
+                <li className="px-4 py-6 text-center font-mono text-xs text-[var(--text-muted)] uppercase tracking-widest">
                   No matches // try &quot;projects&quot;
                 </li>
               )}
@@ -254,14 +265,14 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left cursor-pointer transition-colors duration-150 ${
                         i === selected
                           ? "bg-primary-500/15 text-primary-100"
-                          : "text-zinc-400 hover:text-zinc-200"
+                          : "text-[var(--text-muted)] hover:text-[var(--text-ink)]"
                       }`}
                     >
-                      <span className={i === selected ? "text-primary-300" : "text-zinc-600"}>
+                      <span className={i === selected ? "text-primary-300" : "text-[var(--text-faint)]"}>
                         {GROUP_ICONS[item.group]}
                       </span>
                       <span className="flex-1 text-sm truncate">{item.label}</span>
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-600">{item.hint}</span>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--text-faint)]">{item.hint}</span>
                       {i === selected && (
                         <kbd className="text-[10px] font-mono text-primary-400 border border-primary-500/30 rounded px-1.5 py-0.5">↵</kbd>
                       )}
@@ -271,9 +282,9 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
               })}
             </ul>
 
-            <div className="flex items-center gap-4 px-5 py-2.5 border-t border-primary-500/15 text-[10px] font-mono text-zinc-600 uppercase tracking-wider">
-              <span><kbd className="text-zinc-500">↑↓</kbd> navigate</span>
-              <span><kbd className="text-zinc-500">↵</kbd> select</span>
+            <div className="flex items-center gap-4 px-5 py-2.5 border-t border-primary-500/15 text-[10px] font-mono text-[var(--text-faint)] uppercase tracking-wider">
+              <span><kbd className="text-[var(--text-muted)]">↑↓</kbd> navigate</span>
+              <span><kbd className="text-[var(--text-muted)]">↵</kbd> select</span>
               <span className="ml-auto text-primary-500/60">{filtered.length} results</span>
             </div>
           </motion.div>

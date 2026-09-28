@@ -42,8 +42,8 @@ export function GameCabinetGrid({ onSelect }: GameCabinetGridProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, delay: i * 0.06, ease: EASE }}
           whileHover={reduced ? undefined : { y: -6 }}
-          className="game-cabinet group relative flex flex-col text-left rounded-2xl overflow-hidden ring-1 ring-white/10 bg-white/[0.025] cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black outline-none"
-          style={{ color: game.accent, ["--g-accent" as string]: game.accent, ["--g-soft" as string]: game.accentSoft }}
+          className="game-cabinet group relative flex flex-col text-left rounded-2xl overflow-hidden ring-1 ring-[var(--line-border)] bg-[var(--surface-sunken)] cursor-pointer focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black outline-none"
+          style={{ ["--g-accent" as string]: game.accent, ["--g-soft" as string]: game.accentSoft }}
           aria-label={`Play ${game.label}`}
         >
           {/* preview screen */}
@@ -58,7 +58,7 @@ export function GameCabinetGrid({ onSelect }: GameCabinetGridProps) {
               {game.preview}
             </div>
             {/* bottom fade into the card body */}
-            <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0a0c18] to-transparent z-10" aria-hidden />
+            <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[var(--surface-raised)] to-transparent z-10" aria-hidden />
             {/* hover glow */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none z-10"
@@ -68,24 +68,24 @@ export function GameCabinetGrid({ onSelect }: GameCabinetGridProps) {
           </div>
 
           {/* card body */}
-          <div className="relative flex-1 flex flex-col gap-2 px-5 pt-3.5 pb-5 bg-[#0a0c18]">
+          <div className="relative flex-1 flex flex-col gap-2 px-5 pt-3.5 pb-5 bg-[var(--surface-raised)]">
             <div className="flex items-center justify-between gap-3">
-              <h4 className="font-sans text-lg md:text-xl font-black uppercase tracking-tight text-white group-hover:text-[color:var(--g-accent)] transition-colors duration-300">
+              <h4 className="font-sans text-lg md:text-xl font-black uppercase tracking-tight text-[var(--text-ink)] group-hover:text-[color:var(--g-ink)] transition-colors duration-300">
                 {game.label}
               </h4>
               <DifficultyMeter level={game.difficulty} accent={game.accent} />
             </div>
 
-            <p className="text-[12.5px] text-zinc-500 leading-snug">{game.tagline}</p>
+            <p className="text-[12.5px] text-[var(--text-muted)] leading-snug">{game.tagline}</p>
 
             <div className="mt-auto pt-3 flex items-center justify-between">
               <span
                 className="font-mono text-[9px] font-bold uppercase tracking-[0.25em] px-2.5 py-1 rounded-md ring-1"
-                style={{ color: "var(--g-accent)", background: "var(--g-soft)", borderColor: "transparent", boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--g-accent) 30%, transparent)" }}
+                style={{ color: "var(--g-ink)", background: "var(--g-soft)", borderColor: "transparent", boxShadow: "inset 0 0 0 1px color-mix(in srgb, var(--g-ink) 30%, transparent)" }}
               >
                 {game.genre}
               </span>
-              <span className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-600 group-hover:text-[color:var(--g-accent)] transition-colors duration-300">
+              <span className="flex items-center gap-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--text-faint)] group-hover:text-[color:var(--g-ink)] transition-colors duration-300">
                 Play
                 <svg viewBox="0 0 16 16" className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8h10M9 4l4 4-4 4" />

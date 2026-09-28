@@ -27,7 +27,7 @@ export function CyberTicker() {
     <ul className="flex items-center gap-10 pr-10 shrink-0" aria-hidden>
       {TICKER_ITEMS.map((item, i) => (
         <li key={i} className="flex items-center gap-10 whitespace-nowrap">
-          <span className="font-mono text-base md:text-lg font-semibold uppercase tracking-[0.22em] text-zinc-200 hover:text-primary-300 transition-colors duration-200">
+          <span className="font-mono text-base md:text-lg font-semibold uppercase tracking-[0.22em] text-[var(--text-ink)] hover:text-primary-300 transition-colors duration-200">
             {item}
           </span>
           <Separator />
@@ -44,8 +44,8 @@ export function CyberTicker() {
         {row}
       </div>
       {/* edge fade masks */}
-      <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#080a14] to-transparent pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#080a14] to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[var(--surface-page)] to-transparent pointer-events-none" />
+      <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[var(--surface-page)] to-transparent pointer-events-none" />
     </div>
   );
 }

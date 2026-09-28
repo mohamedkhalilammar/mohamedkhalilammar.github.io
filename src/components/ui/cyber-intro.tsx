@@ -65,10 +65,10 @@ export function PageIntro() {
             />
             
             <div className="relative z-20 flex flex-col items-center text-center px-4">
-                <span className="text-white font-orbitron font-bold text-5xl md:text-7xl uppercase tracking-[0.2em] mix-blend-difference drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]">
+                <span className="text-[var(--text-ink)] font-orbitron font-bold text-5xl md:text-7xl uppercase tracking-[0.2em] mix-blend-difference drop-shadow-[0_0_20px_rgba(255,255,255,0.8)]">
                     KHALIL AMMAR
                 </span>
-                <span className="font-mono text-primary-300 font-bold text-xs md:text-sm tracking-widest mt-6 animate-pulse bg-black/50 px-3 py-1 rounded">
+                <span className="font-mono text-primary-300 font-bold text-xs md:text-sm tracking-widest mt-6 animate-pulse bg-[var(--surface-raised)] px-3 py-1 rounded">
                     [ INITIALIZING PORTFOLIO: {((currentIndex / (PHOTOS.length - 1)) * 100).toFixed(0)}% ]
                 </span>
             </div>

@@ -322,7 +322,7 @@ export function MemoryGame() {
               <span className="text-2xl font-black text-primary-400/80 font-mono tracking-tighter">{playerScore}</span>
            </div>
            <div className="flex flex-col items-center">
-              <span className="text-[8px] font-mono text-zinc-500 uppercase tracking-[0.2em] mb-1">
+              <span className="text-[8px] font-mono text-[var(--text-muted)] uppercase tracking-[0.2em] mb-1">
                 {isAiTurn ? "AI MOVING" : status === "playing" ? `MOVE: ${moves}` : "MEMORY"}
               </span>
            </div>
@@ -332,7 +332,7 @@ export function MemoryGame() {
            </div>
         </div>
 
-        <div className="relative p-1 rounded-xl bg-white/[0.02] border border-white/5 shadow-2xl">
+        <div className="relative p-1 rounded-xl bg-[var(--surface-sunken)] border border-[var(--line-rule)] shadow-2xl">
           <div className="grid grid-cols-5 gap-3">
             {cards.length === 0 ? (
               <div className="col-span-5 h-[350px] flex items-center justify-center">
@@ -356,11 +356,11 @@ export function MemoryGame() {
                         cursor: isVisible || isAiTurn || locked ? "default" : "pointer" 
                       }}
                     >
-                      <div className="absolute inset-0 backface-hidden bg-white/[0.03] border border-white/5 rounded-lg flex items-center justify-center">
-                        <span className="text-zinc-700 font-mono text-xs opacity-50">?</span>
+                      <div className="absolute inset-0 backface-hidden bg-[var(--surface-sunken)] border border-[var(--line-rule)] rounded-lg flex items-center justify-center">
+                        <span className="text-[var(--text-faint)] font-mono text-xs opacity-50">?</span>
                       </div>
                       <div 
-                        className={`absolute inset-0 backface-hidden bg-white/[0.08] border rounded-lg flex flex-col items-center justify-center`}
+                        className={`absolute inset-0 backface-hidden bg-[var(--surface-hover)] border rounded-lg flex flex-col items-center justify-center`}
                         style={{ 
                           transform: "rotateY(180deg)",
                           borderColor: card.matched 
@@ -387,11 +387,11 @@ export function MemoryGame() {
           <AnimatePresence>
             {status === "won" && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                   className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 rounded-xl z-50">
+                   className="absolute inset-0 bg-[var(--surface-raised)] backdrop-blur-md flex flex-col items-center justify-center text-center p-8 rounded-xl z-50">
                 <h2 className={`text-4xl font-black uppercase tracking-tighter mb-4 italic`} style={{ color: winColor }}>
                   {winner}
                 </h2>
-                <p className="text-[10px] font-mono text-zinc-500 mb-8 uppercase tracking-widest">
+                <p className="text-[10px] font-mono text-[var(--text-muted)] mb-8 uppercase tracking-widest">
                   {playerScore} — {aiScore} · {moves} moves
                 </p>
                 <button className="btn-primary !py-3 !px-10 !text-xs" onClick={init}>TRY AGAIN</button>

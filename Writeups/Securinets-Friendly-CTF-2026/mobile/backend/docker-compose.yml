@@ -1,0 +1,38 @@
+# Run from this directory: docker compose up --build
+# Requires ../secrets/flags.json to exist (gitignored, generated locally --
+# see secrets/README.md). It is bind-mounted read-only, never copied into
+# the image, same pattern as game.key in malware-track/quiz.
+services:
+  backend:
+    build: .
+    image: securinets-ctf/mobile-backend
+    container_name: mobile-backend
+    restart: unless-stopped
+    # Shared event host: ~45 containers had exhausted Docker's default
+    # address pool, so creating a per-project network fails with
+    # "all predefined address pools have been fully subnetted".
+    # Joining the default bridge creates no new network.
+    network_mode: bridge
+    ports:
+      - "28000:8000" # app.py --http   (plain HTTP: #9 sniffable session_note)
+      - "28443:8443" # app.py --https  (TLS + pinning surface: #10, #11)
+      - "29090:9090" # rogue_sdk_collector.py (#14)
+    environment:
+      CTF_FLAGS: /run/secrets/flags.json
+      # Override in prod if you rotate the committed default -- see
+      # backend/app.py and backend/README.md.
+      # CTF_SIG_KEY: ""
+      # Designer mode. Leave unset for a real event.
+      # CTF_SIG_DISABLED: "1"
+    # The container runs as uid 999, so the mounted flags file must be
+    # readable by it:  sudo chown 999:999 flags.json && sudo chmod 400 flags.json
+    # Owned by the deploying user instead, every service dies on a
+    # PermissionError that only shows up in the container logs.
+    volumes:
+      - ../secrets/flags.json:/run/secrets/flags.json:ro
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 200
+    mem_limit: 256m
+    cpus: 0.5

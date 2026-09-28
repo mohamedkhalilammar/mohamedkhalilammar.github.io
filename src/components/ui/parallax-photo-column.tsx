@@ -57,13 +57,13 @@ export function ParallaxPhotoColumn({ scrollYProgress }: Props) {
               transition={{ type: "spring", stiffness: 30, damping: 20 }}
               whileHover={{ scale: 1.05, zIndex: 1000 }}
             >
-              <div className="relative group">
+              <div className="photo-plate photo-plate--bare relative group">
                 <div className="absolute inset-0 bg-primary-400/10 opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500 rounded-3xl" />
                 <img
                   src={photo.src}
                   alt={photo.alt}
                   className={`w-full h-auto object-cover rounded-2xl md:rounded-3xl border-[0.5px] shadow-[0_20px_50px_rgba(0,0,0,0.7)] transition-all duration-700 antialiased
-                    ${i === 0 ? 'border-primary-400/40' : 'border-white/20 opacity-90 group-hover:opacity-100'}
+                    ${i === 0 ? 'border-primary-400/40' : 'border-[var(--line-border)] opacity-90 group-hover:opacity-100'}
                   `}
                 />
               </div>

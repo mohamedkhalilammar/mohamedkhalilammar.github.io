@@ -180,14 +180,14 @@ export function Minesweeper() {
            </div>
            <div className="flex items-center gap-4">
               <div className="flex flex-col items-end">
-                <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-[0.2em]">TIME</span>
-                <span className="text-2xl font-black text-white/40 font-mono tracking-tighter">{timer}s</span>
+                <span className="text-[9px] font-mono text-[var(--text-muted)] uppercase tracking-[0.2em]">TIME</span>
+                <span className="text-2xl font-black text-[var(--text-muted)] font-mono tracking-tighter">{timer}s</span>
               </div>
               <button
                 onClick={reset}
                 aria-label="Restart game"
-                className={`w-10 h-10 rounded-full border border-white/5 bg-white/5 pointer-events-auto flex items-center justify-center hover:bg-white/10 transition-colors cursor-pointer ${
-                  status === "dead" ? "text-red-400" : status === "won" ? "text-green-400" : "text-zinc-300"
+                className={`w-10 h-10 rounded-full border border-[var(--line-rule)] bg-[var(--surface-sunken)] pointer-events-auto flex items-center justify-center hover:bg-[var(--surface-hover)] transition-colors cursor-pointer ${
+                  status === "dead" ? "text-red-400" : status === "won" ? "text-green-400" : "text-[var(--text-body)]"
                 }`}
               >
                 <FaceIcon mood={status === "dead" ? "dead" : status === "won" ? "cool" : "happy"} />
@@ -198,11 +198,11 @@ export function Minesweeper() {
         <motion.div
           animate={status === "dead" ? { x: [0, -8, 8, -5, 5, -2, 0] } : undefined}
           transition={{ duration: 0.4 }}
-          className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-1 bg-white/5 p-1 rounded-lg border border-white/10 shadow-2xl relative z-10"
+          className="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-1 bg-[var(--surface-sunken)] p-1 rounded-lg border border-[var(--line-border)] shadow-2xl relative z-10"
         >
             {grid.map((row, r) => row.map((cell, c) => (
                 <div key={`${r}-${c}`} onClick={() => reveal(r, c)} onContextMenu={e => flag(e, r, c)}
-                    className={`aspect-square flex items-center justify-center text-[10px] sm:text-xs font-black transition-all duration-75 ${cell.revealed ? (cell.mine ? "bg-red-500/40 text-red-200 ms-pop" : "bg-zinc-900/40 ms-pop") : "bg-zinc-800/60 hover:bg-zinc-700/80 cursor-pointer border border-white/5"} ${!cell.revealed && cell.flagged ? "text-amber-400" : ""}`}
+                    className={`aspect-square flex items-center justify-center text-[10px] sm:text-xs font-black transition-all duration-75 ${cell.revealed ? (cell.mine ? "bg-red-500/40 text-red-200 ms-pop" : "bg-zinc-900/40 ms-pop") : "bg-zinc-800/60 hover:bg-zinc-700/80 cursor-pointer border border-[var(--line-rule)]"} ${!cell.revealed && cell.flagged ? "text-amber-400" : ""}`}
                     style={{ color: cell.revealed && !cell.mine && cell.count > 0 ? COUNT_COLORS[cell.count] : undefined }}>
                     {cell.revealed
                       ? (cell.mine ? <MineIcon /> : cell.count > 0 ? cell.count : "")
@@ -214,7 +214,7 @@ export function Minesweeper() {
         <AnimatePresence>
             {(status === "won" || status === "dead") && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                     className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-8 rounded-lg z-30">
+                     className="absolute inset-0 bg-[var(--surface-raised)] backdrop-blur-md flex flex-col items-center justify-center text-center p-8 rounded-lg z-30">
                     <h2 className={`text-4xl font-black uppercase tracking-tighter mb-4 italic ${status === "won" ? "text-green-500/80" : "text-red-500/80"}`}>
                       {status === "won" ? "COMPLETE" : "FAILED"}
                     </h2>

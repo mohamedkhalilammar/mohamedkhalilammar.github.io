@@ -1,9 +1,6 @@
 "use client";
 
 import { Fragment, type ReactNode } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-
-const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * Renders a paragraph where any substring wrapped in *asterisks* is rendered
@@ -71,18 +68,12 @@ const CARDS = [
  * title, short copy. No accordions, no interaction required.
  */
 export function AboutGrid() {
-  const reduced = useReducedMotion();
-
   return (
     <div className="grid md:grid-cols-2 gap-5 md:gap-6">
-      {CARDS.map((card, i) => (
-        <motion.article
+      {CARDS.map((card) => (
+        <article
           key={card.id}
-          initial={reduced ? false : { opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.15 }}
-          transition={{ duration: 0.65, delay: i * 0.08, ease: EASE }}
-          className="group relative rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-7 md:p-10 backdrop-blur-sm transition-all duration-300 hover:ring-primary-400/40 hover:bg-white/[0.05] hover:-translate-y-1 hover:shadow-[0_20px_50px_-18px_rgba(129,140,248,0.3)]"
+          className="group relative rounded-3xl bg-[var(--surface-sunken)] ring-1 ring-[var(--line-border)] p-7 md:p-10 backdrop-blur-sm transition-all duration-300 hover:ring-primary-400/40 hover:bg-[var(--surface-sunken)] hover:-translate-y-1 hover:shadow-[0_20px_50px_-18px_rgba(129,140,248,0.3)]"
         >
           {/* top hairline accent */}
           <span
@@ -94,18 +85,18 @@ export function AboutGrid() {
             <span className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-primary-500/10 ring-1 ring-primary-500/20 text-primary-300 group-hover:bg-primary-500/15 group-hover:text-primary-200 transition-colors duration-300 [&_svg]:w-6 [&_svg]:h-6 md:[&_svg]:w-7 md:[&_svg]:h-7">
               {card.icon}
             </span>
-            <span className="text-2xl md:text-3xl font-black tabular-nums text-white/[0.07] group-hover:text-primary-400/20 transition-colors duration-300 select-none">
+            <span className="text-2xl md:text-3xl font-black tabular-nums text-[var(--text-whisper)] group-hover:text-primary-400/20 transition-colors duration-300 select-none">
               {card.id}
             </span>
           </div>
 
-          <h3 className="text-white font-bold tracking-tight text-xl md:text-2xl mb-3 md:mb-4">
+          <h3 className="text-[var(--text-ink)] font-bold tracking-tight text-xl md:text-2xl mb-3 md:mb-4">
             {card.title}
           </h3>
-          <p className="text-[15px] md:text-[17px] leading-[1.75] text-zinc-400 [text-wrap:pretty]">
+          <p className="text-[15px] md:text-[17px] leading-[1.75] text-[var(--text-muted)] [text-wrap:pretty]">
             {richBody(card.body)}
           </p>
-        </motion.article>
+        </article>
       ))}
     </div>
   );

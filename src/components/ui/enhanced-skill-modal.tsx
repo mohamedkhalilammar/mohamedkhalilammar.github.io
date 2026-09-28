@@ -31,7 +31,7 @@ interface Props {
   skill: Skill;
   isOpen: boolean;
   onClose: () => void;
-  modalRef: React.RefObject<HTMLDivElement>;
+  modalRef: React.RefObject<HTMLDivElement | null>;
 }
 
 // Derive a rough proficiency level label from 0-100

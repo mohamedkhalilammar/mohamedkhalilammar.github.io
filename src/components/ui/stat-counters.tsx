@@ -44,16 +44,16 @@ function Counter({ value, prefix = "", suffix = "" }: Pick<StatItem, "value" | "
  */
 export function StatCounters({ items }: { items: StatItem[] }) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-px bg-white/5 border border-white/5 rounded-2xl overflow-hidden mb-12">
+    <div className="stat-strip grid grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--surface-sunken)] border border-[var(--line-rule)] rounded-2xl overflow-hidden mb-12">
       {items.map((item) => (
         <div
           key={item.label}
-          className="group bg-[#0a0d1a] hover:bg-[#0d1022] transition-colors duration-300 p-6 md:p-8 flex flex-col gap-2"
+          className="group bg-[var(--surface-raised)] hover:bg-[var(--surface-hover)] transition-colors duration-300 p-6 md:p-8 flex flex-col gap-2"
         >
-          <span className="font-sans text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-white via-primary-200 to-primary-400">
+          <span className="font-sans text-4xl md:text-5xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-[var(--brand-grad-c)] via-[var(--brand-grad-b)] to-[var(--brand-grad-a)]">
             <Counter value={item.value} prefix={item.prefix} suffix={item.suffix} />
           </span>
-          <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-zinc-500 group-hover:text-primary-300/80 transition-colors duration-300">
+          <span className="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-[var(--text-muted)] group-hover:text-primary-300/80 transition-colors duration-300">
             {item.label}
           </span>
         </div>

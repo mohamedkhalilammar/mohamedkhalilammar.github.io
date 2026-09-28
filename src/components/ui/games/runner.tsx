@@ -384,14 +384,14 @@ export function RunnerGame() {
 
   return (
     <div className="w-full max-w-[850px] mx-auto">
-      <div className="relative w-full aspect-[2/1] bg-zinc-950/40 border border-white/5 rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden">
+      <div className="relative w-full aspect-[2/1] bg-zinc-950/40 border border-[var(--line-rule)] rounded-xl shadow-[0_0_100px_rgba(0,0,0,0.5)] overflow-hidden">
         {/* Floating Internal Score */}
         <div className="absolute top-6 right-8 z-40 pointer-events-none select-none text-right">
           <span className="text-[10px] font-mono tracking-[0.3em] font-bold" style={{ color: `${ACCENT}66` }}>DISTANCE</span>
           <div className="text-4xl font-mono font-black tracking-tighter" style={{ color: `${ACCENT}cc`, textShadow: `0 0 18px ${ACCENT}44` }}>
             {score.toString().padStart(5, '0')}m
           </div>
-          <div className="text-[9px] font-mono text-zinc-600 mt-1 uppercase tracking-widest">BEST: {highScore}m</div>
+          <div className="text-[9px] font-mono text-[var(--text-faint)] mt-1 uppercase tracking-widest">BEST: {highScore}m</div>
         </div>
 
         <canvas ref={canvasRef} width={W} height={H} className="w-full h-full" />
@@ -399,8 +399,8 @@ export function RunnerGame() {
         <AnimatePresence>
           {(status === "idle" || status === "dead") && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                 className="absolute inset-0 bg-black/40 backdrop-blur-md flex flex-col items-center justify-center text-center p-12 z-50">
-              <h2 className={`text-4xl font-sans font-black uppercase tracking-tighter mb-2 ${status === "dead" ? 'text-red-500/80' : 'text-white/80'}`}>
+                 className="absolute inset-0 bg-[var(--surface-raised)] backdrop-blur-md flex flex-col items-center justify-center text-center p-12 z-50">
+              <h2 className={`text-4xl font-sans font-black uppercase tracking-tighter mb-2 ${status === "dead" ? 'text-red-500/80' : 'text-[var(--text-body)]'}`}>
                 {status === "dead" ? "GAME OVER" : "RUNNER"}
               </h2>
               {status === "dead" && score >= highScore && score > 0 && (
@@ -412,7 +412,7 @@ export function RunnerGame() {
               >
                  {status === "idle" ? "START" : "RETRY"}
               </button>
-              <div className="mt-8 text-zinc-500 font-mono text-[10px] uppercase tracking-[0.4em]">Space to jump — twice for double jump</div>
+              <div className="mt-8 text-[var(--text-muted)] font-mono text-[10px] uppercase tracking-[0.4em]">Space to jump — twice for double jump</div>
             </motion.div>
           )}
         </AnimatePresence>

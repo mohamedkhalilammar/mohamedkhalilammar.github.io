@@ -18,6 +18,7 @@ export function CreativeEntrance4D() {
   // slide index + travel direction so transitions can wipe from the right side
   const [slide, setSlide] = useState<{ idx: number; dir: 1 | -1 }>({ idx: 0, dir: 1 });
   const current = slide.idx;
+  const [playing, setPlaying] = useState(false);
 
   const advance = useCallback((dir: 1 | -1) => {
     setSlide((s) => ({ idx: (s.idx + dir + BG_PHOTOS.length) % BG_PHOTOS.length, dir }));
@@ -30,9 +31,10 @@ export function CreativeEntrance4D() {
 
   // Autoplay — resets on any slide change so the progress bar stays in sync
   useEffect(() => {
+    if (!playing || reducedMotion) return;
     const t = setInterval(() => advance(1), AUTO_MS);
     return () => clearInterval(t);
-  }, [advance, current]);
+  }, [advance, current, playing, reducedMotion]);
 
   // Touch swipe
   const touchStartX = useRef(0);
@@ -50,7 +52,7 @@ export function CreativeEntrance4D() {
       aria-label="Introduction"
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
-      className="entrance-cover relative w-full overflow-hidden min-h-[70vh] md:min-h-[88vh] flex items-center justify-start"
+      className="entrance-cover relative w-full overflow-hidden flex items-center justify-start"
     >
       {/* ── Full-bleed photo background ── */}
       <div className="absolute inset-0 z-0" aria-hidden>
@@ -60,28 +62,28 @@ export function CreativeEntrance4D() {
             src={BG_PHOTOS[current]}
             idx={current}
             dir={slide.dir}
-            reducedMotion={!!reducedMotion}
+            reducedMotion={!!reducedMotion || !playing}
           />
         </AnimatePresence>
 
         {/* aurora wash + legibility scrims */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_12%,rgba(129,140,248,0.18),transparent_55%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#080a14]/75 via-[#080a14]/45 to-[#080a14]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(8,10,20,0.6)_100%)]" />
+        <div className="entrance-aurora absolute inset-0 bg-[radial-gradient(ellipse_at_70%_12%,rgba(129,140,248,0.18),transparent_55%)]" />
+        <div className="entrance-veil absolute inset-0 bg-gradient-to-b from-[var(--photo-veil-strong)] via-[var(--photo-veil-mid)] to-[var(--surface-page)]" />
+        <div className="entrance-vignette absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,var(--photo-veil-mid)_100%)]" />
         {/* bottom fade into page background */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[#080a14]" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[var(--surface-page)]" />
       </div>
 
       {/* ── Content (left-aligned so the photo stays visible) ── */}
       <div className="relative z-10 w-full max-w-[640px] mr-auto px-6 md:px-10 lg:px-16 text-left">
         <h1
-          className="font-display font-extrabold uppercase leading-[0.9] tracking-[-0.02em] text-white"
-          style={{ fontSize: "clamp(3.2rem, 10vw, 8rem)" }}
+          className="font-display font-extrabold uppercase leading-[0.9] tracking-[-0.02em] text-[var(--text-ink)]"
+          style={{ fontSize: "clamp(2.8rem, 5.8vw, 5rem)" }}
         >
           <span className="block overflow-hidden pb-[0.04em]">
             <motion.span
               className="block"
-              initial={reducedMotion ? false : { y: "110%" }}
+              initial={false}
               animate={{ y: "0%" }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
               style={{ textShadow: "0 4px 50px rgba(3,7,18,0.7)" }}
@@ -92,15 +94,15 @@ export function CreativeEntrance4D() {
           <span className="block overflow-hidden pb-[0.06em]">
             <motion.span
               className="block"
-              initial={reducedMotion ? false : { y: "110%" }}
+              initial={false}
               animate={{ y: "0%" }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
               style={{
-                background: "linear-gradient(100deg, #818cf8 0%, #c4b5fd 50%, #ffffff 100%)",
+                background: "linear-gradient(100deg, var(--brand-grad-a) 0%, var(--brand-grad-b) 50%, var(--brand-grad-c) 100%)",
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                filter: "drop-shadow(0 0 44px rgba(129,140,248,0.32))",
+                filter: "drop-shadow(0 0 44px var(--accent-surface))",
               }}
             >
               Ammar
@@ -109,10 +111,10 @@ export function CreativeEntrance4D() {
         </h1>
 
         <motion.p
-          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.55 }}
-          className="mt-6 max-w-md font-mono text-[13px] md:text-sm uppercase tracking-[0.14em] leading-relaxed text-white/75"
+          className="mt-6 max-w-md font-mono text-[13px] md:text-sm uppercase tracking-[0.14em] leading-relaxed text-[var(--text-body)]"
           style={{ textShadow: "0 1px 14px rgba(3,7,18,0.9)" }}
         >
           Cybersecurity Enthusiast{" "}
@@ -120,22 +122,30 @@ export function CreativeEntrance4D() {
           &amp; Engineering Student at INSAT.
         </motion.p>
 
-        <motion.div
-          initial={reducedMotion ? false : { opacity: 0, y: 12 }}
+        {/* ── Scroll cue ──
+               This is a title card, not a conversion surface: the buttons that
+               used to sit here pointed at #projects and #contact, the exact two
+               anchors the introduction below repeats. A visitor who has seen
+               nothing yet has no reason to press them, so the stage now hands
+               off to the introduction instead. ── */}
+        <motion.a
+          href="#projects"
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.7 }}
-          className="mt-9 flex flex-wrap items-center justify-start gap-4"
+          className="entrance-scroll-cue group mt-10 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--text-muted)] transition-colors hover:text-[var(--text-ink)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400"
+          style={{ textShadow: "0 1px 14px rgba(3,7,18,0.9)" }}
         >
-          <a href="#projects" className="entrance-cta-primary" data-cursor="View">
-            View Work
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
-          </a>
-          <a href="#contact" className="entrance-cta-ghost">
-            Contact
-          </a>
-        </motion.div>
+          <span>Explore my work</span>
+          <motion.svg
+            width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+            strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden
+            animate={reducedMotion ? undefined : { y: [0, 4, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <path d="M8 3v10M4 9l4 4 4-4" />
+          </motion.svg>
+        </motion.a>
       </div>
 
       {/* ── Story progress bar (no labels) ── */}
@@ -144,23 +154,27 @@ export function CreativeEntrance4D() {
           <button
             key={i}
             onClick={() => goTo(i)}
+            type="button"
+            aria-pressed={current === i}
             aria-label={`Show ${LABELS[i]}`}
-            className="relative h-[3px] flex-1 overflow-hidden rounded-full bg-white/18"
+            className="entrance-photo-tab relative h-11 flex-1"
           >
-            {i < current && <span className="absolute inset-0 bg-primary-400/80" />}
+            <span className="absolute inset-x-0 top-1/2 h-[2px] bg-[var(--line-border)]" />
             {i === current && (
               <motion.span
                 key={current}
-                className="absolute inset-y-0 left-0 rounded-full"
-                style={{ background: "linear-gradient(90deg,#818cf8,#c4b5fd)" }}
-                initial={{ width: "0%" }}
+                className="absolute top-1/2 h-[2px] left-0"
+                style={{ background: "linear-gradient(90deg,var(--brand-grad-a),var(--brand-grad-b))" }}
+                initial={{ width: playing && !reducedMotion ? "0%" : "100%" }}
                 animate={{ width: "100%" }}
-                transition={{ duration: AUTO_MS / 1000, ease: "linear" }}
+                transition={{ duration: playing && !reducedMotion ? AUTO_MS / 1000 : 0, ease: "linear" }}
               />
             )}
           </button>
         ))}
       </div>
+
+      <button type="button" className="entrance-play" aria-pressed={playing} onClick={() => setPlaying(p => !p)}>{playing ? "Pause slideshow" : "Play slideshow"}</button>
 
       {/* ── Arrows ── */}
       <button onClick={() => advance(-1)} aria-label="Previous photo" className="entrance-arrow left-4 md:left-7">
@@ -238,7 +252,7 @@ function BgPhoto({ src, idx, dir, reducedMotion }: BgPhotoProps) {
             : { scale: zoomIn ? 1.12 : 1.03, x: zoomIn ? dir * -14 : dir * 10 }
         }
         transition={{ duration: AUTO_MS / 1000 + 1.5, ease: "easeOut" }}
-        className="h-full w-full object-cover select-none"
+        className="photo-plate--bare h-full w-full object-cover select-none"
         style={{ objectPosition: "center 25%", filter: "contrast(1.04) saturate(0.95) brightness(0.92)" }}
       />
     </motion.div>

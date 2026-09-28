@@ -17,18 +17,8 @@ export function ScrollProgress() {
   return (
     <motion.div
       aria-hidden
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 2,
-        transformOrigin: "0% 50%",
-        scaleX,
-        zIndex: 9999,
-        background: "linear-gradient(90deg, #6366f1, #818cf8, #c4b5fd)",
-        boxShadow: "0 0 12px rgba(129,140,248,0.6)",
-      }}
+      className="scroll-progress-bar"
+      style={{ transformOrigin: "0% 50%", scaleX }}
     />
   );
 }
