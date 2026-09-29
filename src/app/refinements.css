@@ -420,7 +420,12 @@ html:has(.article-page), body:has(.article-page) { overflow-x: clip; }
 .blog-page::before { display: none; }
 .blog-page .journal-container { width: min(100% - 80px, 1320px); }
 .hero-signal { display: inline-block; width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--accent-ink); box-shadow: 0 0 0 4px var(--accent-surface); }
-.blog-page .journal-hero { display: block; padding: 42px 0 30px; }
+.blog-page .journal-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 48px; padding: 42px 0 30px; }
+.journal-hero-author { flex-shrink: 0; width: min(300px, 30vw); margin: 0; }
+.journal-hero-author img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 28%; border-radius: 16px; border: 1px solid var(--line-border); background: var(--surface-sunken); }
+.journal-hero-author figcaption { display: grid; gap: 4px; margin-top: 12px; }
+.journal-hero-author-name { font-weight: 650; letter-spacing: -.02em; color: var(--text-ink); }
+.journal-hero-author-role { font-size: .78rem; color: var(--text-muted); }
 .journal-hero .eyebrow, .article-hero-kicker .eyebrow { display: flex; align-items: center; gap: 12px; }
 .blog-page .journal-hero h1 { font-family: var(--font-heading), sans-serif; font-size: clamp(4rem, 7vw, 7rem); line-height: 1; font-weight: 600; letter-spacing: -.06em; margin: 20px 0 4px; }
 .hero-title-dot { color: var(--accent-ink); }
@@ -480,8 +485,9 @@ html:has(.article-page), body:has(.article-page) { overflow-x: clip; }
 }
 @media (max-width: 767px) {
   .blog-page .journal-container { width: calc(100% - 40px); }
-  .blog-page .journal-hero { padding: 34px 0 28px; }
+  .blog-page .journal-hero { flex-direction: column; align-items: flex-start; gap: 28px; padding: 34px 0 28px; }
   .blog-page .journal-hero h1 { font-size: clamp(3.5rem, 15vw, 5.5rem); margin-bottom: 0; }
+  .journal-hero-author { width: min(240px, 64vw); }
   .journal-hero-copy .hero-browse { display: none; }
   .blog-page .journal-toolbar { position: static; gap: 14px; flex-direction: column-reverse; padding: 16px 0 10px; }
   .journal-search { width: 100%; flex: auto; }
