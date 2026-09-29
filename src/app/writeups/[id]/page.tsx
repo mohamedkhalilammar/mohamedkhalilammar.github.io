@@ -15,12 +15,18 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const post = getPost((await params).id);
+  const id = (await params).id;
+  const post = getPost(id);
   if (!post) return { title: "Article not found — Khalil Ammar" };
+  // NOTE: a page-level `openGraph` object replaces the root one instead of
+  // merging, so the shared preview image + url must be repeated here or
+  // article links get no embed image.
+  const images = [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Khalil Ammar — Security & Intelligence" }];
   return {
     title: post.title + " — Khalil Ammar",
     description: post.summary,
-    openGraph: { title: post.title, description: post.summary, type: "article", authors: ["Khalil Ammar"], ...(!post.dateIsPlaceholder ? { publishedTime: post.date } : {}) },
+    openGraph: { title: post.title, description: post.summary, url: `/writeups/${id}`, siteName: "Khalil Ammar", type: "article", images, authors: ["Khalil Ammar"], ...(!post.dateIsPlaceholder ? { publishedTime: post.date } : {}) },
+    twitter: { card: "summary_large_image", title: post.title, description: post.summary, images: ["/opengraph-image.png"] },
   };
 }
 

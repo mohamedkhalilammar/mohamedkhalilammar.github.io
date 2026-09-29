@@ -31,10 +31,29 @@ const azeret = Azeret_Mono({
   display: "swap",
 });
 
+const SITE_URL = "https://khalilammar.me";
+const SITE_TITLE = "Khalil Ammar | Security & Intelligence";
+const SITE_DESCRIPTION =
+  "Cybersecurity portfolio focused on reverse engineering, malware analysis, mobile pentesting, CTF performance, and practical offensive security projects.";
+
 export const metadata: Metadata = {
-  title: "Khalil Ammar | Security & Intelligence",
-  description:
-    "Cybersecurity portfolio focused on reverse engineering, malware analysis, mobile pentesting, CTF performance, and practical offensive security projects.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: "/",
+    siteName: "Khalil Ammar",
+    type: "website",
+    // Image comes from ./opengraph-image.png via the file convention.
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    // Image falls back to ./opengraph-image.png.
+  },
 };
 
 
