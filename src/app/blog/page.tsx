@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { getCategories, getPostCards, getTags } from "@/lib/posts";
 import { BlogIndex } from "@/components/ui/blog-index";
 import { SiteHeader } from "@/components/ui/site-header";
@@ -23,7 +22,7 @@ export default function BlogPage() {
             <a className="hero-browse" href="#article-library">Browse articles <span aria-hidden>↘</span></a>
           </div>
           <figure className="journal-hero-author">
-            <Image src="/media/photo.jpg" alt="Khalil Ammar holding CTF prizes at an IEEE INSAT event" width={2048} height={1501} priority />
+            <img src="/media/security-talk-detail-960.webp" srcSet="/media/security-talk-detail-480.webp 480w, /media/security-talk-detail-960.webp 960w" sizes="(max-width: 375px) 64vw, (max-width: 767px) 240px, (max-width: 1000px) 30vw, 300px" alt="A speaker at a lectern discussing a projected slide about PromptSpy and AI." width={960} height={1280} fetchPriority="high" />
             <figcaption>
               <span className="journal-hero-author-name">Khalil Ammar</span>
               <span className="journal-hero-author-role">Author & security researcher · {posts.length} articles</span>

@@ -7,9 +7,10 @@ const BG_PHOTOS = [
   "/media/cybersphere.jpeg",
   "/media/finals.jpg",
   "/media/photo.jpg",
+  "/media/security-talk-detail-960.webp",
 ];
 
-const LABELS = ["Cyber Lab", "CTF Finals", "Portrait"]; // a11y only (indicator labels)
+const LABELS = ["Cyber Lab", "CTF Finals", "Portrait", "Cybersecurity workshop"]; // a11y only (indicator labels)
 
 const AUTO_MS = 5200;
 
@@ -18,7 +19,6 @@ export function CreativeEntrance4D() {
   // slide index + travel direction so transitions can wipe from the right side
   const [slide, setSlide] = useState<{ idx: number; dir: 1 | -1 }>({ idx: 0, dir: 1 });
   const current = slide.idx;
-  const [playing, setPlaying] = useState(false);
 
   const advance = useCallback((dir: 1 | -1) => {
     setSlide((s) => ({ idx: (s.idx + dir + BG_PHOTOS.length) % BG_PHOTOS.length, dir }));
@@ -31,10 +31,10 @@ export function CreativeEntrance4D() {
 
   // Autoplay — resets on any slide change so the progress bar stays in sync
   useEffect(() => {
-    if (!playing || reducedMotion) return;
+    if (reducedMotion) return;
     const t = setInterval(() => advance(1), AUTO_MS);
     return () => clearInterval(t);
-  }, [advance, current, playing, reducedMotion]);
+  }, [advance, current, reducedMotion]);
 
   // Touch swipe
   const touchStartX = useRef(0);
@@ -62,7 +62,7 @@ export function CreativeEntrance4D() {
             src={BG_PHOTOS[current]}
             idx={current}
             dir={slide.dir}
-            reducedMotion={!!reducedMotion || !playing}
+            reducedMotion={!!reducedMotion}
           />
         </AnimatePresence>
 
@@ -165,16 +165,14 @@ export function CreativeEntrance4D() {
                 key={current}
                 className="absolute top-1/2 h-[2px] left-0"
                 style={{ background: "linear-gradient(90deg,var(--brand-grad-a),var(--brand-grad-b))" }}
-                initial={{ width: playing && !reducedMotion ? "0%" : "100%" }}
+                initial={{ width: !reducedMotion ? "0%" : "100%" }}
                 animate={{ width: "100%" }}
-                transition={{ duration: playing && !reducedMotion ? AUTO_MS / 1000 : 0, ease: "linear" }}
+                transition={{ duration: !reducedMotion ? AUTO_MS / 1000 : 0, ease: "linear" }}
               />
             )}
           </button>
         ))}
       </div>
-
-      <button type="button" className="entrance-play" aria-pressed={playing} onClick={() => setPlaying(p => !p)}>{playing ? "Pause slideshow" : "Play slideshow"}</button>
 
       {/* ── Arrows ── */}
       <button onClick={() => advance(-1)} aria-label="Previous photo" className="entrance-arrow left-4 md:left-7">
@@ -252,8 +250,8 @@ function BgPhoto({ src, idx, dir, reducedMotion }: BgPhotoProps) {
             : { scale: zoomIn ? 1.12 : 1.03, x: zoomIn ? dir * -14 : dir * 10 }
         }
         transition={{ duration: AUTO_MS / 1000 + 1.5, ease: "easeOut" }}
-        className="photo-plate--bare h-full w-full object-cover select-none"
-        style={{ objectPosition: "center 25%", filter: "contrast(1.04) saturate(0.95) brightness(0.92)" }}
+        className={`photo-plate--bare h-full w-full object-cover select-none${idx === 3 ? " entrance-workshop-photo" : ""}`}
+        style={{ objectPosition: idx === 3 ? undefined : "center 25%", filter: "contrast(1.04) saturate(0.95) brightness(0.92)" }}
       />
     </motion.div>
   );

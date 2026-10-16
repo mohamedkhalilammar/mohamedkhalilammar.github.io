@@ -4,8 +4,7 @@ import { achievements, ctfIdentity } from "@/data/portfolio";
 
 const TICKER_ITEMS = [
   ...achievements.map((a) => a.highlight),
-  `${ctfIdentity.stats.challengesSolved} challenges solved`,
-  `${ctfIdentity.stats.eventsEntered}+ CTF events`,
+  `+${ctfIdentity.stats.eventPodiums} CTF Event Podium`,
   `Team ${ctfIdentity.team}`,
 ];
 

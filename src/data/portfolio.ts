@@ -418,9 +418,7 @@ export const ctfIdentity = {
   interest: "Offensive Security & Threat Analysis",
   categories: "Web Exploitation, Reverse Engineering, Forensics",
   stats: {
-    eventsEntered: 15,
-    challengesSolved: 142,
-    topPlacement: "1st Place (x2)"
+    eventPodiums: 20
   }
 };
 

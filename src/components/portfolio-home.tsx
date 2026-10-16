@@ -2,7 +2,7 @@
 
 import { MotionConfig, motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import { HomeJournal } from "@/components/ui/home-journal";
 import { SectionShell } from "@/components/sections/section-shell";
 import { AboutGrid } from "@/components/ui/about-grid";
 import { SiteHeader } from "@/components/ui/site-header";
@@ -122,10 +122,10 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
                 00
               </div>
               
-              <div className="flex flex-col items-center w-full relative z-10">
+              <div className="personal-intro relative z-10">
 
                 {/* ── Text column ── */}
-                <div className="w-full max-w-3xl mx-auto flex flex-col items-center text-center">
+                <div className="personal-intro-copy">
 
                   {/* Role eyebrow */}
                   <p className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-[var(--text-muted)] uppercase tracking-[0.25em] mb-2 min-h-[1.6em]">
@@ -157,7 +157,7 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
                     {profile.about.split("\n\n")[0]}
                   </motion.p>
 
-                  <div className="flex flex-wrap items-center justify-center gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     <Magnetic strength={0.25}>
                       <a className="btn-primary focus-visible:ring-2 focus-visible:ring-primary-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black active:scale-95" href="#projects">{profile.cta.primary}</a>
                     </Magnetic>
@@ -166,7 +166,9 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
                     </Magnetic>
                   </div>
                 </div>
-
+                <figure className="personal-intro-photo">
+                  <img src="/media/security-talk-960.webp" srcSet="/media/security-talk-480.webp 480w, /media/security-talk-960.webp 960w" sizes="(min-width: 768px) 360px, calc(100vw - 48px)" width={960} height={1280} loading="lazy" decoding="async" alt="A speaker holding a microphone beside a slide titled AI in Cybersecurity: What We Already Know." />
+                </figure>
               </div>
 
               {/* ── About cards — all visible, no expanding ── */}
@@ -190,9 +192,7 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
             <SectionShell id="achievements" eyebrow="Milestones" title="Key Achievements" index="01">
               <StatCounters
                 items={[
-                  { value: ctfIdentity.stats.eventsEntered, suffix: "+", label: "CTF Events Entered" },
-                  { value: ctfIdentity.stats.challengesSolved, label: "Challenges Solved" },
-                  { value: 2, suffix: "x", label: "First-Place Finishes" },
+                  { value: ctfIdentity.stats.eventPodiums, prefix: "+", label: "CTF Event Podium" },
                   { value: 1, prefix: "Top ", suffix: "%", label: "TryHackMe Worldwide" },
                 ]}
               />
@@ -271,17 +271,7 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
           {/* ===== WRITEUPS ===== */}
           <motion.div {...reveal} className="section-flow relative">
             <SectionShell id="blog" eyebrow="Writing" title="The Blog" index="03">
-              <p className="section-description">Reverse engineering, CTF write-ups, and lessons from the projects I build.</p>
-              <div className="home-writing-list">
-                {posts.slice(0, 3).map((post, index) => (
-                  <Link href={`/writeups/${post.id}`} key={post.id} className="home-writing-row">
-                    <span className="home-writing-index" aria-hidden>{String(index + 1).padStart(2, "0")}</span>
-                    <div><span className="journal-meta">{post.category}</span><h3>{post.title}</h3><p>{post.summary}</p></div>
-                    <span className="home-writing-arrow" aria-hidden>↗</span>
-                  </Link>
-                ))}
-              </div>
-              <Link href="/blog" className="journal-read">Explore all {posts.length} articles <span aria-hidden>↗</span></Link>
+              <HomeJournal posts={posts} />
             </SectionShell>
           </motion.div>
 

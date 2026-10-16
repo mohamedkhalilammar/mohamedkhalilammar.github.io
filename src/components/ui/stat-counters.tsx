@@ -44,7 +44,7 @@ function Counter({ value, prefix = "", suffix = "" }: Pick<StatItem, "value" | "
  */
 export function StatCounters({ items }: { items: StatItem[] }) {
   return (
-    <div className="stat-strip grid grid-cols-2 lg:grid-cols-4 gap-px bg-[var(--surface-sunken)] border border-[var(--line-rule)] rounded-2xl overflow-hidden mb-12">
+    <div className="stat-strip grid grid-cols-2 gap-px bg-[var(--surface-sunken)] border border-[var(--line-rule)] rounded-2xl overflow-hidden mb-12">
       {items.map((item) => (
         <div
           key={item.label}

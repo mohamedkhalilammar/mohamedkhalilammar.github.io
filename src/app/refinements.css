@@ -15,7 +15,6 @@
 .portfolio-home .hero-section > :is(.atmosphere-dark, .atmosphere-light) { opacity: .25; }
 .portfolio-home .entrance-cover { min-height: 520px; height: min(650px, 75svh); }
 .portfolio-home .entrance-cover h1 { line-height: 1.04; }
-.entrance-play { position: absolute; bottom: 30px; right: 24px; z-index: 20; min-height: 44px; padding: 8px 14px; font-size: .75rem; color: var(--text-body); border: 1px solid var(--line-border); background: var(--surface-page); border-radius: 6px; }
 .portfolio-home .card-sheen { display: none; }
 .portfolio-home .skills-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); overflow: visible; width: 100%; padding: 0; margin: 0; }
 .portfolio-home .skills-card { min-width: 0; border-radius: 6px; box-shadow: none; }
@@ -29,12 +28,6 @@
 .portfolio-home .contact-form-ui textarea { resize: vertical; min-height: 130px; }
 .portfolio-home .contact-form-ui button[type="submit"] { border: 1px solid var(--accent-fill); background: var(--accent-fill); color: var(--text-on-accent); border-radius: 6px; text-transform: none; letter-spacing: 0; font-family: var(--font-body), sans-serif; min-height: 48px; }
 .form-error { color: var(--status-error); font-size: .875rem; line-height: 1.5; }
-.home-writing-list { border-top: 1px solid var(--line-border); }
-.home-writing-row { display: grid; grid-template-columns: 32px minmax(0,1fr) 28px; gap: 20px; align-items: start; padding: 24px 0; border-bottom: 1px solid var(--line-border); }
-.home-writing-index { font: .7rem var(--font-mono),monospace; color: var(--text-muted); padding-top: 3px; }
-.home-writing-row h3 { font-size: 1.25rem; font-weight: 600; line-height: 1.3; margin: 8px 0; letter-spacing: -.025em; }
-.home-writing-row p { font-size: .9375rem; color: var(--text-muted); line-height: 1.6; max-width: 75ch; }
-.home-writing-arrow { color: var(--accent-ink); font-size: 1.4rem; align-self: center; }
 .portfolio-home .btn-primary, .portfolio-home .btn-secondary { border-radius: 6px; box-shadow: none; min-height: 44px; transition-duration: 180ms; }
 .portfolio-home .btn-primary::before, .portfolio-home .btn-secondary::before { display: none; }
 .refined-footer { display: grid; grid-template-columns: 1.4fr 1fr .6fr; gap: 40px; padding: 40px max(24px,calc((100vw - 1152px)/2)); border-top: 1px solid var(--line-border); background: var(--surface-page); color: var(--text-muted); font-size: .8rem; }
@@ -94,8 +87,6 @@
   .portfolio-home .skills-grid { grid-template-columns: minmax(0,1fr); gap: 16px; }
   .portfolio-home .hero-section { padding-inline: 0; }
   .portfolio-home .hero-content { padding-inline: 20px; }
-  .home-writing-row { gap: 12px; grid-template-columns: 22px minmax(0,1fr) 20px; }
-  .home-writing-row h3 { font-size: 1.125rem; }
   .refined-footer { grid-template-columns: 1fr 1fr; padding: 32px 20px; gap: 24px; }
   .footer-identity { grid-column: 1/-1; }
   .refined-footer nav a { min-height: 44px; }
@@ -522,3 +513,68 @@ html:has(.article-page), body:has(.article-page) { overflow-x: clip; }
 .article-contents-links a + a { border-top: 1px solid var(--line-border); }
 .article-contents-links a > span { color: var(--accent-ink); }
 .article-contents-links a:hover { color: var(--accent-ink); }
+
+/* Personal photography keeps its original portrait proportions. */
+.personal-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 360px); align-items: center; gap: clamp(32px, 6vw, 88px); }
+.personal-intro-copy { max-width: 650px; }
+.personal-intro-copy > p:first-child { letter-spacing: .12em; }
+.personal-intro .intro-heading { font-size: clamp(2.3rem, 4.5vw, 4rem); text-wrap: balance; }
+.personal-intro-photo { margin: 0; }
+.personal-intro-photo img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line-border); }
+.blog-page .journal-hero-author img { aspect-ratio: 3 / 4; height: auto; object-fit: contain; }
+
+/* Homepage journal: one lead story and a compact reading list. */
+.home-journal-intro { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin: -8px 0 32px; }
+.home-journal-intro > p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
+.home-journal-archive { display: inline-flex; align-items: center; gap: 16px; min-height: 44px; color: var(--text-ink); font-size: .875rem; white-space: nowrap; border-bottom: 1px solid var(--accent-ink); }
+.home-journal-archive > span:first-child { color: var(--text-muted); font: .7rem var(--font-mono), monospace; }
+.home-journal-grid { display: grid; grid-template-columns: 1.08fr 1fr; gap: 40px; }
+.home-journal-feature { min-width: 0; background: var(--accent-surface); border: 1px solid var(--line-border); border-radius: 8px; overflow: hidden; }
+.home-journal-feature > a { display: flex; flex-direction: column; height: 100%; padding: clamp(24px, 3vw, 40px); transition: background .2s; }
+.home-journal-feature-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px; color: var(--accent-ink); }
+.home-journal-feature-top > span:last-child { font-size: 1.8rem; }
+.home-journal-kicker { font: .65rem var(--font-mono), monospace; text-transform: uppercase; letter-spacing: .16em; color: var(--accent-ink); }
+.home-journal-meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--text-muted); font: .65rem var(--font-mono), monospace; line-height: 1.6; }
+.home-journal-meta > span:first-child { color: var(--accent-ink); }
+.home-journal-feature h3 { font-size: clamp(1.8rem, 3vw, 2.65rem); letter-spacing: -.045em; line-height: 1.13; font-weight: 600; margin: 16px 0 20px; text-wrap: balance; }
+.home-journal-feature p { color: var(--text-body); font-size: 1rem; line-height: 1.75; margin-bottom: 32px; }
+.home-journal-feature-bottom { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line-border); padding-top: 22px; margin-top: auto; font-size: .8rem; }
+.home-journal-feature-bottom > span { color: var(--accent-ink); }
+.home-journal-feature-bottom time { font-size: .7rem; color: var(--text-muted); }
+.home-journal-more { min-width: 0; }
+.home-journal-more > .home-journal-kicker { padding: 8px 0 18px; border-bottom: 1px solid var(--line-border); }
+.home-journal-more article { border-bottom: 1px solid var(--line-border); }
+.home-journal-more article a { display: grid; grid-template-columns: 22px minmax(0,1fr) 18px; gap: 16px; padding: 24px 0; }
+.home-journal-number { color: var(--text-muted); font: .65rem var(--font-mono), monospace; padding-top: 3px; }
+.home-journal-more h3 { font-size: 1.35rem; line-height: 1.2; font-weight: 600; letter-spacing: -.025em; margin: 8px 0; }
+.home-journal-more article p { color: var(--text-muted); font-size: .875rem; line-height: 1.65; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.home-journal-next { color: var(--accent-ink); }
+.home-journal a:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 5px; }
+.home-journal a:hover h3, .home-journal-archive:hover { color: var(--accent-ink); }
+.home-journal-feature > a:hover { background: var(--surface-hover); }
+@media (max-width: 767px) {
+  .personal-intro { grid-template-columns: 1fr; gap: 32px; }
+  .personal-intro-photo { width: min(100%, 400px); margin-inline: auto; }
+  .home-journal-intro { align-items: flex-start; flex-direction: column; gap: 16px; }
+  .home-journal-grid { grid-template-columns: 1fr; gap: 28px; }
+  .home-journal-feature-top { margin-bottom: 36px; }
+  .home-journal-more article a { gap: 12px; }
+}
+
+/* Photo grading: muted color and contrast, with a soft edge vignette. */
+.personal-intro-photo { position: relative; overflow: hidden; border-radius: 8px; isolation: isolate; }
+.personal-intro-photo img { filter: saturate(.38) contrast(1.12) brightness(.94); transition: filter .65s ease; }
+.personal-intro-photo::after { content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit; background: radial-gradient(ellipse at 48% 42%, transparent 45%, rgba(9, 12, 24, .26) 100%); opacity: .8; transition: opacity .65s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .personal-intro-photo:hover img { filter: saturate(1) contrast(1.04) brightness(1); }
+  .personal-intro-photo:hover::after { opacity: .35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .personal-intro-photo img, .personal-intro-photo::after { transition: none; }
+}
+
+/* Keep the workshop portrait visible beside the introduction on wide screens. */
+.entrance-workshop-photo { object-fit: contain; object-position: 85% center; }
+@media (max-width: 767px) {
+  .entrance-workshop-photo { object-fit: cover; object-position: center 62%; }
+}
