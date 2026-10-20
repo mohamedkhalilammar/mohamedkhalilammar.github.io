@@ -20,6 +20,12 @@ The `lib/` directory only contains `x86_64`. No `arm64-v8a`, which means it won'
 phone and won't run if you force it, so I'm on an emulator from the start. That also rules out the
 usual Dart recovery tooling, since blutter and unflutter are both arm64-only.
 
+> **A strange freeRASP inversion:** the APK includes freeRASP, which is commonly used to detect
+> emulators and other risky runtime conditions so an app can refuse to run. This challenge does
+> the opposite. Its x86_64-only build forces me onto an emulator because the intended challenge is
+> the emulator-specific Impeller crash. On a physical device that crash would not happen, so the
+> environment freeRASP would normally reject is the environment the challenge needs.
+
 Installing and running it gives three screens:
 
 | | | |
