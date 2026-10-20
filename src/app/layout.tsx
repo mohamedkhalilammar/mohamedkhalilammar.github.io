@@ -33,7 +33,7 @@ const azeret = Azeret_Mono({
 const SITE_URL = "https://khalilammar.me";
 const SITE_TITLE = "Khalil Ammar";
 const SITE_DESCRIPTION =
-  "Breaking things. Figuring them out.";
+  "The personal blog of Khalil Ammar (fadigaa), cybersecurity enthusiast and CTF player.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
