@@ -1,5 +1,6 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
 import type { Components } from "react-markdown";
 import { CodeBlock } from "@/components/ui/code-block";
 import type { Element, ElementContent } from "hast";
@@ -49,11 +50,18 @@ const components: Components = {
   table: ({ node, ...props }) => node && collectImages(node).length
     ? <ArticleGallery images={collectImages(node)} layout="row" />
     : <div className="article-table" role="region" aria-label="Article table" tabIndex={0}><table {...props} /></div>,
-  pre: ({ node: _node, children }) => <CodeBlock>{children}</CodeBlock>,
+  pre: ({ node, children }) => {
+    const code = node?.children.find((child) => child.type === "element" && child.tagName === "code");
+    const classes = code?.type === "element" ? code.properties.className : [];
+    const language = Array.isArray(classes)
+      ? String(classes.find((name) => String(name).startsWith("language-")) ?? "").replace(/^language-/, "")
+      : "";
+    return <CodeBlock language={language}>{children}</CodeBlock>;
+  },
   code: ({ node: _node, ...props }) => <code {...props} />,
   img: ({ node: _node, alt, ...props }) => <img alt={alt ?? ""} loading="lazy" {...props} />,
 };
 
 export function MarkdownBody({ children }: { children: string }) {
-  return <div className="article-prose"><ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>{children}</ReactMarkdown></div>;
+  return <div className="article-prose"><ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[[rehypeHighlight, { ignoreMissing: true }]]} components={components}>{children}</ReactMarkdown></div>;
 }
