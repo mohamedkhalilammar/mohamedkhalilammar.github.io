@@ -215,3 +215,8 @@
   .portfolio-home .personal-intro-copy { width: 52%; padding: 40px 32px; }
   .portfolio-home .personal-intro .workshop-background::after { background: linear-gradient(90deg, #080a1426 10%, #080a1480 48%, #080a14c9 100%), linear-gradient(0deg, #080a14, transparent 28%, transparent 75%, #080a1466); }
 }
+
+.portfolio-home .personal-intro-copy > p:not(:first-child) { padding: 20px 24px; border: 1px solid var(--line-border); border-radius: 10px; background: #111522eb; }
+@media (max-width: 767px) {
+  .portfolio-home .personal-intro-copy > p:not(:first-child) { padding: 18px; }
+}
