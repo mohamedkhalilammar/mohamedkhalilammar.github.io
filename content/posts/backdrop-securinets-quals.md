@@ -22,9 +22,8 @@ usual Dart recovery tooling, since blutter and unflutter are both arm64-only.
 
 > **A strange freeRASP inversion:** the APK includes freeRASP, which is commonly used to detect
 > emulators and other risky runtime conditions so an app can refuse to run. This challenge does
-> the opposite. Its x86_64-only build forces me onto an emulator because the intended challenge is
-> the emulator-specific Impeller crash. On a physical device that crash would not happen, so the
-> environment freeRASP would normally reject is the environment the challenge needs.
+> the opposite: its x86_64-only build forces me to use an emulator, the exact environment freeRASP
+> would normally treat as suspicious.
 
 Installing and running it gives three screens:
 
@@ -319,6 +318,12 @@ Securinets{https://github.com/flutter/flutter/issues/163421}
 The flag is the issue that explains why the reveal screen crashes on every emulator, which is the
 only kind of machine an x86_64-only APK runs on. You can't read it until you've already diagnosed
 the bug it points at.
+
+Now the x86_64 restriction makes sense. It forces the app onto an emulator, where the selected
+OpenGL ES backend runs through the emulator's graphics stack and hits the bug. On a physical
+phone, it would use real device drivers instead of the emulator's fallback layer, so this crash
+would not happen. Without the crash, the reveal path works normally and the challenge becomes much
+easier. The author forced the emulator because the environment itself is part of the challenge.
 
 ## Afterword
 
