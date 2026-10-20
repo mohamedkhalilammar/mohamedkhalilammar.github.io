@@ -93,14 +93,15 @@ Four names are worth knowing before going further:
 Impeller draws through Vulkan when it can and falls back to OpenGL ES when it can't, which is
 what an emulator gets. `impeller/renderer/backend/gles/` is that fallback path.
 
-Paste that message into a search engine and the first or second result is the flag. Obviously I
-didn't know that yet. It reads like an ordinary bug report, because that's what it is, so I chased
-it through the issue tracker like any other crash and only understood what I'd been reading when
-the flag finally rendered.
+Searching that message doesn't necessarily take you straight to the exact issue linked in the
+flag. There are plenty of bug reports, discussions, and other resources that can help explain
+the crash. The error message is one clue; the renderer configuration and what happens when you
+tap Reveal Flag help narrow it down too. I followed those clues through the issue tracker like
+any other crash and only understood the significance of the link when the flag finally rendered.
 
 ## What's going on
 
-Searching the error string lands on
+One relevant issue is
 [flutter/flutter#163421](https://github.com/flutter/flutter/issues/163421), whose title is the
 whole story: *"[Impeller] App Crashes on Android Emulator when navigating to a route using a
 BackdropFilter with ImageFilter.blur()"*. Somewhere in the thread is the fix.
@@ -108,7 +109,7 @@ BackdropFilter with ImageFilter.blur()"*. Somewhere in the thread is the fix.
 ![The workaround, in the issue thread](/media/backdrop/06-issue-workaround.webp)
 
 A BackdropFilter is a blur over whatever is painted behind it, the app is called Backdrop, and the
-reveal screen is a route you navigate to. Still a guess.
+reveal screen is a route you navigate to. Still a guess though.
 
 It isn't the emulator's fault either, and it isn't a default gone wrong: `MainActivity` overrides
 `getFlutterShellArgs()` and builds the engine's startup flags from integer arrays XORed with 90,
