@@ -10,7 +10,7 @@ The user's latest decisions supersede the historical theme plans below:
   Rotate the opening backgrounds every six seconds, with manual controls; pause while hovered or keyboard-focused.
   Respect reduced motion and pause rotation offscreen or in a hidden tab.
   The lectern photo (IMG_2550) opens the site; IMG_2538 introduces the blog;
-  IMG_2546 stays in the personal introduction, displayed in black and white on the left, with text on the right.
+  IMG_2546 stays in the personal introduction, displayed in black and white across the section, with text overlaid on the right.
   Use dots, not visible photo titles.
 - The role line and work link use readable sans-serif text with normal spacing.
 - Keep the About content, with smaller type and tighter spacing. Certifications
