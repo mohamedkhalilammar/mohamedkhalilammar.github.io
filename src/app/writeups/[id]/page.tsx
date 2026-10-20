@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   // NOTE: a page-level `openGraph` object replaces the root one instead of
   // merging, so the shared preview image + url must be repeated here or
   // article links get no embed image.
-  const images = [{ url: "/opengraph-image.png", width: 1200, height: 630, alt: "Khalil Ammar — Security & Intelligence" }];
+  const images = [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "Khalil Ammar — Security & Intelligence" }];
   return {
     title: post.title + " — Khalil Ammar",
     description: post.summary,
     openGraph: { title: post.title, description: post.summary, url: `/writeups/${id}`, siteName: "Khalil Ammar", type: "article", images, authors: ["Khalil Ammar"], ...(!post.dateIsPlaceholder ? { publishedTime: post.date } : {}) },
-    twitter: { card: "summary_large_image", title: post.title, description: post.summary, images: ["/opengraph-image.png"] },
+    twitter: { card: "summary_large_image", title: post.title, description: post.summary, images: ["/opengraph-image.jpg"] },
   };
 }
 

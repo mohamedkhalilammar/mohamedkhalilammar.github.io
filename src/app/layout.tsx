@@ -45,13 +45,13 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "Khalil Ammar",
     type: "website",
-    // Image comes from ./opengraph-image.png via the file convention.
+    // Image comes from ./opengraph-image.jpg via the file convention.
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    // Image falls back to ./opengraph-image.png.
+    // Image falls back to ./opengraph-image.jpg.
   },
 };
 
