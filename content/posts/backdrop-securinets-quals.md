@@ -2,6 +2,7 @@
 id: "backdrop-securinets-quals"
 title: "Backdrop"
 competition: "Securinets International Quals 2026"
+competitionLogo: "/media/securinets-logo.webp"
 category: "CTF Writeups"
 date: "2026-10-20"
 summary: "An x86_64-only Flutter challenge that forces Impeller down a broken emulator path, then turns the APK signing certificate into the key for revealing its flag."

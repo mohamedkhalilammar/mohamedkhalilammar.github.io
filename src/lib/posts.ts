@@ -31,6 +31,7 @@ export type PostMeta = {
   dateIsPlaceholder?: boolean;
   summary: string;
   competition?: string;
+  competitionLogo?: string;
   tags: string[];
   cover?: string;
   flag?: string;
@@ -203,6 +204,7 @@ function parsePost(file: string, raw: string): Post {
     dateIsPlaceholder: data.dateIsPlaceholder === true,
     summary,
     competition: data.competition ? String(data.competition).trim() : undefined,
+    competitionLogo: data.competitionLogo ? String(data.competitionLogo).trim() : undefined,
     tags: (data.tags ?? []).map((tag: unknown) => String(tag).trim()).filter(Boolean),
     cover: data.cover ? String(data.cover).trim() : undefined,
     flag: data.flag ? String(data.flag).trim() : undefined,

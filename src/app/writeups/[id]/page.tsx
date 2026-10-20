@@ -43,14 +43,18 @@ export default async function WriteupPage({ params }: { params: Promise<{ id: st
       <SiteHeader />
       <ScrollProgress />
       <main id="main-content" className="journal-container reader-container">
-        <nav className="article-breadcrumb" aria-label="Breadcrumb"><Link href="/blog">← All articles</Link><span aria-hidden>/</span><Link href={"/blog?category=" + encodeURIComponent(post.category)}>{post.category}</Link></nav>
+        <nav className="article-breadcrumb" aria-label="Breadcrumb"><Link href="/blog">All articles</Link><span aria-hidden="true">›</span><Link href={"/blog?category=" + encodeURIComponent(post.category)}>{post.category}</Link></nav>
         <article>
           <header className={`article-header${post.competition ? " article-header--competition" : ""}`}>
-            <div className="article-hero-kicker"><p className="eyebrow"><span className="hero-signal" aria-hidden />{post.category}</p></div>
+            <div className="article-header-main">
             <h1>{post.title}</h1>
-            <p className={post.competition ? "article-competition" : "article-deck"}>{post.competition ?? post.summary}</p>
-            <div className="article-hero-topics">{post.tags.slice(0, 4).map(tag => <Link key={tag} href={"/blog?tag=" + encodeURIComponent(tag)}>{tag}<span aria-hidden>↗</span></Link>)}</div>
-            <div className="article-hero-bottom"><div className="article-byline"><span className="author-monogram" aria-hidden>KA</span><div><span>Khalil Ammar</span><span className="journal-meta">{!post.dateIsPlaceholder && <><time dateTime={post.date}>{new Date(post.date + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}</time></>}</span></div></div><a className="hero-browse" href="#article-start">Begin reading <span aria-hidden>↓</span></a></div>
+            {post.competition ? (
+              <div className="article-competition">
+                {post.competitionLogo && <Image className="article-competition-logo" src={post.competitionLogo} alt="" width={56} height={56} />}
+                <p>{post.competition}</p>
+              </div>
+            ) : <p className="article-deck">{post.summary}</p>}
+            </div>
           </header>
           {post.cover && <figure className="article-cover"><Image src={post.cover} alt={post.title + " — project preview"} width={1200} height={675} priority /></figure>}
           <div className="article-layout">
