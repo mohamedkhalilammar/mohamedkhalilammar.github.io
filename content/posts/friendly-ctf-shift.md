@@ -2,6 +2,8 @@
 id: "friendly-ctf-shift"
 title: "Shift"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The key check is a hand-written XOR-and-rotate loop compared against a table in .rodata, so there is no library call to trace and you have to read the loop and run it backwards."
 flag: "Securinets{r0ll_1t_b4ck_0n3_byt3_4t_4_t1m3_5e02}"

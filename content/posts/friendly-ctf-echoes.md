@@ -2,6 +2,8 @@
 id: "friendly-ctf-echoes"
 title: "Echoes"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The app writes a sensitive value to logcat during normal use; capture it with adb while driving the screen."
 flag: "Securinets{th3_app_t4lks_t00_much_9cd6e756}"

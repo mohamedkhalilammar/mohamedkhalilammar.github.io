@@ -2,6 +2,8 @@
 id: "friendly-ctf-dor"
 title: "DOR"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The profile endpoint takes any valid token and hands back whichever account id you ask for, so you change the id in the request and read someone else's record."
 flag: "Securinets{f4c9a2e7-b81d-4f3a-9c6e-2b7d5a1f8e3c}"

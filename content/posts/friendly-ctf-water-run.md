@@ -2,6 +2,8 @@
 id: "friendly-ctf-water-run"
 title: "Water Run"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "Two ways through a Godot runner: edit jump power with Cheat Engine, or reverse the native DLL and recover the encrypted flag offline."
 flag: "Securinets{1f_th3_g4me_w0nt_l3t_y0u_w1n_ch4nge_1t}"

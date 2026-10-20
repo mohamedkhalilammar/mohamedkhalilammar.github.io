@@ -2,6 +2,8 @@
 id: "friendly-ctf-license"
 title: "License"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The paid-or-not decision runs entirely on the device, so you patch the smali that makes it (or hook it) to return licensed, and the app computes the flag for you."
 flag: "Securinets{l1c3ns3_d3nied_2f7e4b3a}"

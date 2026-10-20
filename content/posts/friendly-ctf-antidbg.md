@@ -2,6 +2,8 @@
 id: "friendly-ctf-antidbg"
 title: "AntiDbg"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "An anti-debug check refuses to run under a debugger, so you let it run, let it get its answer, then change that answer in a register before the program reads it."
 flag: "Securinets{fl1p_th3_r3g1st3r_n0t_th3_byt3s_4c7f}"

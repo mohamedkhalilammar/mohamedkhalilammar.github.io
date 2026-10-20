@@ -2,6 +2,8 @@
 id: "friendly-ctf-forged-papers"
 title: "Forged Papers"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The JWT is signed correctly with HS256 but the secret is a rockyou.txt word, so you crack it offline, mint a token that says role admin, and re-sign it."
 flag: "Securinets{forged_papers_grant_admin}"

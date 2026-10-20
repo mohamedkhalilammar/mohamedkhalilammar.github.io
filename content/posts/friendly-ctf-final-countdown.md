@@ -2,6 +2,8 @@
 id: "friendly-ctf-final-countdown"
 title: "Final Countdown"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "Five times to hit in a row, each counted only while the app genuinely reads that time, verified by the server, so you hook the exact clock the checker reads and feed it each target."
 flag: "Securinets{th3_cl0ck_1s_th3_1nput_fa51adbf}"

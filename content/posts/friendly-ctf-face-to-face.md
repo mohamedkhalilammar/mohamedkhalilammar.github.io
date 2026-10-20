@@ -2,6 +2,8 @@
 id: "friendly-ctf-face-to-face"
 title: "Face to Face"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The biometric prompt's success callback is trusted client-side with no CryptoObject, so hooking it opens the vault with no fingerprint."
 flag: "Securinets{n3v3r_ch3ck3d_y0ur_f4c3_2ebfa0af}"

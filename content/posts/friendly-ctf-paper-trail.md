@@ -2,6 +2,8 @@
 id: "friendly-ctf-paper-trail"
 title: "Paper Trail"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A 10 MB Linux binary that is really a PyInstaller bundle, so you extract it, decompile the Python bytecode, and read the passphrase and flag unsealing straight out of the source."
 flag: "Securinets{unp4ck_th3_pyth0n_4nd_r34d_1t_2d8b}"

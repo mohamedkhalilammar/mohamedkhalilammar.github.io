@@ -2,6 +2,8 @@
 id: "friendly-ctf-open-lines"
 title: "Open Lines"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The login talks over plain HTTP and the response carries an extra field the app never shows, so anything sitting on the wire reads the flag out of the body."
 flag: "Securinets{party_line_was_never_encrypted}"

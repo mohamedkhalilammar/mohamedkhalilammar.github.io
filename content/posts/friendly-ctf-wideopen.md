@@ -2,6 +2,8 @@
 id: "friendly-ctf-wideopen"
 title: "WideOpen"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The Firebase database has its read rule left open, so the whole customer table dumps over REST and one password hash in it is crackable."
 flag: "Securinets{azerty123}"

@@ -2,6 +2,8 @@
 id: "friendly-ctf-nobody-called"
 title: "Nobody Called"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A native library still exports the unseal routine for a note format the UI dropped, and nothing in the app calls it, so you call it yourself with the live nonce from the server."
 flag: "Securinets{c4ll_1t_y0urs3lf_8b3f21}"

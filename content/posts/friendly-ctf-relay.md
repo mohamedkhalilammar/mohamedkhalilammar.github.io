@@ -2,6 +2,8 @@
 id: "friendly-ctf-relay"
 title: "Relay"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The binary checks in with a server that does not exist, so you read the hostname out of its DNS query with strace, point that name at yourself, and answer its HTTP request with the token it sends you."
 flag: "Securinets{4nsw3r_th3_c4ll_y0urs3lf_1e7d}"

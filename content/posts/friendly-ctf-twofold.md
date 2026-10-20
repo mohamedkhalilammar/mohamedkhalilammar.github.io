@@ -2,6 +2,8 @@
 id: "friendly-ctf-twofold"
 title: "Twofold"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 draft: true
 date: "2026-09-27"
 summary: "A .NET binary decompiles back to readable C#, so you can either read how it builds its access code or breakpoint the moment it does."

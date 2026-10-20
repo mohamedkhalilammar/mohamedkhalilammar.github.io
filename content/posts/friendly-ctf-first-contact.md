@@ -2,6 +2,8 @@
 id: "friendly-ctf-first-contact"
 title: "First Contact"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A hardcoded account name and an MD5 of its password ship in the APK; crack the hash, then let the server verify the plaintext."
 flag: "Securinets{sh1pp3d_1n_th3_0p3n}"

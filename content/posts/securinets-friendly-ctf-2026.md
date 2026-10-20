@@ -2,6 +2,8 @@
 id: "securinets-friendly-ctf-2026"
 title: "Securinets Friendly CTF 2026: the challenges I built"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-28"
 summary: "Twenty-six challenges I shipped for Securinets INSAT's beginner CTF: one Android app holding the whole Mobile track, and a reverse engineering ladder from ltrace to Cheat Engine."
 tags:

@@ -2,6 +2,8 @@
 id: "friendly-ctf-doorman"
 title: "Doorman"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The badge code is stored scrambled so strings finds nothing, but the program checks your input with strcmp, and ltrace prints both sides of that comparison."
 flag: "Securinets{th3_d00r_0p3n3d_1ts3lf_a71c}"

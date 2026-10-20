@@ -2,6 +2,8 @@
 id: "friendly-ctf-off-the-map"
 title: "Off the Map"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A diagnostics screen was dropped from the app's navigation but is still exported in the manifest, so it can be launched directly with adb."
 flag: "Securinets{br1dg3_t00_far_455c016c}"

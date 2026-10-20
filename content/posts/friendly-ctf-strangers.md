@@ -2,6 +2,8 @@
 id: "friendly-ctf-strangers"
 title: "Strangers"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A bundled analytics SDK the app didn't write ships telemetry to its own server on a different host and port, and the reply carries a value the app never shows."
 flag: "Securinets{th3_p4ss3ng3r_c4lls_h0m3}"

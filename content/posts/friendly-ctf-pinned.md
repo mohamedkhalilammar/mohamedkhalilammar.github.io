@@ -2,6 +2,8 @@
 id: "friendly-ctf-pinned"
 title: "PINNED"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The app pins its server certificate so an ordinary proxy fails, so you disable the pinning on the device with Frida and read the audit response the app never shows."
 flag: "Securinets{sealed_envelope_pin_bypassed}"

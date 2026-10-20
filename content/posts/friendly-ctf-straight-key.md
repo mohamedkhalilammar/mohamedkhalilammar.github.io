@@ -2,6 +2,8 @@
 id: "friendly-ctf-straight-key"
 title: "Straight Key"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "Triage an unfamiliar Windows executable, trace its runtime API calls, and build a receiver for the behavior you uncover."
 flag: "Securinets{HELDNOTTYPED}"

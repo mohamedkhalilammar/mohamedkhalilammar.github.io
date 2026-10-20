@@ -2,6 +2,8 @@
 id: "friendly-ctf-plain-sight"
 title: "Plain Sight"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The flag is a plain string resource inside the APK; decoding the app's resources reads it straight out."
 flag: "Securinets{r3s0urc3s_4r3_n0t_h1dd3n}"

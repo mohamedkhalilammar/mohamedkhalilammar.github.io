@@ -2,6 +2,8 @@
 id: "friendly-ctf-l0gin"
 title: "L0gIn"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The login form builds a SQL query by pasting your input into a string, so a single quote breaks out and you log in as admin without the password."
 flag: "Securinets{qu0t3_y0ur_w4y_1n_3b3a28f6}"

@@ -2,6 +2,8 @@
 id: "friendly-ctf-warmup"
 title: "Warmup"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "The app encrypts a value with AES but ships the key and IV right beside the ciphertext, so you decrypt it yourself."
 flag: "Securinets{k3y_und3r_th3_d00rmat_ddf88982}"

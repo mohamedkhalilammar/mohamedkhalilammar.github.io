@@ -2,6 +2,8 @@
 id: "friendly-ctf-water-run-revenge"
 title: "Water Run: Revenge"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A Sekiro-inspired fly-hacking challenge: find live vertical velocity with Cheat Engine, or recover the flag offline by reversing the native DLL."
 flag: "Securinets{v3locity_is_gr4vity_with_attitude}"

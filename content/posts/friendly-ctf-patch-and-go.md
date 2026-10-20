@@ -2,6 +2,8 @@
 id: "friendly-ctf-patch-and-go"
 title: "Patch&Go"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A licence check hashes a file against a constant you are not meant to match, so instead of passing it you patch the function to return 1, or set its return value in gdb."
 flag: "Securinets{0n3_byt3_1s_4ll_1t_t00k_c93f}"

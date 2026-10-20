@@ -2,6 +2,8 @@
 id: "friendly-ctf-what-remains"
 title: "What Remains"
 category: "CTF Writeups"
+competition: "Securinets Friendly CTF 2026"
+competitionLogo: "/media/securinets-logo.webp"
 date: "2026-09-27"
 summary: "A value the app saved to its own private SQLite database stays on disk after the screen stops showing it; read it off the data directory."
 flag: "Securinets{pl41nt3xt_3v1d3nc3_7de67f16}"
