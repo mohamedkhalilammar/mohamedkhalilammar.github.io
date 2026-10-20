@@ -7,7 +7,6 @@ summary: "A value the app saved to its own private SQLite database stays on disk
 flag: "Securinets{pl41nt3xt_3v1d3nc3_7de67f16}"
 tags:
   - "Mobile Security"
-  - "Forensics"
 ---
 
 This screen has one button: save data to the device. Press it and it writes, tells you it is done, and shows you nothing else. That is the trick. The app stored something and moved on, but "the UI stopped showing it" is not the same as "it is gone." It is still sitting in the app's own storage, and the device owner can read that.

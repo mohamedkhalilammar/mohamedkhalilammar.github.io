@@ -7,7 +7,6 @@ summary: "The app writes a sensitive value to logcat during normal use; capture 
 flag: "Securinets{th3_app_t4lks_t00_much_9cd6e756}"
 tags:
   - "Mobile Security"
-  - "Forensics"
 ---
 
 This screen has one button that says it writes to the system log. That is not a distraction, it is the whole challenge. Apps talk to the log constantly while they run — debug lines, status messages, the sort of thing developers add and forget to remove. This one logs something it should not, and if you are watching the log when it does, you read it straight off.

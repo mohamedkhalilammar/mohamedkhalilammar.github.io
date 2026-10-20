@@ -30,6 +30,7 @@ export type PostMeta = {
   /** Migrated writeups carry a synthesised date until real ones are filled in. */
   dateIsPlaceholder?: boolean;
   summary: string;
+  competition?: string;
   tags: string[];
   cover?: string;
   flag?: string;
@@ -201,6 +202,7 @@ function parsePost(file: string, raw: string): Post {
     date,
     dateIsPlaceholder: data.dateIsPlaceholder === true,
     summary,
+    competition: data.competition ? String(data.competition).trim() : undefined,
     tags: (data.tags ?? []).map((tag: unknown) => String(tag).trim()).filter(Boolean),
     cover: data.cover ? String(data.cover).trim() : undefined,
     flag: data.flag ? String(data.flag).trim() : undefined,
@@ -228,7 +230,8 @@ let cache: Post[] | null = null;
  * Invalid frontmatter throws and fails the build.
  */
 export function getAllPosts(): Post[] {
-  if (cache) return cache;
+  // Markdown edits must appear immediately in the local preview.
+  if (cache && process.env.NODE_ENV !== "development") return cache;
 
   if (!fs.existsSync(CONTENT_DIR)) {
     cache = [];

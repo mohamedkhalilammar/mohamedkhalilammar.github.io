@@ -7,7 +7,6 @@ summary: "The app encrypts a value with AES but ships the key and IV right besid
 flag: "Securinets{k3y_und3r_th3_d00rmat_ddf88982}"
 tags:
   - "Mobile Security"
-  - "Cryptography"
 ---
 
 This screen shows you a blob of encrypted data and a button that refuses to open it. The app is honest about it: the button does nothing, and the screen will never show you the contents. The message on screen even tells you the maths is fine — real AES, a real mode, real padding. So this is not about breaking crypto. It is about noticing that the app has to decrypt this on your phone, which means everything it needs to decrypt it is on your phone too.

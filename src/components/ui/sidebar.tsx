@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 const navigationLinks = [
   { label: "About", href: "#about" },
@@ -80,8 +79,8 @@ export function Sidebar({ onArcadeOpen }: { onArcadeOpen?: () => void }) {
                             }
                             setIsOpen(false);
                           }} 
-                          target={(item as any).target || "_self"}
-                          rel={(item as any).rel || ""}
+                          target={item.target || "_self"}
+                          rel={item.rel || ""}
                           className="nav-smooth-btn group"
                         >
                           <div className="nav-btn-text">
@@ -100,12 +99,6 @@ export function Sidebar({ onArcadeOpen }: { onArcadeOpen?: () => void }) {
                 </div>
                 
                 <div className="mt-auto pt-8 border-t border-[color:var(--line-strong)] px-2">
-                  <div className="mb-5">
-                    <p className="text-[0.7rem] uppercase tracking-[0.2em] text-[color:var(--text-muted)] mb-3 font-mono opacity-80">
-                      Appearance
-                    </p>
-                    <ThemeToggle />
-                  </div>
                   <div className="flex gap-6 font-mono text-[0.85rem]">
                     <a href="https://linkedin.com/in/khalilammarr" target="_blank" rel="noopener noreferrer" className="text-[color:var(--foreground)] hover:text-[color:var(--accent)] transition-colors">LinkedIn</a>
                     <a href="https://github.com/khalilammarr" target="_blank" rel="noopener noreferrer" className="text-[color:var(--foreground)] hover:text-[color:var(--accent)] transition-colors flex items-center gap-2">

@@ -45,10 +45,10 @@ export default async function WriteupPage({ params }: { params: Promise<{ id: st
       <main id="main-content" className="journal-container reader-container">
         <nav className="article-breadcrumb" aria-label="Breadcrumb"><Link href="/blog">← All articles</Link><span aria-hidden>/</span><Link href={"/blog?category=" + encodeURIComponent(post.category)}>{post.category}</Link></nav>
         <article>
-          <header className="article-header">
+          <header className={`article-header${post.competition ? " article-header--competition" : ""}`}>
             <div className="article-hero-kicker"><p className="eyebrow"><span className="hero-signal" aria-hidden />{post.category}</p></div>
             <h1>{post.title}</h1>
-            <p className="article-deck">{post.summary}</p>
+            <p className={post.competition ? "article-competition" : "article-deck"}>{post.competition ?? post.summary}</p>
             <div className="article-hero-topics">{post.tags.slice(0, 4).map(tag => <Link key={tag} href={"/blog?tag=" + encodeURIComponent(tag)}>{tag}<span aria-hidden>↗</span></Link>)}</div>
             <div className="article-hero-bottom"><div className="article-byline"><span className="author-monogram" aria-hidden>KA</span><div><span>Khalil Ammar</span><span className="journal-meta">{!post.dateIsPlaceholder && <><time dateTime={post.date}>{new Date(post.date + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}</time></>}</span></div></div><a className="hero-browse" href="#article-start">Begin reading <span aria-hidden>↓</span></a></div>
           </header>
@@ -64,7 +64,7 @@ export default async function WriteupPage({ params }: { params: Promise<{ id: st
             </div>
           </div>
         </article>
-        {related.length > 0 && <section className="related-articles" aria-labelledby="related-heading"><div className="related-heading"><h2 id="related-heading">Related articles</h2><Link href="/blog">All articles ↗</Link></div><div className="related-grid">{related.map(p => <Link key={p.id} href={"/writeups/" + p.id}><span className="journal-meta">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p><span className="journal-read">Read article <span aria-hidden>↗</span></span></Link>)}</div></section>}
+        {related.length > 0 && <section className="related-articles" aria-labelledby="related-heading"><div className="related-heading"><h2 id="related-heading">Related articles</h2></div><div className="related-grid">{related.map(p => <Link key={p.id} href={"/writeups/" + p.id}><span className="journal-meta">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p><span className="journal-read">Read article <span aria-hidden>↗</span></span></Link>)}</div></section>}
       </main>
       <EnhancedFooter />
     </div>

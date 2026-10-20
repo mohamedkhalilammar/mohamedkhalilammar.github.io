@@ -4,8 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { ctfWriteups, profile, projects } from "@/data/portfolio";
-import { useTheme } from "@/components/ui/theme-provider";
-import { THEME_LABELS, otherTheme } from "@/lib/theme";
 
 type PaletteItem = {
   id: string;
@@ -66,9 +64,17 @@ const GROUP_ICONS: Record<PaletteItem["group"], React.ReactNode> = {
  */
 export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: CommandPaletteProps) {
   const router = useRouter();
-  const { theme, toggleTheme } = useTheme();
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
+  const [previousOpen, setPreviousOpen] = useState(isOpen);
+  // Reset this component before rendering a newly opened search session.
+  if (previousOpen !== isOpen) {
+    setPreviousOpen(isOpen);
+    if (isOpen) {
+      setQuery("");
+      setSelected(0);
+    }
+  }
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
@@ -103,14 +109,6 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
     }));
 
     const actions: PaletteItem[] = [
-      {
-        id: "act-theme",
-        label: `Switch to ${THEME_LABELS[otherTheme(theme)]} Theme`,
-        group: "Actions",
-        hint: THEME_LABELS[otherTheme(theme)],
-        keywords: "theme dark light appearance colour color midnight amber",
-        action: toggleTheme,
-      },
       { id: "act-arcade", label: "Open the Arcade", group: "Actions", hint: "Play", keywords: "game snake tetris pong", action: onArcade },
       { id: "act-breach", label: "Initiate Breach Protocol", group: "Actions", hint: "???", keywords: "matrix rain hack easter egg", action: onBreach },
       {
@@ -142,7 +140,7 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
     ];
 
     return [...nav, ...proj, ...writeups, ...actions];
-  }, [router, onArcade, onBreach, theme, toggleTheme]);
+  }, [router, onArcade, onBreach]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -165,16 +163,12 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, onOpen, onClose]);
 
-  // Reset + focus on open
+  // Focus after the opening panel has mounted.
   useEffect(() => {
     if (!isOpen) return;
-    setQuery("");
-    setSelected(0);
     const t = setTimeout(() => inputRef.current?.focus(), 30);
     return () => clearTimeout(t);
   }, [isOpen]);
-
-  useEffect(() => setSelected(0), [query]);
 
   useEffect(() => {
     listRef.current
@@ -230,7 +224,7 @@ export function CommandPalette({ isOpen, onOpen, onClose, onArcade, onBreach }: 
               <input
                 ref={inputRef}
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => { setQuery(e.target.value); setSelected(0); }}
                 onKeyDown={onInputKey}
                 placeholder="Type a command or search…"
                 aria-label="Search commands"

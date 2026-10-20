@@ -8,7 +8,6 @@ summary: "Brute-forcing an obfuscated Go binary by targeting instruction alignme
 flag: "Securinets{1_L0v3_G0l4ng5_50_MuCH_d0n'T_You?}"
 tags:
   - "Reverse Engineering"
-  - "Cryptography"
 ---
 
 The challenge began with a mysterious executable: `gocipher.exe`. Initial execution revealed a deceptively simple command-line interface demanding a flag. I threw it headfirst into **IDA Pro** to dissect its internals. Digging into the *main_main* function, I was greeted by an intimidating wall of obfuscated Go assembly wrapping a complex **XOR and Linear Congruential Generator (LCG)** mathematical pattern.

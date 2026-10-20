@@ -1,5 +1,26 @@
 # Portfolio — current direction (2026-08-25)
 
+## Current refinement (2026-10-16)
+
+The user's latest decisions supersede the historical theme plans below:
+
+- **Dark only.** Light mode, its switcher, and saved-preference handling are removed.
+- **Photos are backgrounds, not framed galleries.** Distribute all three distinct
+  workshop photos across the opening, personal introduction, and blog introduction.
+  Rotate the opening backgrounds every six seconds, with manual controls; pause while hovered or keyboard-focused.
+  Respect reduced motion and pause rotation offscreen or in a hidden tab.
+  The lectern photo (IMG_2550) opens the site; IMG_2538 introduces the blog;
+  IMG_2546 stays in the personal introduction, displayed in black and white on the left, with text on the right.
+  Use dots, not visible photo titles.
+- The role line and work link use readable sans-serif text with normal spacing.
+- Keep the About content, with smaller type and tighter spacing. Certifications
+  stay compact, with complete descriptions available in expandable details.
+- The homepage presents the blog and links to it; no article previews on the homepage.
+  Articles live on /blog in compact reading rows. Only CTF Writeups has topic
+  checkboxes and groups; other categories use a single list with article tags;
+  retain search, filters, and chronological sorting.
+- Prefer brief opacity transitions, responsive photo assets, and static atmosphere.
+
 **This supersedes `REDESIGN-PLAN.md` and `HOMEPAGE-RESTRUCTURE.md`.** Both of those
 describe the light "Technical Editorial" redesign and the homepage teardown, which
 Khalil rejected. Read them as history only — do not execute them.

@@ -7,7 +7,6 @@ dateIsPlaceholder: true
 summary: "Reversing embedded PDF JavaScript and brute-forcing Steganographic image layers."
 flag: "MOJO-JOJO{h1dd3n_1n_pl41n_s1ght_pdf_m4g1c!}"
 tags:
-  - "Forensics"
   - "Reverse Engineering"
 ---
 

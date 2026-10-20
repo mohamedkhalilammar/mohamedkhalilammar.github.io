@@ -1,52 +1,21 @@
-"use client";
+/* eslint-disable @next/next/no-img-element -- Responsive assets are pre-generated for the static export. */
+interface Props { photos: string[]; }
 
-/**
- * AchievementPhotoStrip — shows achievement photos on mobile as a horizontal scroll strip.
- * On desktop the existing vertical photo stack is still used.
- *
- * Usage in page.tsx:
- *
- * 1. Move ACHIEVEMENT_PHOTOS outside the component (see bottom of this file).
- * 2. Add <AchievementPhotoStrip photos={ACHIEVEMENT_PHOTOS} /> just ABOVE the
- *    "grid grid-cols-1 lg:grid-cols-12" div, inside your achievements SectionShell.
- *
- * The strip is hidden on lg screens (lg:hidden), so it only shows on mobile/tablet.
- */
-
-import { motion } from "framer-motion";
-
-interface Props {
-  photos: string[];
-}
-
+/** Native scroll-snap gallery on mobile; desktop uses the adjacent photo column. */
 export function AchievementPhotoStrip({ photos }: Props) {
   return (
-    <div className="lg:hidden mb-10 overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory achievement-strip-scroll relative w-full">
-      <div
-        className="flex gap-4 px-6 pb-4"
-        style={{ width: "max-content" }}
-      >
-        {photos.map((src, i) => (
-          <motion.div
-            key={src + i}
-            initial={{ opacity: 0, x: 36, scale: 0.94 }}
-            whileInView={{ opacity: 1, x: 0, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-            className="photo-plate relative flex-shrink-0 snap-center w-[220px] h-[155px] rounded-2xl overflow-hidden border border-primary-500/25 shadow-lg group/photo"
-          >
-            <img
-              src={src}
-              alt={`Achievement photo ${i + 1}`}
-              className="w-full h-full object-cover object-center brightness-105 group-hover/photo:scale-105 transition-transform duration-500"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--photo-caption-soft)] to-transparent pointer-events-none" />
-          </motion.div>
-        ))}
-      </div>
-      {/* Scroll hint fade */}
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-[var(--background)] to-transparent" />
+    <div className="achievement-photo-strip lg:hidden" role="region" aria-label="Competition photos" tabIndex={0}>
+      {photos.map((src, i) => (
+        <img
+          key={src}
+          src={src.replace("-960.webp", "-480.webp")}
+          alt={`CTF competition and team achievement ${i + 1}`}
+          width={480}
+          height={360}
+          loading="lazy"
+          decoding="async"
+        />
+      ))}
     </div>
   );
 }

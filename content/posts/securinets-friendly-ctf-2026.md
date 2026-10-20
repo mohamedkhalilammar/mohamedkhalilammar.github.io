@@ -5,7 +5,6 @@ category: "CTF Writeups"
 date: "2026-09-28"
 summary: "Twenty-six challenges I shipped for Securinets INSAT's beginner CTF: one Android app holding the whole Mobile track, and a reverse engineering ladder from ltrace to Cheat Engine."
 tags:
-  - "Challenge Design"
   - "Mobile Security"
   - "Reverse Engineering"
 ---

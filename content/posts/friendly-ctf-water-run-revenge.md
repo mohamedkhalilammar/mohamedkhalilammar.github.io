@@ -7,7 +7,6 @@ summary: "A Sekiro-inspired fly-hacking challenge: find live vertical velocity w
 flag: "Securinets{v3locity_is_gr4vity_with_attitude}"
 tags:
   - "Reverse Engineering"
-  - "Game Hacking"
 ---
 
 Same game, same wall at 8,000 points, same jump that isn't enough. If you cleared Water Run, you already know what to reach for: find the jump value, make it bigger, hop over. So you attach Cheat Engine, set the type to `Float`, scan for `9.25347`, and get nothing. That value doesn't exist in this build. There's no helpful `JUMP` readout on the HUD either, and nothing on screen tells you what to look for.

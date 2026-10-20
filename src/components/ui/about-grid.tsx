@@ -64,36 +64,23 @@ const CARDS = [
 ];
 
 /**
- * AboutGrid — the bio as four always-visible glass cards: icon, number,
- * title, short copy. No accordions, no interaction required.
+ * The bio as four compact, always-visible topics.
  */
 export function AboutGrid() {
   return (
-    <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+    <div className="about-topics">
       {CARDS.map((card) => (
         <article
           key={card.id}
-          className="group relative rounded-3xl bg-[var(--surface-sunken)] ring-1 ring-[var(--line-border)] p-7 md:p-10 backdrop-blur-sm transition-all duration-300 hover:ring-primary-400/40 hover:bg-[var(--surface-sunken)] hover:-translate-y-1 hover:shadow-[0_20px_50px_-18px_rgba(129,140,248,0.3)]"
+          className="about-topic"
         >
-          {/* top hairline accent */}
-          <span
-            aria-hidden
-            className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-primary-400/50 via-primary-300/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          />
-
-          <div className="flex items-center justify-between mb-6 md:mb-7">
-            <span className="flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-primary-500/10 ring-1 ring-primary-500/20 text-primary-300 group-hover:bg-primary-500/15 group-hover:text-primary-200 transition-colors duration-300 [&_svg]:w-6 [&_svg]:h-6 md:[&_svg]:w-7 md:[&_svg]:h-7">
+          <div className="about-topic-heading">
+            <span className="about-topic-icon">
               {card.icon}
             </span>
-            <span className="text-2xl md:text-3xl font-black tabular-nums text-[var(--text-whisper)] group-hover:text-primary-400/20 transition-colors duration-300 select-none">
-              {card.id}
-            </span>
+            <h3>{card.title}</h3>
           </div>
-
-          <h3 className="text-[var(--text-ink)] font-bold tracking-tight text-xl md:text-2xl mb-3 md:mb-4">
-            {card.title}
-          </h3>
-          <p className="text-[15px] md:text-[17px] leading-[1.75] text-[var(--text-muted)] [text-wrap:pretty]">
+          <p>
             {richBody(card.body)}
           </p>
         </article>

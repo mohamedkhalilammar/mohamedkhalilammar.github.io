@@ -7,7 +7,6 @@ summary: "Two ways through a Godot runner: edit jump power with Cheat Engine, or
 flag: "Securinets{1f_th3_g4me_w0nt_l3t_y0u_w1n_ch4nge_1t}"
 tags:
   - "Reverse Engineering"
-  - "Game Hacking"
 ---
 
 You play a runner. You're carrying a six-pack of water down a Tunisian medina alley, a crowd is chasing you, and you dodge and jump obstacles while the score climbs. It plays fine. Then at 8,000 points a wall drops across all three lanes at once, and your jump doesn't clear it. It's not a timing thing you can practice. The wall is taller than you can jump, full stop.

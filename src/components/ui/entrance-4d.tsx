@@ -1,258 +1,118 @@
 "use client";
 
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+/* eslint-disable @next/next/no-img-element -- Static hosting uses pre-generated responsive photos. */
 import { useCallback, useEffect, useRef, useState } from "react";
 
-const BG_PHOTOS = [
-  "/media/cybersphere.jpeg",
-  "/media/finals.jpg",
-  "/media/photo.jpg",
-  "/media/security-talk-detail-960.webp",
+const PHOTOS = [
+  { name: "Speaking", file: "workshop-writing", alt: "Khalil speaking at the lectern during a workshop on AI and cybersecurity.", portrait: true },
+  { name: "Cybersphere", file: "cybersphere", alt: "Khalil and his teammates holding their first-place prize at Cybersphere Congress.", portrait: false },
+  { name: "CTF finals", file: "finals", alt: "Khalil and his team working together during the CTF finals.", portrait: false },
+  { name: "Competition", file: "photo", alt: "Khalil holding competition prizes at a cybersecurity event.", portrait: false },
 ];
 
-const LABELS = ["Cyber Lab", "CTF Finals", "Portrait", "Cybersecurity workshop"]; // a11y only (indicator labels)
-
-const AUTO_MS = 5200;
-
+/** Decoded photo crossfades with optional automatic rotation. */
 export function CreativeEntrance4D() {
-  const reducedMotion = useReducedMotion();
-  // slide index + travel direction so transitions can wipe from the right side
-  const [slide, setSlide] = useState<{ idx: number; dir: 1 | -1 }>({ idx: 0, dir: 1 });
-  const current = slide.idx;
-
-  const advance = useCallback((dir: 1 | -1) => {
-    setSlide((s) => ({ idx: (s.idx + dir + BG_PHOTOS.length) % BG_PHOTOS.length, dir }));
+  const [current, setCurrent] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [pending, setPending] = useState<number | null>(null);
+  const [photoError, setPhotoError] = useState(false);
+  const images = useRef<(HTMLImageElement | null)[]>([]);
+  const requested = useRef(0);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  const section = useRef<HTMLElement | null>(null);
+  const selectPhoto = useCallback(async (index: number) => {
+    requested.current = index;
+    setPending(index);
+    setPhotoError(false);
+    try {
+      const image = images.current[index];
+      if (!image) throw new Error("Photo unavailable");
+      image.loading = "eager";
+      if (!image.getAttribute("src")) {
+        const file = PHOTOS[index].file;
+        image.srcset = `/media/optimized/${file}-480.webp 480w, /media/optimized/${file}-960.webp 960w, /media/optimized/${file}-1600.webp 1600w`;
+        image.src = `/media/optimized/${file}-1600.webp`;
+      }
+      await image.decode();
+      if (requested.current === index) setCurrent(index);
+    } catch {
+      if (requested.current === index) setPhotoError(true);
+    } finally {
+      if (requested.current === index) setPending(null);
+    }
   }, []);
-
-  const goTo = useCallback(
-    (idx: number) => setSlide((s) => ({ idx, dir: idx >= s.idx ? 1 : -1 })),
-    []
-  );
-
-  // Autoplay — resets on any slide change so the progress bar stays in sync
   useEffect(() => {
-    if (reducedMotion) return;
-    const t = setInterval(() => advance(1), AUTO_MS);
-    return () => clearInterval(t);
-  }, [advance, current, reducedMotion]);
-
-  // Touch swipe
-  const touchStartX = useRef(0);
-  const onTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  const onTouchEnd = (e: React.TouchEvent) => {
-    const delta = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(delta) > 50) advance(delta > 0 ? 1 : -1);
-  };
+    if (paused) return;
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const timer = window.setInterval(() => {
+      const bounds = section.current?.getBoundingClientRect();
+      if (motion.matches || document.hidden || !bounds || bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
+      void selectPhoto((requested.current + 1) % PHOTOS.length);
+    }, 6000);
+    return () => window.clearInterval(timer);
+  }, [paused, current, selectPhoto]);
+  const advance = (direction: number) => { void selectPhoto((requested.current + direction + PHOTOS.length) % PHOTOS.length); };
 
   return (
     <section
       id="entrance"
+      ref={section}
       aria-label="Introduction"
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-      className="entrance-cover relative w-full overflow-hidden flex items-center justify-start"
+      className="portfolio-entrance"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false); }}
+      onTouchStart={event => { touchStart.current = { x: event.touches[0].clientX, y: event.touches[0].clientY }; }}
+      onTouchEnd={event => {
+        if (!touchStart.current) return;
+        const dx = touchStart.current.x - event.changedTouches[0].clientX;
+        const dy = touchStart.current.y - event.changedTouches[0].clientY;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) advance(dx > 0 ? 1 : -1);
+        touchStart.current = null;
+      }}
+      onTouchCancel={() => { touchStart.current = null; }}
     >
-      {/* ── Full-bleed photo background ── */}
-      <div className="absolute inset-0 z-0" aria-hidden>
-        <AnimatePresence initial={false} mode="sync" custom={slide.dir}>
-          <BgPhoto
-            key={current}
-            src={BG_PHOTOS[current]}
-            idx={current}
-            dir={slide.dir}
-            reducedMotion={!!reducedMotion}
+      <div className="entrance-backgrounds">
+        {PHOTOS.map((photo, index) => (
+          <img
+            key={photo.file}
+            ref={element => { images.current[index] = element; }}
+            src={index === 0 ? `/media/optimized/${photo.file}-1600.webp` : undefined}
+            srcSet={index === 0 ? `/media/optimized/${photo.file}-480.webp 480w, /media/optimized/${photo.file}-960.webp 960w, /media/optimized/${photo.file}-1600.webp 1600w` : undefined}
+            sizes={photo.portrait ? "(min-width: 768px) 65vw, 100vw" : "100vw"}
+            width={960}
+            height={photo.portrait ? 1280 : 720}
+            alt={photo.alt}
+            aria-hidden={index !== current}
+            data-active={index === current}
+            className={photo.portrait ? "entrance-photo entrance-photo--portrait" : "entrance-photo"}
+            fetchPriority={index === 0 ? "high" : "low"}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            draggable={false}
           />
-        </AnimatePresence>
-
-        {/* aurora wash + legibility scrims */}
-        <div className="entrance-aurora absolute inset-0 bg-[radial-gradient(ellipse_at_70%_12%,rgba(129,140,248,0.18),transparent_55%)]" />
-        <div className="entrance-veil absolute inset-0 bg-gradient-to-b from-[var(--photo-veil-strong)] via-[var(--photo-veil-mid)] to-[var(--surface-page)]" />
-        <div className="entrance-vignette absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,var(--photo-veil-mid)_100%)]" />
-        {/* bottom fade into page background */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-[var(--surface-page)]" />
-      </div>
-
-      {/* ── Content (left-aligned so the photo stays visible) ── */}
-      <div className="relative z-10 w-full max-w-[640px] mr-auto px-6 md:px-10 lg:px-16 text-left">
-        <h1
-          className="font-display font-extrabold uppercase leading-[0.9] tracking-[-0.02em] text-[var(--text-ink)]"
-          style={{ fontSize: "clamp(2.8rem, 5.8vw, 5rem)" }}
-        >
-          <span className="block overflow-hidden pb-[0.04em]">
-            <motion.span
-              className="block"
-              initial={false}
-              animate={{ y: "0%" }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-              style={{ textShadow: "0 4px 50px rgba(3,7,18,0.7)" }}
-            >
-              Khalil
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden pb-[0.06em]">
-            <motion.span
-              className="block"
-              initial={false}
-              animate={{ y: "0%" }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
-              style={{
-                background: "linear-gradient(100deg, var(--brand-grad-a) 0%, var(--brand-grad-b) 50%, var(--brand-grad-c) 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                filter: "drop-shadow(0 0 44px var(--accent-surface))",
-              }}
-            >
-              Ammar
-            </motion.span>
-          </span>
-        </h1>
-
-        <motion.p
-          initial={false}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.55 }}
-          className="mt-6 max-w-md font-mono text-[13px] md:text-sm uppercase tracking-[0.14em] leading-relaxed text-[var(--text-body)]"
-          style={{ textShadow: "0 1px 14px rgba(3,7,18,0.9)" }}
-        >
-          Cybersecurity Enthusiast{" "}
-          <br className="hidden sm:block" />
-          &amp; Engineering Student at INSAT.
-        </motion.p>
-
-        {/* ── Scroll cue ──
-               This is a title card, not a conversion surface: the buttons that
-               used to sit here pointed at #projects and #contact, the exact two
-               anchors the introduction below repeats. A visitor who has seen
-               nothing yet has no reason to press them, so the stage now hands
-               off to the introduction instead. ── */}
-        <motion.a
-          href="#projects"
-          initial={false}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.7 }}
-          className="entrance-scroll-cue group mt-10 inline-flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.24em] text-[var(--text-muted)] transition-colors hover:text-[var(--text-ink)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-400"
-          style={{ textShadow: "0 1px 14px rgba(3,7,18,0.9)" }}
-        >
-          <span>Explore my work</span>
-          <motion.svg
-            width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-            strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden
-            animate={reducedMotion ? undefined : { y: [0, 4, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <path d="M8 3v10M4 9l4 4 4-4" />
-          </motion.svg>
-        </motion.a>
-      </div>
-
-      {/* ── Story progress bar (no labels) ── */}
-      <div className="absolute left-6 md:left-10 lg:left-16 bottom-7 z-20 flex w-[min(260px,55vw)] items-center gap-2">
-        {BG_PHOTOS.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            type="button"
-            aria-pressed={current === i}
-            aria-label={`Show ${LABELS[i]}`}
-            className="entrance-photo-tab relative h-11 flex-1"
-          >
-            <span className="absolute inset-x-0 top-1/2 h-[2px] bg-[var(--line-border)]" />
-            {i === current && (
-              <motion.span
-                key={current}
-                className="absolute top-1/2 h-[2px] left-0"
-                style={{ background: "linear-gradient(90deg,var(--brand-grad-a),var(--brand-grad-b))" }}
-                initial={{ width: !reducedMotion ? "0%" : "100%" }}
-                animate={{ width: "100%" }}
-                transition={{ duration: !reducedMotion ? AUTO_MS / 1000 : 0, ease: "linear" }}
-              />
-            )}
-          </button>
         ))}
       </div>
-
-      {/* ── Arrows ── */}
-      <button onClick={() => advance(-1)} aria-label="Previous photo" className="entrance-arrow left-4 md:left-7">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="9,2 4,7 9,12" /></svg>
-      </button>
-      <button onClick={() => advance(1)} aria-label="Next photo" className="entrance-arrow right-4 md:right-7">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><polyline points="5,2 10,7 5,12" /></svg>
-      </button>
+      <div className="entrance-inner">
+        <div className="entrance-copy">
+          <h1><span>Khalil</span><span>Ammar</span></h1>
+          <p className="entrance-role">Cybersecurity enthusiast<br />&amp; engineering student at INSAT.</p>
+          <a className="entrance-work-link" href="#projects">Explore my work <span aria-hidden>↗</span></a>
+        </div>
+        <div className="entrance-controls" role="group" aria-label="Background photos" aria-busy={pending !== null}>
+          <div className="entrance-photo-tabs">
+            {PHOTOS.map((photo, index) => (
+              <button type="button" key={photo.file} aria-label={`Show ${photo.name}`} aria-pressed={current === index} onClick={() => { void selectPhoto(index); }}><span aria-hidden /></button>
+            ))}
+          </div>
+          <div className="entrance-photo-arrows">
+            <button type="button" onClick={() => advance(-1)} aria-label="Previous photo">←</button>
+            <button type="button" onClick={() => advance(1)} aria-label="Next photo">→</button>
+          </div>
+          <p className={photoError ? "entrance-photo-error" : "sr-only"} role="status">{photoError ? "Photo unavailable. Please choose another." : pending !== null ? "Loading photo…" : PHOTOS[current].alt}</p>
+        </div>
+      </div>
     </section>
-  );
-}
-
-type BgPhotoProps = {
-  src: string;
-  idx: number;
-  dir: 1 | -1;
-  reducedMotion: boolean;
-};
-
-/**
- * BgPhoto — cinematic slide: the incoming photo wipes in from the travel
- * direction (clip-path) while the outgoing one pans away underneath.
- * Ken Burns alternates per slide (even → slow zoom-in, odd → slow zoom-out)
- * so consecutive photos never move the same way.
- */
-function BgPhoto({ src, idx, dir, reducedMotion }: BgPhotoProps) {
-  const zoomIn = idx % 2 === 0;
-
-  const variants = {
-    enter: (d: 1 | -1) =>
-      reducedMotion
-        ? { opacity: 0 }
-        : {
-            clipPath: d === 1 ? "inset(0 0 0 100%)" : "inset(0 100% 0 0)",
-            scale: 1.06,
-            filter: "blur(6px)",
-            opacity: 1,
-          },
-    center: {
-      clipPath: "inset(0 0 0 0)",
-      scale: 1,
-      x: 0,
-      filter: "blur(0px)",
-      opacity: 1,
-    },
-    exit: (d: 1 | -1) =>
-      reducedMotion
-        ? { opacity: 0 }
-        : {
-            opacity: 0,
-            scale: 1.07,
-            x: d === 1 ? -60 : 60,
-            filter: "blur(5px)",
-          },
-  };
-
-  return (
-    <motion.div
-      className="absolute inset-0"
-      custom={dir}
-      variants={variants}
-      initial="enter"
-      animate="center"
-      exit="exit"
-      transition={{ duration: 1.15, ease: [0.22, 1, 0.36, 1] }}
-    >
-      <motion.img
-        src={src}
-        alt=""
-        draggable={false}
-        initial={reducedMotion ? { scale: 1 } : { scale: zoomIn ? 1 : 1.14, x: 0 }}
-        animate={
-          reducedMotion
-            ? { scale: 1 }
-            : { scale: zoomIn ? 1.12 : 1.03, x: zoomIn ? dir * -14 : dir * 10 }
-        }
-        transition={{ duration: AUTO_MS / 1000 + 1.5, ease: "easeOut" }}
-        className={`photo-plate--bare h-full w-full object-cover select-none${idx === 3 ? " entrance-workshop-photo" : ""}`}
-        style={{ objectPosition: idx === 3 ? undefined : "center 25%", filter: "contrast(1.04) saturate(0.95) brightness(0.92)" }}
-      />
-    </motion.div>
   );
 }

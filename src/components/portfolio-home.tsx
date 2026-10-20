@@ -1,8 +1,12 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- Static export uses pre-generated responsive WebP photos. */
 import { MotionConfig, motion, useReducedMotion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Credentials } from "@/components/ui/credentials";
 import { HomeJournal } from "@/components/ui/home-journal";
+import { WorkshopBackground } from "@/components/ui/workshop-background";
 import { SectionShell } from "@/components/sections/section-shell";
 import { AboutGrid } from "@/components/ui/about-grid";
 import { SiteHeader } from "@/components/ui/site-header";
@@ -15,31 +19,31 @@ import { ScrollProgress } from "@/components/ui/scroll-progress";
 import { Magnetic } from "@/components/ui/magnetic";
 import { EnhancedFooter } from "@/components/ui/enhanced-footer";
 import { EnhancedSkillModal } from "@/components/ui/enhanced-skill-modal";
-import { ArcadePanel } from "@/components/ui/arcade-panel";
-import { Atmosphere, PaperAtmosphere } from "@/components/ui/atmosphere";
-import { PaperPlate } from "@/components/ui/paper-atmosphere";
+import { Atmosphere } from "@/components/ui/atmosphere";
 import { CommandPalette } from "@/components/ui/command-palette";
-import { MatrixRain } from "@/components/ui/matrix-rain";
 import { CyberTicker } from "@/components/ui/cyber-ticker";
 import { StatCounters } from "@/components/ui/stat-counters";
 import { RadarSweep } from "@/components/ui/radar-sweep";
-import { achievements, certifications, ctfIdentity, learningPath, profile, projects, skillGroups } from "@/data/portfolio";
+import { achievements, ctfIdentity, profile, projects, skillGroups } from "@/data/portfolio";
 
+
+const ArcadePanel = dynamic(() => import("@/components/ui/arcade-panel").then(module => module.ArcadePanel), { ssr: false });
+const MatrixRain = dynamic(() => import("@/components/ui/matrix-rain").then(module => module.MatrixRain), { ssr: false });
 
 const ACHIEVEMENT_PHOTOS = [
-  "/media/team.jpeg",
-  "/media/winners.jpeg",
-  "/media/dup.jpeg",
-  "/media/finals.jpg",
-  "/media/scoreboard.jpeg",
-  "/media/cybercampphoto.jpg",
-  "/media/teamm.jpeg"
+  "/media/optimized/team-960.webp",
+  "/media/optimized/winners-960.webp",
+  "/media/optimized/dup-960.webp",
+  "/media/optimized/finals-960.webp",
+  "/media/optimized/scoreboard-960.webp",
+  "/media/optimized/cybercampphoto-960.webp",
+  "/media/optimized/teamm-960.webp"
 ];
 
 // Refined reveal config — tighter, more intentional
 const makeReveal = (reducedMotion: boolean) => ({
   initial: false,
-  whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+  whileInView: { opacity: 1, y: 0 },
   transition: reducedMotion ? { duration: 0 } : { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
   viewport: { once: true, amount: 0.08 },
 });
@@ -54,13 +58,6 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
     []
   );
   const [selectedSkillName, setSelectedSkillName] = useState(allSkills[0]?.name ?? "");
-  const [roleIdx, setRoleIdx] = useState(0);
-  const roles = ["CTF Player", "Cyber Security Enthusiast", "Engineering Student"];
-
-  useEffect(() => {
-    const interval = setInterval(() => setRoleIdx(p => (p + 1) % roles.length), 3200);
-    return () => clearInterval(interval);
-  }, []);
 
   const selectedSkill = allSkills.find((s) => s.name === selectedSkillName) ?? allSkills[0];
   const [isSkillAlertVisible, setIsSkillAlertVisible] = useState(false);
@@ -106,7 +103,7 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
         <SiteHeader onSearch={() => setIsPaletteOpen(true)} />
 
         <main id="main-content">
-          {/* ===== CINEMATIC ENTRANCE (re-keyed so its reveal replays after boot) ===== */}
+          {/* ===== INTRODUCTION & PHOTO GALLERY ===== */}
           <CreativeEntrance4D />
 
           {/* ===== HERO ===== */}
@@ -123,25 +120,12 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
               </div>
               
               <div className="personal-intro relative z-10">
-
+                <WorkshopBackground photo="introduction" alt="Khalil explaining PromptSpy and the role of AI during a cybersecurity workshop." />
                 {/* ── Text column ── */}
                 <div className="personal-intro-copy">
 
                   {/* Role eyebrow */}
-                  <p className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-[var(--text-muted)] uppercase tracking-[0.25em] mb-2 min-h-[1.6em]">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary-400 animate-pulse flex-shrink-0" aria-hidden />
-                    <AnimatePresence mode="wait">
-                      <motion.span
-                        key={roles[roleIdx]}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -8 }}
-                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        {roles[roleIdx]}
-                      </motion.span>
-                    </AnimatePresence>
-                  </p>
+                  <p className="intro-eyebrow">Cybersecurity &amp; engineering</p>
 
                   {/* Title */}
                   <h2 className="intro-heading">Security through curiosity.</h2>
@@ -166,15 +150,12 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
                     </Magnetic>
                   </div>
                 </div>
-                <figure className="personal-intro-photo">
-                  <img src="/media/security-talk-960.webp" srcSet="/media/security-talk-480.webp 480w, /media/security-talk-960.webp 960w" sizes="(min-width: 768px) 360px, calc(100vw - 48px)" width={960} height={1280} loading="lazy" decoding="async" alt="A speaker holding a microphone beside a slide titled AI in Cybersecurity: What We Already Know." />
-                </figure>
               </div>
 
               {/* ── About cards — all visible, no expanding ── */}
               <div id="about" className="relative z-10 mt-12 md:mt-16">
                 <div className="mb-8 md:mb-12">
-                  <h2 className="font-sans text-4xl md:text-5xl font-black uppercase tracking-tighter mb-2 leading-none text-[var(--text-ink)]">
+                  <h2 className="section-heading">
                     About
                   </h2>
                   <div className="h-[2px] w-16 bg-gradient-to-r from-primary-400 to-primary-600" />
@@ -202,23 +183,18 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
                 </div>
                 <div className="lg:col-span-4 hidden lg:flex flex-col gap-10 mt-2">
                   {ACHIEVEMENT_PHOTOS.map((src, idx) => (
-                    <motion.div key={idx} className="photo-plate relative w-full rounded-xl overflow-hidden border border-primary-400/20 shadow-lg group aspect-video"
-                      initial={reducedMotion ? false : { opacity: 0, y: 18 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.08 * idx, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                      viewport={{ once: true, amount: 0.25 }}>
-                      <div className="absolute inset-0 bg-gradient-to-t from-[var(--photo-caption)] via-transparent to-transparent z-10 pointer-events-none" />
-                      <motion.img
+                    <figure key={src} className="achievement-photo">
+                      <img
                         src={src}
-                        alt="Achievement"
-                        initial={reducedMotion ? undefined : { scale: 1.18 }}
-                        whileInView={{ scale: 1 }}
-                        viewport={{ once: true, amount: 0.25 }}
-                        transition={{ delay: 0.08 * idx, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="w-full h-full object-cover group-hover:scale-[1.06] group-hover:brightness-110 transition-[transform,filter] duration-700 ease-out"
+                        srcSet={`${src.replace("-960.webp", "-480.webp")} 480w, ${src} 960w`}
+                        sizes="(min-width: 1200px) 360px, 30vw"
+                        width={960}
+                        height={720}
+                        loading="lazy"
+                        decoding="async"
+                        alt={`CTF competition and team achievement ${idx + 1}`}
                       />
-                      <span className="card-sheen z-20" aria-hidden />
-                    </motion.div>
+                    </figure>
                   ))}
                 </div>
                 <div className="lg:col-span-8 relative lg:border-l-2 lg:border-primary-400/20 lg:ml-8 lg:pl-12 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-6 lg:gap-12 pb-6 lg:pb-0 snap-x snap-mandatory scrollbar-hide -mx-6 px-6 lg:mx-0 w-screen lg:w-auto">
@@ -270,7 +246,7 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
 
           {/* ===== WRITEUPS ===== */}
           <motion.div {...reveal} className="section-flow relative">
-            <SectionShell id="blog" eyebrow="Writing" title="The Blog" index="03">
+            <SectionShell id="blog" eyebrow="Writing" title="" index="03">
               <HomeJournal posts={posts} />
             </SectionShell>
           </motion.div>
@@ -278,81 +254,7 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
           {/* ===== CERTIFICATIONS ===== */}
           <motion.div {...reveal} className="section-flow relative">
             <SectionShell id="certifications" eyebrow="Validation" title="Certifications" index="04">
-              <p className="text-[var(--text-muted)] text-base leading-relaxed mb-10 max-w-2xl">
-                Verified training and formal credentials that back the practical offensive-security work shown in this portfolio.
-              </p>
-
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-5 mb-6">
-                {certifications.map((cert, idx) => (
-                    <motion.article
-                      key={cert.name}
-                      initial={reducedMotion ? false : { opacity: 0, y: 28 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
-                      whileHover={reducedMotion ? undefined : { y: -6 }}
-                      transition={{ duration: 0.55, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                      className="group relative bg-[var(--surface-raised)] border border-primary-500/15 rounded-xl p-4 md:p-5 backdrop-blur-sm hover:border-primary-500/45 transition-colors duration-300 hover:bg-[var(--surface-sunken)] hover:shadow-[0_20px_50px_-18px_rgba(129,140,248,0.3)]"
-                    >
-                      <span className="card-sheen" aria-hidden />
-                      <div className="flex items-start justify-between mb-3.5 gap-3">
-                        <p className="text-[9px] md:text-[10px] font-mono uppercase tracking-[0.25em] text-primary-400 mt-0.5">
-                          {cert.issuer}
-                        </p>
-                        {cert.logo && (
-                          <img src={cert.logo} alt={cert.issuer} className="h-7 md:h-8 object-contain rounded bg-[var(--surface-sunken)] p-1 transition-transform duration-500 group-hover:scale-110" />
-                        )}
-                      </div>
-                      <h3 className="text-base md:text-lg font-orbitron font-bold text-[var(--text-ink)] mb-2 leading-snug group-hover:text-primary-300 transition-colors">
-                        {cert.name}
-                      </h3>
-                      <p className="text-[var(--text-muted)] text-[13px] leading-relaxed mb-4 group-hover:text-[var(--text-muted)] transition-colors duration-300">
-                        {cert.description}
-                      </p>
-                      <a
-                      href={cert.verifyUrl || cert.localFile}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group/link inline-flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-primary-400 hover:text-[var(--text-ink)] transition-colors border-b border-primary-500/20 hover:border-primary-400 pb-0.5 min-h-[44px]"
-                    >
-                      View Certificate <span className="transition-transform duration-300 group-hover/link:translate-x-1">→</span>
-                    </a>
-                  </motion.article>
-                ))}
-              </div>
-
-              <article className="bg-gradient-to-br from-[var(--accent-surface)] to-[var(--surface-raised)] border border-primary-500/20 rounded-xl p-5 backdrop-blur-sm hover:border-primary-500/40 transition-all duration-300">
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-5">
-                  <div className="flex items-center gap-5">
-                    {learningPath.logo && (
-                      <img src={learningPath.logo} alt={learningPath.provider} className="h-11 object-contain rounded bg-[var(--surface-sunken)] p-1.5" />
-                    )}
-                    <div>
-                      <p className="text-[9px] font-mono uppercase tracking-[0.25em] text-primary-400 mb-2">Learning Path</p>
-                      <h3 className="text-xl font-orbitron font-bold text-[var(--text-ink)]">{learningPath.name}</h3>
-                      <p className="text-[var(--text-muted)] text-sm mt-1">{learningPath.provider} · {learningPath.status} · {learningPath.progress}</p>
-                    </div>
-                  </div>
-                  <a
-                    href={learningPath.localFile}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 border border-primary-500/35 text-primary-300 hover:text-[var(--text-ink)] hover:border-primary-400 rounded-lg text-[11px] font-mono uppercase tracking-wider transition-all whitespace-nowrap"
-                  >
-                    Open Proof →
-                  </a>
-                </div>
-                <p className="text-primary-100/75 mb-5 leading-relaxed text-sm">{learningPath.summary}</p>
-                <div className="flex flex-wrap gap-2">
-                  {learningPath.modules.map((module) => (
-                    <span
-                      key={module}
-                      className="px-3 py-1 rounded-full border border-primary-500/30 text-[11px] font-mono uppercase tracking-wider text-primary-200/80 bg-primary-950/15"
-                    >
-                      {module}
-                    </span>
-                  ))}
-                </div>
-              </article>
+              <Credentials />
             </SectionShell>
           </motion.div>
 
@@ -468,9 +370,6 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
                   <Atmosphere>
                     <RadarSweep />
                   </Atmosphere>
-                  <PaperAtmosphere>
-                    <PaperPlate />
-                  </PaperAtmosphere>
                 </div>
 
                 {/* Contact form */}
@@ -629,10 +528,10 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
           />
         )}
         
-        <ArcadePanel
+        {isArcadeOpen && <ArcadePanel
           isOpen={isArcadeOpen}
           onClose={() => setIsArcadeOpen(false)}
-        />
+        />}
 
         <CommandPalette
           isOpen={isPaletteOpen}
@@ -641,7 +540,7 @@ export default function PortfolioHome({ posts }: { posts: PostMeta[] }) {
           onArcade={() => setIsArcadeOpen(true)}
           onBreach={() => setIsMatrixOn(true)}
         />
-        <MatrixRain active={isMatrixOn} onExit={() => setIsMatrixOn(false)} />
+        {isMatrixOn && <MatrixRain active={isMatrixOn} onExit={() => setIsMatrixOn(false)} />}
       </div>
     </MotionConfig>
   );
