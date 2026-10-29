@@ -1,7 +1,7 @@
 /* Shared interface primitives. Use the existing theme's semantic colors. */
 /* Editorial refinements also apply to the existing portfolio components. */
 .editorial-page :is(h1,h2,h3,h4), .portfolio-home :is(h2,h3), .arcade-page h1 { text-transform: none; }
-.portfolio-home.page-shell, .arcade-page.page-shell { position: relative; overflow-x: clip; }
+.portfolio-home.page-shell, .arcade-page.page-shell, .article-page.page-shell { position: relative; overflow-x: clip; }
 .portfolio-home .section-flow { margin-bottom: 0; border: 0; border-radius: 0; overflow: visible; }
 .portfolio-section { max-width: 1200px; padding: 48px 24px; margin: 0 auto; position: relative; border-top: 1px solid var(--line-border); }
 .section-kicker { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }

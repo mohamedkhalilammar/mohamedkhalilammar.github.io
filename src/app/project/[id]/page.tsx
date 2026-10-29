@@ -33,12 +33,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
     <div className="editorial-page project-page">
       <SiteHeader />
       <main id="main-content" className="journal-container">
-        <nav className="article-breadcrumb" aria-label="Breadcrumb"><Link href="/#projects">← All projects</Link><span aria-hidden>/</span><span>Case study</span></nav>
+        <nav className="article-breadcrumb" aria-label="Breadcrumb"><Link href="/#projects">All projects</Link><span aria-hidden="true">›</span><span>Case study</span></nav>
         <header className="project-header">
           <p className="eyebrow">{project.context ?? "Selected project"}</p>
           <h1>{project.name}</h1>
           <p>{project.summary}</p>
-          <dl className="project-facts">{[["Role", project.role], ["Timeline", project.duration]].filter(([, value]) => value).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
         </header>
         <div className="project-body-grid">
           <div className="project-main-column">
@@ -54,7 +53,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         </div>
         {screenshots.length > 0 && <section className="project-screenshots"><h2>In practice</h2><p>Screenshots from the project. Select an image to take a closer look.</p><ProjectGallery name={project.name} screenshots={screenshots.map(s => s.src)} screenshotCaptions={screenshots.map(s => s.caption ?? "")} /></section>}
         {markdown && <section className="project-documentation"><p className="eyebrow">Technical notes</p><MarkdownBody>{markdown}</MarkdownBody></section>}
-        <nav className="next-project" aria-label="Next project"><span className="eyebrow">Next project</span><Link href={"/project/" + slug(nextProject.name)}>{nextProject.name}<span aria-hidden>↗</span></Link></nav>
+        <nav className="next-project" aria-label="Next project">
+          <Link href={"/project/" + slug(nextProject.name)}>
+            <div className="next-project-copy"><span className="next-project-label">Next project</span><h2>{nextProject.name}</h2><p>{nextProject.summary}</p></div>
+            <span className="next-project-arrow" aria-hidden="true">↗</span>
+          </Link>
+        </nav>
       </main>
       <EnhancedFooter />
     </div>

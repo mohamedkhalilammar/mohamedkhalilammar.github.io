@@ -39,7 +39,8 @@ export default async function WriteupPage({ params }: { params: Promise<{ id: st
     return score(b) - score(a);
   }).slice(0, 2);
   return (
-    <div className="editorial-page article-page">
+    <div className="editorial-page article-page page-shell">
+      <div className="page-noise" aria-hidden />
       <SiteHeader />
       <ScrollProgress />
       <main id="main-content" className="journal-container reader-container">
@@ -47,13 +48,14 @@ export default async function WriteupPage({ params }: { params: Promise<{ id: st
         <article>
           <header className={`article-header${post.competition ? " article-header--competition" : ""}`}>
             <div className="article-header-main">
-            <h1>{post.title}</h1>
-            {post.competition ? (
+            {post.competition && (
               <div className="article-competition">
                 {post.competitionLogo && <Image className="article-competition-logo" src={post.competitionLogo} alt="" width={56} height={56} />}
                 <p>{post.competition}</p>
               </div>
-            ) : <p className="article-deck">{post.summary}</p>}
+            )}
+            <h1>{post.title}</h1>
+            {!post.competition && <p className="article-deck">{post.summary}</p>}
             </div>
           </header>
           {post.cover && <figure className="article-cover"><Image src={post.cover} alt={post.title + " — project preview"} width={1200} height={675} priority /></figure>}
