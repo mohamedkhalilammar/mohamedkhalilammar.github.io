@@ -14,17 +14,19 @@ tags:
 
 ## Recon
 
-It's a Halloween candy shop, and it's a lovely piece of set dressing. Soft pink gummies, a jar of
-striped humbugs, a banner counting down to midnight. Then there's the thing in the corner you're
-clearly meant to want: The Midnight Collection, a numbered black chest with an orange ribbon,
-€666.00, badged "Only one available".
+Intigriti's October Challenge 2026 is a small web shop called Halloween Store. It sells six
+products: five sweets between €8.90 and €14.90, and The Midnight Collection, a chest priced at
+€666.00 and marked "Only one available". The flag is inside the chest. A new session starts with
+€66.00 of store credit. The challenge is a pricing problem: get a €666.00 item down to €66.00 or
+less, a 90% cut, in a shop whose coupons only offer 50%.
 
-The shop gives you €66.00 of store credit.
+![Halloween Store homepage: NIGHT20 banner across the top, €66.00 credit in the header, empty bag](/media/intigriti-1026/00-homepage.webp)
 
-So the whole puzzle is sitting in the price tag before you touch anything. You need 90% off, the
-shop advertises 50%, and the flag is inside the chest.
-
-The front end talks to a small JSON API, and it's refreshingly small:
+My first move on any web challenge is the same. I click through the site once as a normal
+customer, then run the same flow again behind Burp and read the traffic. Here the front end is a
+thin client over a JSON API. The endpoints came from the network tab; I then read the page
+JavaScript to confirm I had not missed any route the UI never links to. `/health` is the only
+extra route, and it is not linked anywhere:
 
 ```
 GET  /api/session        issues a session cookie and €66.00 of credit
@@ -36,28 +38,31 @@ POST /api/newsletter     {"email": "..."}   hands you a promotion code
 POST /api/checkout       {}                 returns a receipt
 ```
 
-Six products. Five sweets between €8.90 and €14.90, and the chest at €666.00. `/health` answers
-`{"ok":true,"service":"ble"}`, which is where the `BLE-` on every order ID comes from, and that's
-the only introspection the app gives up.
+Three behaviours from this pass shaped everything after it. Sessions are server-side:
+`GET /api/session` sets a cookie and attaches €66.00 of credit, and cart state lives on the
+server per session. The cart is capped: quantity is fixed at 1 and the API refuses to add the
+same product twice, so the largest possible cart is all six products at €722.70. And `/health`
+answering `{"ok":true,"service":"ble"}` explains the `BLE-` prefix on every order ID, which told
+me the app would give up very little introspection beyond its own API.
 
-Two promotion codes exist. NIGHT20 gives 20% and is printed in the banner on every page, so the
-shop wants you to have it. NEWS30 gives 30% and arrives if you subscribe to the newsletter with
-any address at all. Both refuse to apply unless the chest is already in your bag:
+Two coupon codes turned up during recon. NIGHT20 (20%) is printed in the banner on every page.
+NEWS30 (30%) comes from `POST /api/newsletter`, which accepts any email address; there is no
+confirmation step, so the code is effectively public. Both codes refuse to apply while the chest
+is not in the bag:
 
 ```json
 {"error":"coupon_restricted","message":"Promotions are reserved for The Midnight Collection."}
 ```
 
-Apply both and the discount stacks to 50%. The chest drops to €333.00.
+With the chest in the bag, both codes apply and the discounts add: 20% + 30% takes the total to
+€333.00 against €66.00 of credit.
 
 ![The bag with both promotions applied once each: subtotal €666.00, NIGHT20 and NEWS30 each listed once, total €333.00, "Still needed: €267.00"](/media/intigriti-1026/01-bag-50pct.webp)
 
-You have €66.00. This is where the challenge actually starts.
+I worked in the order below, dead ends included. Two of the three failures each removed a whole
+class of attacks, and the third one is the reason this writeup exists.
 
-I got there eventually. I also spent most of a day writing a proof that it was impossible, which
-is the interesting part, so I'm keeping the wrong turns in.
-
-## The arithmetic nobody wants to do
+## What the two coupons can actually cover
 
 My instinct was to start trying things. I'm glad I did the boring thing instead, because it told
 me which part of the shop was worth attacking.
@@ -273,6 +278,8 @@ opens the chest:
  "message":"Your order is confirmed and being prepared.",
  "flag":"INTIGRITI{094638e6-ba2f-4c50-8bb4-41ced0d5debd}"}}
 ```
+
+![Order confirmed: paid €0.00, flag shown under "Inside the archive"](/media/intigriti-1026/03-order-confirmed.webp)
 
 A €666.00 chest, paid with nothing, and the €66.00 still sitting in the account afterwards.
 

@@ -256,22 +256,22 @@ html:has(.blog-page), body:has(.blog-page) { overflow-x: clip; }
 .article-prose code { font-family: var(--font-mono), monospace; font-size: .8em; padding: 2px 5px; background: var(--accent-surface); color: var(--accent-ink); border-radius: 3px; }
 .article-prose hr { margin: 36px 0; border-color: var(--line-border); }
 .article-prose img { display: block; max-width: 100%; height: auto; margin-block: 24px; border-radius: var(--ui-radius); }
-.writeup-gallery { width: fit-content; max-width: 100%; margin: 28px auto 36px; }
+.writeup-gallery { width: min(1180px, 100%); margin: 32px auto 40px; }
 .writeup-gallery figure { min-width: 0; margin: 0; }
-.writeup-image-trigger { position: relative; display: block; width: fit-content; max-width: 100%; margin-inline: auto; padding: 0; border: 0; border-radius: 8px; background: transparent; cursor: zoom-in; }
-.article-prose .writeup-image-trigger img { width: auto; max-width: 100%; height: auto; max-height: min(460px, 60vh); object-fit: contain; margin: 0; border-radius: 8px; box-shadow: 0 10px 28px rgb(0 0 0 / .16); transition: transform 180ms; }
+.writeup-image-trigger { position: relative; display: block; width: 100%; margin-inline: auto; padding: 0; border: 0; border-radius: 8px; background: transparent; cursor: zoom-in; }
+.article-prose .writeup-image-trigger img { width: 100%; height: auto; max-height: min(92vh, 1100px); object-fit: contain; margin: 0; border-radius: 8px; box-shadow: 0 10px 28px rgb(0 0 0 / .16); transition: transform 180ms; }
 .writeup-image-trigger:hover img { transform: translateY(-2px); }
 .writeup-image-trigger:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 4px; }
 .writeup-image-expand { display: block; width: fit-content; margin: 8px 0 0 auto; padding: 2px 0; color: var(--accent-ink); font-size: .65rem; line-height: 1.5; }
 .writeup-gallery-row { display: flex; align-items: flex-start; gap: 20px; width: 100%; overflow-x: auto; padding: 6px 0 12px; scroll-snap-type: x proximity; scrollbar-color: var(--accent-ink) transparent; scrollbar-width: thin; }
 .writeup-gallery-row figure { flex: 1 0 160px; scroll-snap-align: start; }
 .writeup-gallery-row .writeup-image-trigger { width: 100%; }
-.article-prose .writeup-gallery-row .writeup-image-trigger img { width: 100%; max-height: 420px; object-fit: contain; }
+.article-prose .writeup-gallery-row .writeup-image-trigger img { width: 100%; max-height: min(72vh, 720px); object-fit: contain; }
 .writeup-gallery-row figcaption { margin-top: 4px; }
 
-.writeup-gallery figcaption { display: flex; justify-content: space-between; gap: 16px; max-width: 480px; margin: 12px auto 0; font-size: .75rem; line-height: 1.5; color: var(--text-muted); }
+.writeup-gallery figcaption { display: flex; justify-content: space-between; gap: 16px; margin: 12px auto 0; font-size: .75rem; line-height: 1.5; color: var(--text-muted); }
 .writeup-gallery figcaption > span:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
-.writeup-thumbnail-strip { display: flex; justify-content: safe center; gap: 10px; max-width: min(480px, 100%); margin-inline: auto; overflow-x: auto; padding: 16px 4px 10px; scrollbar-color: var(--accent-ink) transparent; scrollbar-width: thin; }
+.writeup-thumbnail-strip { display: flex; justify-content: safe center; gap: 10px; max-width: min(720px, 100%); margin-inline: auto; overflow-x: auto; padding: 16px 4px 10px; scrollbar-color: var(--accent-ink) transparent; scrollbar-width: thin; }
 .writeup-thumbnail-strip button { flex: 0 0 auto; position: relative; padding: 0 0 7px; border: 0; border-radius: 0; background: transparent; opacity: .5; cursor: pointer; transition: opacity 180ms; }
 .writeup-thumbnail-strip button:hover, .writeup-thumbnail-strip button[aria-pressed="true"] { opacity: 1; }
 .writeup-thumbnail-strip button[aria-pressed="true"]::after { content: ""; position: absolute; height: 2px; left: 20%; right: 20%; bottom: 0; background: var(--accent-ink); border-radius: 2px; }
@@ -292,7 +292,7 @@ html:has(.blog-page), body:has(.blog-page) { overflow-x: clip; }
 .writeup-viewer-footer p { text-align: center; }
 .writeup-viewer-footer button:disabled { opacity: .25; cursor: default; }
 @media (max-width: 600px) {
-  .article-prose .writeup-image-trigger img { max-height: 360px; }
+  .article-prose .writeup-image-trigger img { max-height: min(78vh, 720px); }
   .writeup-image-dialog { width: calc(100% - 16px); height: calc(100dvh - 16px); border-radius: 8px; }
   .writeup-viewer-toolbar, .writeup-viewer-footer { padding: 8px; gap: 8px; font-size: .75rem; }
   .writeup-viewer-toolbar > div { gap: 8px; }
