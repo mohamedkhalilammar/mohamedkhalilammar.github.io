@@ -529,3 +529,16 @@ body{background:var(--ground)}
 .pd-go a[target]::after{content:" \2197"}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 ::selection{background:color-mix(in srgb,var(--accent) 35%,transparent);color:var(--ink)}
+/* work pane: the way into the full project page, as one clear card */
+.pd-more{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:24px}
+.pd-card{flex:1 1 280px;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px;padding:14px 14px 14px 20px;border-radius:var(--radius);
+  background:var(--ground);box-shadow:inset 0 0 0 1px var(--line-2);color:var(--ink);text-decoration:none;transition:box-shadow .25s var(--ease),background .25s var(--ease),transform .35s var(--ease)}
+.pd-card:hover{box-shadow:inset 0 0 0 1px var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--ground));transform:translateY(-2px)}
+.pd-card-txt{display:grid;gap:3px}
+.pd-card-t{font-weight:600;font-size:16.5px;line-height:1.25}
+.pd-card-s{font-size:13.5px;color:var(--dim)}
+.pd-card-go{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--accent);color:var(--on-accent);transition:transform .3s var(--ease)}
+.pd-card-go svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pd-card:hover .pd-card-go{transform:translateX(3px)}
+.pd-src{font-size:14.5px;font-weight:600;color:var(--body);text-decoration:none;white-space:nowrap}
+.pd-src:hover{color:var(--accent)}

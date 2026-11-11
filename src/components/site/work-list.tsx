@@ -45,7 +45,13 @@ export function WorkList({ projects }: { projects: Project[] }) {
                 <ol className={"flow" + (p.diagram ? " mflow" : "")} aria-label="Pipeline">{p.flow.map((s) => <li key={s}><span>{s}</span></li>)}</ol>
                 <ul className="feats">{p.highlights.map((f) => <li key={f}>{f}</li>)}</ul>
                 <p className="stk">{p.stack.join(" · ")}</p>
-                <p className="pd-go"><Link href={"/project/" + p.slug}>Open the case study</Link>{p.githubUrl && <a href={p.githubUrl} target="_blank" rel="noopener noreferrer">Source on GitHub</a>}</p>
+                <div className="pd-more">
+                  <Link className="pd-card" href={"/project/" + p.slug}>
+                    <span className="pd-card-txt"><span className="pd-card-t">See how it was built</span><span className="pd-card-s">Architecture, build notes and results</span></span>
+                    <span className="pd-card-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" /></svg></span>
+                  </Link>
+                  {p.githubUrl && <a className="pd-src" href={p.githubUrl} target="_blank" rel="noopener noreferrer">Source on GitHub ↗</a>}
+                </div>
               </div></div>
             </div>
           </div>
