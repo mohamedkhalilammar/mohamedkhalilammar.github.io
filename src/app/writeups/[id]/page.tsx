@@ -1,27 +1,28 @@
-import { ArticleToc } from "@/components/ui/article-toc";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getAllPosts, getPost } from "@/lib/posts";
+import { getAllPosts, getPost, groupSlug, postGroup, type Post } from "@/lib/posts";
+import { addrFor } from "@/lib/trace";
 import { MarkdownBody, articleHeadings } from "@/components/ui/markdown-body";
-import { SiteHeader } from "@/components/ui/site-header";
-import { EnhancedFooter } from "@/components/ui/enhanced-footer";
-import { ScrollProgress } from "@/components/ui/scroll-progress";
+import { SiteBar } from "@/components/site/site-bar";
+import { SiteFooter } from "@/components/site/site-footer";
+import { MapsLine } from "@/components/site/maps-line";
+import { ArticleToc } from "@/components/site/article-toc";
+import { FlagReveal } from "@/components/site/flag-reveal";
+import { Glyph } from "@/components/site/glyph";
+import { postGlyph } from "@/components/site/post-glyph";
 
 export const dynamicParams = false;
 export function generateStaticParams() {
-  return getAllPosts().map(post => ({ id: post.id }));
+  return getAllPosts().map((post) => ({ id: post.id }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const id = (await params).id;
   const post = getPost(id);
   if (!post) return { title: "Article not found — Khalil Ammar" };
-  // NOTE: a page-level `openGraph` object replaces the root one instead of
-  // merging, so the shared preview image + url must be repeated here or
-  // article links get no embed image.
-  const images = [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "Khalil Ammar — Security & Intelligence" }];
+  // a page-level openGraph replaces the root one instead of merging, so the preview image is repeated here
+  const images = [{ url: "/opengraph-image.jpg", width: 1200, height: 630, alt: "Khalil Ammar" }];
   return {
     title: post.title + " — Khalil Ammar",
     description: post.summary,
@@ -30,49 +31,101 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   };
 }
 
+const fmtDate = (iso: string) => new Date(iso + "T00:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+
+function PostCard({ post, label }: { post: Post; label: string }) {
+  const group = postGroup(post);
+  return (
+    <Link className="ar-card" href={"/writeups/" + post.id}>
+      <span className="mono dim">{label}</span>
+      <span className="kr"><Glyph name={postGlyph(group, post.tags)} /><span className="k">{group}</span></span>
+      <span className="t">{post.title}</span>
+      <span className="s">{post.summary}</span>
+      <span className="go">Read</span>
+    </Link>
+  );
+}
+
 export default async function WriteupPage({ params }: { params: Promise<{ id: string }> }) {
   const post = getPost((await params).id);
   if (!post) notFound();
-  const headings = articleHeadings(post.content);
-  const related = getAllPosts().filter(p => p.id !== post.id).sort((a, b) => {
-    const score = (p: typeof post) => Number(p.category === post.category) * 3 + p.tags.filter(t => post.tags.includes(t)).length;
-    return score(b) - score(a);
-  }).slice(0, 2);
+  const all = getAllPosts();
+  const group = postGroup(post);
+  const siblings = all.filter((p) => postGroup(p) === group);
+  const at = siblings.findIndex((p) => p.id === post.id);
+  const newer = at > 0 ? siblings[at - 1] : undefined;
+  const older = at < siblings.length - 1 ? siblings[at + 1] : undefined;
+  const near = new Set([post.id, newer?.id, older?.id]);
+  const related = all.filter((p) => !near.has(p.id))
+    .map((p) => ({ p, score: Number(postGroup(p) === group) * 2 + p.tags.filter((t) => post.tags.includes(t)).length }))
+    .sort((a, b) => b.score - a.score).slice(0, 3).map((x) => x.p);
+  const sections = [...articleHeadings(post.content), ...(post.flag ? [{ id: "recovered-flag", text: "Recovered flag" }] : [])];
+
   return (
-    <div className="editorial-page article-page page-shell">
-      <div className="page-noise" aria-hidden />
-      <SiteHeader />
-      <ScrollProgress />
-      <main id="main-content" className="journal-container reader-container">
-        <nav className="article-breadcrumb" aria-label="Breadcrumb"><Link href="/blog">All articles</Link><span aria-hidden="true">›</span><Link href={"/blog?category=" + encodeURIComponent(post.category)}>{post.category}</Link></nav>
-        <article>
-          <header className={`article-header${post.competition ? " article-header--competition" : ""}`}>
-            <div className="article-header-main">
+    <>
+      <SiteBar active="writing" symbol={"writeups/" + post.id} />
+      <main className="wrap sub" id="main-content">
+        <article className="ar">
+          <header className="ar-head rv">
+            <MapsLine region="writing" name={"writeups/" + post.id} at={addrFor("writing", post.id)} />
+            <nav className="crumbs" aria-label="Breadcrumb" data-r>
+              <Link href="/blog">Blog</Link><span aria-hidden="true">/</span><Link href={"/blog?group=" + groupSlug(group)}>{group}</Link>
+            </nav>
             {post.competition && (
-              <div className="article-competition">
-                {post.competitionLogo && <Image className="article-competition-logo" src={post.competitionLogo} alt="" width={56} height={56} />}
-                <p>{post.competition}</p>
-              </div>
+              <p className="ar-comp" data-r>
+                {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
+                {post.competitionLogo && <img src={post.competitionLogo} alt="" width={40} height={40} />}
+                {post.competition}
+              </p>
             )}
-            <h1>{post.title}</h1>
-            {!post.competition && <p className="article-deck">{post.summary}</p>}
-            </div>
+            <h1 className="ar-title" data-r>{post.title}</h1>
+            <p className="ar-deck" data-r>{post.summary}</p>
+            <p className="ar-meta mono" data-r>
+              <span>{post.dateIsPlaceholder ? "undated" : <time dateTime={post.date}>{fmtDate(post.date)}</time>}</span>
+              <span>{post.readingMinutes} min read</span>
+              {post.tags.map((t) => <span className="tag" key={t}>{t}</span>)}
+            </p>
           </header>
-          {post.cover && <figure className="article-cover"><Image src={post.cover} alt={post.title + " — project preview"} width={1200} height={675} priority /></figure>}
-          <div className="article-layout">
-            <ArticleToc sections={[...headings, ...(post.flag ? [{ id: "recovered-flag", text: "Recovered flag" }] : [])]} />
-            <div id="article-start" className="article-reading-column">
-              {post.severity && <dl className="finding-details">{[["Severity", post.severity], ["CVSS", post.cvss], ["Status", post.status], ["Platform", post.platform]].filter(([, value]) => value !== undefined).map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>}
+
+          {post.cover && (
+            <figure className="ar-cover rv"><div data-r="clip">
+              {/* eslint-disable-next-line @next/next/no-img-element -- static export */}
+              <img src={post.cover} alt={post.title + ", project preview"} />
+            </div></figure>
+          )}
+
+          <div className="ar-grid">
+            <aside className="ar-side"><ArticleToc sections={sections} /></aside>
+            <div className="ar-body">
+              {post.severity && (
+                <dl className="ar-facts">
+                  {([["Severity", post.severity], ["CVSS", post.cvss], ["Status", post.status], ["Platform", post.platform]] as const)
+                    .filter(([, v]) => v !== undefined).map(([k, v]) => <div key={k}><dt>{k}</dt><dd>{v}</dd></div>)}
+                </dl>
+              )}
               <MarkdownBody>{post.content}</MarkdownBody>
-              {post.flag && <details id="recovered-flag" className="article-flag"><summary>Recovered flag <span>Reveal spoiler</span></summary><code>{post.flag}</code></details>}
-              {post.githubUrl && <a href={post.githubUrl} target="_blank" rel="noopener noreferrer" className="journal-read">View source on GitHub ↗</a>}
-              <div className="article-finish"><p>Thanks for reading.</p><Link href="/blog">Back to articles <span aria-hidden>↗</span></Link></div>
+              {post.flag && <FlagReveal flag={post.flag} />}
+              {post.githubUrl && <p className="pd-go"><a href={post.githubUrl} target="_blank" rel="noopener noreferrer">Source on GitHub</a></p>}
+              <p className="ar-exit mono">[Inferior 1 exited normally] <span className="dim">· thanks for reading</span></p>
             </div>
           </div>
         </article>
-        {related.length > 0 && <section className="related-articles" aria-labelledby="related-heading"><div className="related-heading"><h2 id="related-heading">Related articles</h2></div><div className="related-grid">{related.map(p => <Link key={p.id} href={"/writeups/" + p.id}><span className="journal-meta">{p.category}</span><h3>{p.title}</h3><p>{p.summary}</p><span className="journal-read">Read article <span aria-hidden>↗</span></span></Link>)}</div></section>}
+
+        {(newer || older) && (
+          <nav className="ar-pager" aria-label={"More in " + group}>
+            {older ? <PostCard post={older} label={"← previous in " + group.toLowerCase()} /> : <span />}
+            {newer ? <PostCard post={newer} label={"next in " + group.toLowerCase() + " →"} /> : <span />}
+          </nav>
+        )}
+
+        {related.length > 0 && (
+          <section className="ar-rel rv" aria-labelledby="rel-h">
+            <div className="ar-rel-h"><h2 id="rel-h">Keep reading</h2><Link href="/blog" className="ar-all">All posts</Link></div>
+            <div className="ar-rel-grid">{related.map((p) => <div data-r key={p.id}><PostCard post={p} label={p.date.slice(0, 7)} /></div>)}</div>
+          </section>
+        )}
       </main>
-      <EnhancedFooter />
-    </div>
+      <SiteFooter />
+    </>
   );
 }

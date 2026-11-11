@@ -336,3 +336,26 @@ export function getArchiveByYear(): ArchiveYear[] {
     .map(([year, posts]) => ({ year, posts }))
     .sort((a, b) => b.year.localeCompare(a.year));
 }
+
+/**
+ * Reader-facing groups for the blog tabs. The frontmatter `category` stays as it is;
+ * the groups split "CTF Writeups" into what Khalil solved and what he built.
+ */
+export const POST_GROUPS = ["CTF writeups", "Challenges I built", "Engineering", "Opinions", "Bug bounty"] as const;
+export type PostGroup = (typeof POST_GROUPS)[number];
+
+export function postGroup(post: Pick<PostMeta, "id" | "category">): PostGroup {
+  if (post.category === BUG_BOUNTY_CATEGORY) return "Bug bounty";
+  if (post.category === "Engineering") return "Engineering";
+  if (post.category === "Reflections") return "Opinions";
+  if (post.id.startsWith("friendly-ctf-") || post.id === "securinets-friendly-ctf-2026") return "Challenges I built";
+  return "CTF writeups";
+}
+
+export function groupCounts(posts: Pick<PostMeta, "id" | "category">[]): Record<PostGroup, number> {
+  const counts = Object.fromEntries(POST_GROUPS.map((g) => [g, 0])) as Record<PostGroup, number>;
+  for (const p of posts) counts[postGroup(p)] += 1;
+  return counts;
+}
+
+export const groupSlug = (g: PostGroup) => toSlug(g);

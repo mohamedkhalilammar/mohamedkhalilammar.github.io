@@ -16,6 +16,18 @@ export type Project = {
   challenges?: string;
   impact?: string;
   icon?: string;
+  /** Live Trace fields: URL slug, display title, line glyph, list subtitle, pane copy. */
+  slug: string;
+  title: string;
+  glyph: string;
+  short: string;
+  meta: string;
+  blurb: string;
+  flow: string[];
+  highlights: string[];
+  figures?: { src: string; alt: string }[];
+  diagram?: "honeypot";
+  order: number;
   mediaUrl?: string;
   screenshots?: string[];
   screenshotCaptions?: string[];
@@ -84,7 +96,7 @@ export const profile = {
   socials: {
     github: "https://github.com/khalilammarr",
     linkedin: "https://www.linkedin.com/in/khalil-ammar-00665a334/",
-    email: "mohamedkhalil.ammr@insat.ucar.tn"
+    email: "mohamedkhalil.ammar@insat.ucar.tn"
   }
 };
 
@@ -139,6 +151,16 @@ export const achievements: Achievement[] = [
 export const projects: Project[] = [
   {
     name: "LLM-Powered Adaptive Honeypot",
+    slug: "llm-powered-adaptive-honeypot",
+    title: "LLM-powered adaptive honeypot",
+    glyph: "hive",
+    short: "sole architect · 6 weeks",
+    meta: "Threat intelligence research · sole architect · 6 weeks",
+    blurb: "A deception platform built as a layered pipeline. Cowrie and FastAPI collect attacker input, a policy-gated LLM generates realistic responses, and Wazuh ingests normalized telemetry. The goal went past keeping attackers busy: it was turning noisy interaction logs into structured intelligence.",
+    highlights: ["LLM-driven SSH and HTTP interaction modules", "Policy-guided output sanitization and model gating", "Automated IoC extraction from adversarial sessions"],
+    flow: ["attacker", "Cowrie · FastAPI", "policy gate", "LLM", "Wazuh SIEM"],
+    diagram: "honeypot",
+    order: 0,
     icon: "Honeypot",
     summary:
       "Built a deception platform as a layered pipeline: Cowrie/FastAPI collect attacker input, a policy-gated LLM generates realistic responses, and Wazuh ingests normalized telemetry. The key value was not only trapping attackers longer, but learning how to turn noisy interaction logs into structured intelligence we could act on.",
@@ -162,6 +184,15 @@ export const projects: Project[] = [
   },
   {
     name: "Home SOC Setup",
+    slug: "home-soc-setup",
+    title: "Home SOC",
+    glyph: "pulse",
+    short: "detection lab · ongoing",
+    meta: "Personal lab · SOC architect and analyst",
+    blurb: "A detection lifecycle end to end, focused on repeatable detection engineering and on what makes an alert actionable.",
+    flow: ["Sysmon endpoints", "Wazuh manager", "correlation", "triage", "review"],
+    highlights: ["Multi-OS telemetry into one SIEM", "Custom detection rules for common techniques", "Attack simulation to validate alerts"],
+    order: 5,
     icon: "SOC",
     summary:
       "Built a full SOC lab as an end-to-end detection lifecycle: endpoint telemetry collection, log normalization, correlation, triage, and post-incident review. Instead of only deploying tools, we focused on repeatable detection engineering and documented what made alerts actionable.",
@@ -182,6 +213,16 @@ export const projects: Project[] = [
   },
   {
     name: "GreenGuard — Smart Greenhouse",
+    slug: "greenguard-smart-greenhouse",
+    title: "GreenGuard",
+    glyph: "leaf",
+    short: "IoT greenhouse · academic",
+    meta: "Academic project · embedded and backend engineer",
+    blurb: "A greenhouse control loop built for reliability over demos: firmware, broker and backend as coordinated layers, tested under intermittent connectivity.",
+    flow: ["ESP32 sensors", "MQTT", "FastAPI", "WebSocket dashboard"],
+    highlights: ["Temperature, humidity, soil and light ingestion", "Local fallback logic during outages", "Sub-second dashboard updates"],
+    figures: [{"src": "/media/site/greenguard.webp", "alt": "Web dashboard"}, {"src": "/media/site/wokwi.webp", "alt": "Wokwi circuit simulation"}],
+    order: 6,
     icon: "IoT",
     summary:
       "Engineered a resilient IoT control loop for greenhouse automation, prioritizing reliability over demo-only behavior. I built firmware, broker, and backend as coordinated layers, then validated behavior under intermittent connectivity to ensure safe autonomous operation.",
@@ -211,6 +252,16 @@ export const projects: Project[] = [
   },
   {
     name: "Haniny – AI Driver Assistant",
+    slug: "haniny-ai-driver-assistant",
+    title: "Haniny, AI driver assistant",
+    glyph: "wheel",
+    short: "48-hour hackathon · 4th of 54",
+    meta: "Hack For Good · lead mobile and IoT developer · 48 hours",
+    blurb: "Real-time perception and risk scoring built under hackathon constraints. Camera ingestion, model inference, event scoring and mobile feedback had to work as one low-latency loop.",
+    flow: ["driver + road cameras", "YOLOv8 · MediaPipe", "risk scoring", "Flutter app"],
+    highlights: ["Fatigue, drowsiness and distraction monitoring", "Road hazard detection with YOLOv8", "Inference loop tuned for under 300 ms"],
+    figures: [{"src": "/media/site/haniny.webp", "alt": "Haniny brand mark: the AI guardian for every driver"}],
+    order: 1,
     icon: "AI",
     summary:
       "Developed Haniny as a real-time perception and risk-scoring system under hackathon constraints. We treated it as a systems-integration challenge: camera ingestion, model inference, event scoring, and mobile feedback had to work as one low-latency loop.",
@@ -249,6 +300,15 @@ export const projects: Project[] = [
   },
   {
     name: "Malware Analysis Lab",
+    slug: "malware-analysis-lab",
+    title: "Malware analysis lab",
+    glyph: "bug",
+    short: "personal research · ongoing",
+    meta: "Personal research · malware analyst",
+    blurb: "An isolated environment where each sample moves through the same stages, so findings can be compared across families.",
+    flow: ["intake", "static triage", "dynamic tracing", "report"],
+    highlights: ["Dynamic analysis of RATs: VenomRAT, AsyncRAT, RedLine", "Persistence and C2 pattern mapping", "FakeNet and INetSim for safe traffic capture"],
+    order: 4,
     icon: "Malware Lab",
     summary:
       "Built an isolated malware research environment as a repeatable analysis workflow, not a one-off sandbox. Each sample moved through intake, static triage, dynamic tracing, and reporting so findings could be compared across families.",
@@ -269,6 +329,15 @@ export const projects: Project[] = [
   },
   {
     name: "CTF Challenge Development",
+    slug: "ctf-challenge-development",
+    title: "CTF challenge development",
+    glyph: "flag",
+    short: "challenge author · seasonal",
+    meta: "Challenge author and infrastructure lead",
+    blurb: "Reverse engineering challenges designed as a curriculum, where each level trains one reasoning step instead of only getting harder, and built to stay reliable on competition infrastructure.",
+    flow: ["C/C++ · asm", "obfuscation + anti-debug", "Docker · xinetd", "solver validation"],
+    highlights: ["Original RE and binary exploitation challenges", "Layered obfuscation and anti-debug", "Automated solver validation and health checks"],
+    order: 2,
     icon: "CTF",
     summary:
       "Designed CTF reverse-engineering challenges as a curriculum pipeline, where each level trained a specific reasoning step instead of only increasing difficulty. We emphasized educational progression, infrastructure reliability, and anti-cheese challenge design.",
@@ -289,6 +358,15 @@ export const projects: Project[] = [
   },
   {
     name: "DroidHunt - Mobile Security Toolkit",
+    slug: "droidhunt-mobile-security-toolkit",
+    title: "DroidHunt",
+    glyph: "droid",
+    short: "Android assessment toolkit",
+    meta: "Offensive toolkit for mobile auditing · reverse engineer",
+    blurb: "Instrumentation, traffic interception and runtime inspection in one repeatable toolkit, so assessment time goes into logic flaws instead of environment fixes.",
+    flow: ["ADB provisioning", "cert injection", "Frida hooks", "Burp Suite"],
+    highlights: ["SSL pinning and root detection bypass modules", "JNI-level runtime tracing via Frida", "Scripted setup for emulators and devices"],
+    order: 3,
     icon: "Mobile Sec",
     summary:
       "Built DroidHunt as a workflow accelerator for Android assessments, combining instrumentation, traffic interception, and runtime inspection into one repeatable toolkit. The focus was reducing setup friction so analysis time is spent on logic flaws, not environment fixes.",
@@ -413,7 +491,7 @@ export const skillGroups: SkillGroup[] = [
 ];
 
 export const ctfIdentity = {
-  name: "fadigaaa",
+  name: "fadigaa",
   team: "MOJO-JOJO",
   interest: "Offensive Security & Threat Analysis",
   categories: "Web Exploitation, Reverse Engineering, Forensics",
@@ -421,6 +499,99 @@ export const ctfIdentity = {
     eventPodiums: 20
   }
 };
+
+/** Live Trace home: sections after the hero. */
+export const heroPhotos = [
+  { src: "/media/site/bg-prize.webp", alt: "Khalil holding competition prizes at a cybersecurity event, wearing an event lanyard", width: 1600, height: 1173, position: "58% 30%" },
+  { src: "/media/site/bg-finals.webp", alt: "Khalil and his team working at their laptops during a CTF finals night", width: 1600, height: 900, position: "100% 50%" },
+  { src: "/media/site/bg-cybersphere.webp", alt: "Khalil and three teammates on stage at Cybersphere Congress 7.0 holding the first-place cheque", width: 1600, height: 1200, position: "50% 45%" },
+];
+
+export const heroIntro =
+  "Engineering student at INSAT, in networks and telecommunications. Somewhere between keeping up with the AI rollercoaster, figuring out how to work smarter, build faster, and do things that weren't possible yesterday, and trying not to lose sight of the fundamentals, the joy of figuring things out, and the curiosity that got me here in the first place.";
+
+export const pathIntro =
+  "I study networks and telecommunications at INSAT, in Tunis. At Securinets INSAT I'm on the technical team and work as an instructor, helping first-year students who are just getting into cybersecurity through workshops and challenges. I play CTFs with MOJO-JOJO as fadigaa.";
+
+export type PathRole = { title: string; text: string; link?: { href: string; label: string } };
+export type PathNode = { name: string; kind: string; logo: string; round?: boolean; edge: "f" | "j" | "t"; roles: PathRole[] };
+
+export const pathNodes: PathNode[] = [
+  { name: "INSAT, Tunis", kind: "School", logo: "/media/site/logo-insat.webp", round: true, edge: "f", roles: [
+    { title: "Engineering student", text: "National Institute of Applied Science and Technology. Networks and telecommunications." },
+  ] },
+  { name: "MOJO-JOJO", kind: "CTF team · plays as fadigaa", logo: "/media/site/logo-mojo.webp", round: true, edge: "j", roles: [
+    { title: "Team member", text: "Reverse engineering, web exploitation and forensics." },
+    { title: "Organiser, MOJO JOJO CTF", text: "Organised the event and wrote the web challenges." },
+  ] },
+  { name: "Securinets INSAT", kind: "INSAT's cybersecurity club", logo: "/media/site/logo-securinets.webp", edge: "t", roles: [
+    { title: "Technical team member", text: "Part of the team behind the club's workshops and CTFs." },
+    { title: "Instructor", text: "Helps first-year students getting into cybersecurity, through workshops and challenges." },
+    { title: "Challenge author", text: "26 challenges for Friendly CTF 2026: the whole Mobile track in one Android app, and a reverse engineering ladder from ltrace to Cheat Engine.", link: { href: "/writeups/securinets-friendly-ctf-2026", label: "Author writeups" } },
+  ] },
+];
+
+export const interests = [
+  { glyph: "chip", label: "Reverse engineering" },
+  { glyph: "phone", label: "Taking Android apps apart" },
+  { glyph: "flag", label: "Designing CTF challenges" },
+  { glyph: "spark", label: "AI agents for offensive security" },
+];
+
+export type RecordEntry = { rank: string; sup?: string; small?: string; label: string; title: string; text: string; link?: { href: string; label: string } };
+
+export const record: RecordEntry[] = [
+  { rank: "1", sup: "st", label: "1st", title: "Cybersphere Congress Advanced CTF", text: "Securinets INSAT, April 2026, with AI use restricted. Prizes: two .xyz domains, an INE premium voucher, a Root-Me career path and Root-Me gift cards." },
+  { rank: "1", sup: "st", label: "1st", title: "CyberCamp Bootcamp & Competition", text: "Mobile penetration testing track." },
+  { rank: "7", small: "Top", label: "Top 7", title: "Securinets International Finals", text: "Worldwide." },
+  { rank: "2", sup: "nd", label: "2nd", title: "DarkNets CTF 3.0", text: "Played mostly reverse engineering, plus web, pwn and crypto." },
+  { rank: "4", small: "Top", label: "Top 4", title: "Securinets CTF Qualifiers", text: "Africa." },
+  { rank: "5", sup: "th", label: "5th", title: "CSAW Dubai Qualifiers", text: "Qualifying round." },
+  { rank: "8", small: "Top", label: "Top 8", title: "Cybears Algeria Qualifiers", text: "Global." },
+  { rank: "4", sup: "th", small: "Of 54", label: "4th of 54 teams", title: "Hack For Good Hackathon", text: "Built Haniny, an AI driver monitoring system, and pitched it to over 500 people.", link: { href: "/project/haniny-ai-driver-assistant", label: "Haniny project" } },
+  { rank: "1%", small: "Top", label: "Top 1 percent", title: "TryHackMe", text: "Pentesting and SOC learning paths." },
+];
+
+export const recordPhotos = [
+  { src: "/media/site/cybersphere.webp", alt: "Four teammates on stage at Cybersphere Congress 7.0 holding an oversized prize cheque", width: 960, height: 720, caption: "Cybersphere Congress 7.0" },
+  { src: "/media/site/cybercamp.webp", alt: "Four teammates holding CyberCamp prize boards", width: 480, height: 320, caption: "CyberCamp" },
+  { src: "/media/site/duo.webp", alt: "Khalil and a teammate working at their laptops during the Securinets finals", width: 567, height: 423, caption: "Securinets International Finals" },
+];
+
+export const credentials = [
+  { name: "Certified Red Team Operations Management (CRTOM)", issuer: "Red Team Leaders", logo: "/media/site/logo-rtl.webp", width: 316, height: 100 },
+  { name: "Certified Phishing Prevention Specialist (CPPS)", issuer: "Hack & Fix", logo: "/media/site/logo-hackfix.webp", width: 160, height: 160 },
+  { name: "Jr Penetration Tester path, completed", issuer: "TryHackMe", logo: "/media/site/logo-thm.webp", width: 320, height: 180 },
+];
+
+/** The six posts the home Writing deck shows, with a cover each; titles and dates come from the posts. */
+export type DeckCover =
+  | { kind: "shot"; src: string; alt: string; width: number; height: number }
+  | { kind: "phone"; src: string; width: number; height: number }
+  | { kind: "big"; text: string; caption: string }
+  | { kind: "term"; html: string };
+
+export const featuredWriting: { id: string; glyph: string; kicker: string; title?: string; blurb?: string; cover: DeckCover }[] = [
+  { id: "intigriti-1026-midnight-collection", glyph: "bag", kicker: "Intigriti · web · business logic",
+    blurb: "A Halloween candy shop sells one €666 box and hands you €66 of credit. Two coupons stack to 50%, until the duplicate-use guard turns out to only check the coupon you added last.",
+    cover: { kind: "shot", src: "/media/site/post-midnight.webp", alt: "The Halloween Store challenge homepage, showing a bowl of candy and the line A little magic, a lot of sugar", width: 1600, height: 751 } },
+  { id: "backdrop-securinets-quals", glyph: "phone", kicker: "Securinets Quals · mobile · RE",
+    cover: { kind: "phone", src: "/media/site/post-backdrop.webp", width: 1080, height: 1920 } },
+  { id: "securinets-friendly-ctf-2026", glyph: "flag", kicker: "Authored · 26 challenges", title: "Friendly CTF 2026: the challenges I built",
+    blurb: "One Android app holding the whole Mobile track, and a reverse engineering ladder from ltrace to Cheat Engine.",
+    cover: { kind: "phone", src: "/media/site/post-friendly.webp", width: 788, height: 1400 } },
+  { id: "csaw-four-minutes-thirty-two-seconds", glyph: "clock", kicker: "Reflections · AI",
+    blurb: "We cleared an entire CSAW wave in 4 minutes and 32 seconds, using AI agents ourselves, and it left me questioning what online CTFs measure.",
+    cover: { kind: "big", text: "4:32", caption: "one CSAW wave, start to finish" } },
+  { id: "friendly-ctf-doorman", glyph: "door", kicker: "Friendly CTF · reverse engineering",
+    blurb: "The badge code is stored scrambled so strings finds nothing, but the check uses strcmp, and ltrace prints both sides of it.",
+    cover: { kind: "term", html: '<i>$</i> ltrace ./doorman<br>badge code: hello<br><em>strcmp("hello", "SHIFT-<s>XXXX</s>-NIGHT")</em> = 21' } },
+  { id: "friendly-ctf-dor", glyph: "card", kicker: "Friendly CTF · mobile · web",
+    blurb: "The profile endpoint takes any valid token and returns whichever account id you ask for.",
+    cover: { kind: "term", html: "GET /profile/<em>6</em> <i>&rarr; 200</i> your record<br>GET /profile/<em>4</em> <i>&rarr; 200</i> someone else&rsquo;s" } },
+];
+
+export const contactLead = "Open to security internships, CTF collaboration, and network engineering opportunities.";
 
 export const certifications: Certification[] = [
   {

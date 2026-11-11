@@ -1,0 +1,327 @@
+/* Arcade: the games were built on the old token names. Map them onto the Live Trace palette
+   here instead of rewriting every game. Rules below the tokens are the games' own (moved from the old stylesheets). */
+.arcade{
+  --surface-page:var(--ground); --surface-sunken:var(--surface); --surface-raised:var(--hover); --surface-hover:var(--hover);
+  --text-ink:var(--ink); --text-body:var(--body); --text-muted:var(--dim); --text-faint:color-mix(in srgb,var(--dim) 70%,transparent);
+  --line-border:var(--line-2); --line-rule:var(--line); --foreground:var(--ink); --scrim:rgba(8,6,5,.86);
+  --shadow-rgb:0,0,0; --sheen:rgba(255,255,255,.04); --radius-lg:var(--radius);
+}
+.arcade .game-stage,.arcade .game-cabinet{border-radius:var(--radius)}
+.custom-modal-overlay{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:16px;background:var(--scrim,rgba(8,6,5,.86));backdrop-filter:blur(6px)}
+.custom-modal-content{width:min(980px,100%);max-height:92vh;border-radius:var(--radius);background:var(--ground);box-shadow:0 30px 120px rgba(0,0,0,.7);border:1px solid var(--line-2)}
+
+
+
+.custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--surface-raised);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.custom-modal-content {
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 24px 64px rgb(var(--shadow-rgb) / 0.5);
+}
+
+.custom-modal-content p {
+  color: var(--foreground) !important;
+  font-size: 1.1rem !important;
+}
+
+.custom-modal-content strong {
+  color: var(--accent) !important;
+}
+
+.game-panel {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-hud {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 12px;
+  background: var(--surface-raised);
+  border: 1px solid rgba(129, 140, 248, 0.12);
+  border-radius: 6px;
+}
+
+.game-label {
+  font-family: monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(129, 140, 248, 0.5);
+  font-weight: 700;
+}
+
+.game-score {
+  font-family: monospace;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #818cf8;
+  letter-spacing: 0.05em;
+}
+
+.game-controls-hint {
+  font-family: monospace;
+  font-size: 0.62rem;
+  color: rgba(129, 140, 248, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 4px 0;
+}
+
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 8px;
+}
+
+.game-over-text {
+  font-family: monospace;
+  font-size: 1.4rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #818cf8;
+  text-shadow: 0 0 20px rgba(129, 140, 248, 0.6);
+  margin: 0;
+}
+
+.game-over-score {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: rgba(129, 140, 248, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 0;
+}
+
+.game-btn {
+  font-family: monospace;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #0a0a0a;
+  background: #818cf8;
+  border: none;
+  padding: 0.7rem 2rem;
+  cursor: pointer;
+  border-radius: 4px;
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  transition: all 0.2s ease;
+  box-shadow: 0 0 24px rgba(129, 140, 248, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.game-btn::before {
+  content: "";
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--sheen), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s ease;
+}
+
+.game-btn:hover {
+  background: #a5b4fc;
+  box-shadow: 0 0 36px rgba(129, 140, 248, 0.55);
+  transform: translateY(-2px);
+}
+
+.game-btn:hover::before {
+  left: 200%;
+}
+
+.game-btn:active {
+  transform: translateY(0);
+}
+
+.gp-snake {
+  stroke-dasharray: 55 260;
+  animation: gp-snake-travel 3.2s linear infinite;
+}
+
+.gp-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gp-pulse-beat 1.2s ease-in-out infinite;
+}
+
+.gp-jumper {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: gp-jump 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.gp-obstacles {
+  animation: gp-obstacle-slide 2.8s linear infinite;
+}
+
+.gp-ground {
+  animation: gp-ground-scroll 1.1s linear infinite;
+}
+
+.gp-sonar {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gp-sonar-ring 2.4s ease-out infinite;
+}
+
+.gp-sonar-late {
+  animation-delay: 1.2s;
+}
+
+.gp-flag {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: gp-flag-wave 2s ease-in-out infinite;
+}
+
+.gp-ball {
+  animation: gp-ball-x 2.2s linear infinite alternate, gp-ball-y 1.5s ease-in-out infinite alternate;
+}
+
+.gp-paddle-l {
+  animation: gp-paddle-track 1.5s ease-in-out infinite alternate;
+}
+
+.gp-paddle-r {
+  animation: gp-paddle-track 1.5s ease-in-out infinite alternate-reverse;
+}
+
+.gp-card-flip {
+  animation: gp-flip 2.6s ease-in-out infinite;
+}
+
+.gp-tetro {
+  animation: gp-tetro-fall 2.2s steps(6, end) infinite;
+}
+
+.game-cabinet:focus-visible {
+  --tw-ring-color: var(--g-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gp-snake,
+  .gp-pulse,
+  .gp-jumper,
+  .gp-obstacles,
+  .gp-ground,
+  .gp-sonar,
+  .gp-flag,
+  .gp-ball,
+  .gp-paddle-l,
+  .gp-paddle-r,
+  .gp-card-flip,
+  .gp-tetro {
+    animation: none;
+  }
+}
+
+.game-accent-text,
+.game-cabinet {
+  --g-ink: var(--g-accent, var(--text-ink));
+  color: var(--g-ink);
+}
+
+@keyframes gp-snake-travel {
+  to { stroke-dashoffset: -315; }
+}
+
+@keyframes gp-pulse-beat {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.45); opacity: 0.7; }
+}
+
+@keyframes gp-jump {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  18% { transform: translateY(0) scaleY(0.82); }
+  45% { transform: translateY(-34px) scaleY(1.05); }
+  72% { transform: translateY(0) scaleY(0.92); }
+}
+
+@keyframes gp-obstacle-slide {
+  to { transform: translateX(-310px); }
+}
+
+@keyframes gp-ground-scroll {
+  to { stroke-dashoffset: -24; }
+}
+
+@keyframes gp-sonar-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes gp-flag-wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-6deg); }
+}
+
+@keyframes gp-ball-x {
+  from { transform: translateX(28px); }
+  to { transform: translateX(172px); }
+}
+
+@keyframes gp-ball-y {
+  from { transform: translateY(28px); }
+  to { transform: translateY(92px); }
+}
+
+@keyframes gp-paddle-track {
+  from { transform: translateY(-16px); }
+  to { transform: translateY(20px); }
+}
+
+@keyframes gp-flip {
+  0%, 35%, 100% { transform: scaleX(1); }
+  45%, 90% { transform: scaleX(-1); }
+}
+
+@keyframes gp-tetro-fall {
+  0% { transform: translateY(0); opacity: 1; }
+  85% { transform: translateY(56px); opacity: 1; }
+  92% { transform: translateY(56px); opacity: 0.5; }
+  100% { transform: translateY(56px); opacity: 0; }
+}
+
+.arcade-page h1 { text-transform: none; }
+
+.arcade-page.page-shell { position: relative; overflow-x: clip; }
+/* no Tailwind preflight on this site: undo browser button chrome and use the site fonts */
+@layer base{
+  .arcade button{border:0;font:inherit;color:inherit;background:none}
+  .arcade{--font-sans:var(--f-display)}
+}
+/* the page heading already introduces the games; the section's own header would repeat it */
+.arcade #games > div:first-child{display:none}

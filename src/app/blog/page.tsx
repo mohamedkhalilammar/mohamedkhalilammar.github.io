@@ -1,32 +1,40 @@
 import type { Metadata } from "next";
-import { getCategories, getPostCards, getTags } from "@/lib/posts";
-import { BlogIndex } from "@/components/ui/blog-index";
-import { SiteHeader } from "@/components/ui/site-header";
-import { EnhancedFooter } from "@/components/ui/enhanced-footer";
-import { WorkshopBackground } from "@/components/ui/workshop-background";
+import { POST_GROUPS, getPostCards, groupCounts, groupSlug, postGroup } from "@/lib/posts";
+import { SiteBar } from "@/components/site/site-bar";
+import { SiteFooter } from "@/components/site/site-footer";
+import { SectionHead } from "@/components/site/section-head";
+import { BlogIndex, type BlogRow } from "@/components/site/blog-index";
+import { postGlyph } from "@/components/site/post-glyph";
 
 export const metadata: Metadata = {
-  title: "Articles — Khalil Ammar",
-  description: "CTF writeups, reverse engineering, and project breakdowns by Khalil Ammar.",
+  title: "Blog — Khalil Ammar",
+  description: "CTF writeups, the challenges I built, engineering notes and the odd opinion, by Khalil Ammar.",
 };
 
 export default function BlogPage() {
   const posts = getPostCards();
+  const counts = groupCounts(posts);
+  const rows: BlogRow[] = posts.map((p) => {
+    const group = postGroup(p);
+    return {
+      id: p.id, title: p.title, summary: p.summary, date: p.date, undated: !!p.dateIsPlaceholder, minutes: p.readingMinutes,
+      group, groupSlug: groupSlug(group), tags: p.tags, glyph: postGlyph(group, p.tags),
+    };
+  });
+
   return (
-    <div className="editorial-page blog-page">
-      <SiteHeader />
-      <main id="main-content" className="journal-container">
-        <header className="writing-banner writing-banner--archive">
-          <WorkshopBackground photo="opening" priority alt="Khalil presenting a workshop on AI in cybersecurity." />
-          <div className="writing-banner-copy">
-            <h1>Articles<span className="hero-title-dot" aria-hidden>.</span></h1>
-            <p className="journal-description">CTF write-ups, reverse engineering, and the things I learn by building.</p>
-          </div>
-        </header>
-        <div id="article-library" className="article-library-anchor" />
-        <BlogIndex posts={posts} categories={[...new Set([...getCategories().map(c => c.name), "Bug Bounty"])]} tags={getTags().map(t => t.name)} />
+    <>
+      <SiteBar active="writing" symbol="blog" />
+      <main className="wrap sub" id="main-content">
+        <section className="region sub-head" aria-labelledby="blog-h">
+          <SectionHead as="h1" region="writing" name="blog" id="blog-h" title="Blog"
+            lede={<>Writeups for challenges I solved, the {counts["Challenges I built"]} I built for Friendly CTF, engineering notes and the odd opinion. {posts.length} posts so far.</>} />
+          <div className="rv"><div data-r>
+            <BlogIndex rows={rows} groups={POST_GROUPS.map((g) => ({ name: g, slug: groupSlug(g), count: counts[g] }))} />
+          </div></div>
+        </section>
       </main>
-      <EnhancedFooter />
-    </div>
+      <SiteFooter />
+    </>
   );
 }

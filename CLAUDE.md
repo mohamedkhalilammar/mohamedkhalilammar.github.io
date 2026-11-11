@@ -6,20 +6,26 @@ statically exported (`output: "export"`) and served from GitHub Pages (see `CNAM
 - `npm run dev` → dev server on **port 3001**
 - `npm run build` → static export to `out/`
 
-## Layout
+## Layout (Live Trace, ported from `.shots/live-trace/live-trace.html` on 2026-11-11)
 
-- `src/app/page.tsx` — the single long home page, built from numbered `SectionShell`
-  sections (`01` projects → `06` contact).
-- `src/app/writeups/[id]/` and `src/app/project/[id]/` — statically generated detail pages.
-- `src/data/portfolio.ts` — all content as typed exports (`projects`, `achievements`,
-  `ctfWriteups`, `certifications`, …).
-- `src/components/ui/` — one component per file, `"use client"` where it animates.
-- `src/app/globals.css` — design tokens at the top (`--primary: #818cf8` periwinkle,
-  `--color-primary-*` scale). Use the tokens; don't hardcode colours.
+One dark theme. The site reads as a process under a debugger: home sections are memory
+regions, the bar shows a live `rip` readout, pages end with `[Inferior 1 ... exited normally]`.
 
-Nav lives in **four** places that must stay in sync when a section is added or renamed:
-`active-nav.tsx` (`SECTION_IDS`, `NAV_LINKS`, `HREF_TO_ID`), `sidebar.tsx`
-(`navigationLinks`), `command-palette.tsx`, and the section markup in `page.tsx`.
+- `src/app/page.tsx` — home: Hero → Path → Record → Work → Writing deck → Contact.
+- `src/app/blog/`, `src/app/writeups/[id]/`, `src/app/project/[id]/`, `src/app/arcade/`, `src/app/not-found.tsx`.
+- `src/components/site/` — the design system's components (bar, footer, ambient light, reveal,
+  section head, deck, work list, TOC, flag reveal…). `src/components/ui/` keeps only the markdown
+  pipeline, galleries and the arcade games.
+- `src/data/portfolio.ts` — all content (projects carry `slug/title/glyph/short/meta/blurb/flow/
+  highlights/order`; `pathNodes`, `record`, `featuredWriting`, `credentials`, hero photos).
+- `src/lib/posts.ts` — posts + `postGroup()` (CTF writeups / Challenges I built / Engineering /
+  Opinions / Bug bounty). `src/lib/trace.ts` — sections, address map, labels.
+- `src/app/globals.css` — tokens (`--ground --surface --ink --body --dim --accent …`) then home;
+  `src/app/pages.css` — blog, article prose, case study, 404. `src/app/arcade/arcade.css` maps the
+  games' old token names onto the new palette. Use the tokens; don't hardcode colours.
+- Images for the design live in `public/media/site/`.
+- Nav is defined once: `SECTIONS` in `src/lib/trace.ts` (bar, phone sheet and readout all read it).
+- Motion switch: `.still` on `<html>`, persisted in localStorage `lt-motion` (`src/lib/motion.ts`).
 
 ## Work in progress
 
