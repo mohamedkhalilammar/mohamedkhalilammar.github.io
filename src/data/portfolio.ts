@@ -272,7 +272,7 @@ export const heroPhotos = [
 ];
 
 export const heroIntro =
-  "I reverse-engineer Android apps and native binaries, and I build the CTF challenges that teach other people to do it. Engineering student in networks and telecommunications at INSAT, Tunis, trying to keep up with how fast AI is changing this field without losing the joy of figuring things out by hand.";
+  "Cybersecurity enthusiast and engineering student at INSAT, Tunis. I like finding out how systems really work, and then how they break: reverse engineering, web and mobile apps, networks, and the detections that are supposed to catch it all.";
 
 export const pathIntro =
   "I study networks and telecommunications at INSAT, in Tunis. At Securinets INSAT I'm on the technical team and work as an instructor, helping first-year students who are just getting into cybersecurity through workshops and challenges. I play CTFs with MOJO-JOJO as fadigaa.";
