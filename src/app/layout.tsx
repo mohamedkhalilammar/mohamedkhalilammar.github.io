@@ -12,12 +12,24 @@ const mono = Geist_Mono({ variable: "--font-mono", subsets: ["latin"], weight: [
 const SITE_URL = "https://khalilammar.me";
 const SITE_TITLE = "Khalil Ammar";
 const SITE_DESCRIPTION =
-  "The personal blog of Khalil Ammar (fadigaa), engineering student, cybersecurity enthusiast, and CTF player.";
+  "Khalil Ammar (fadigaa): reverse engineering, Android security and CTF challenge design. Projects, writeups and the challenges I built.";
+
+const PERSON_LD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Khalil Ammar",
+  alternateName: "fadigaa",
+  url: SITE_URL,
+  jobTitle: "Engineering student, security",
+  affiliation: { "@type": "CollegeOrUniversity", name: "INSAT, National Institute of Applied Science and Technology" },
+  sameAs: ["https://github.com/khalilammarr", "https://www.linkedin.com/in/khalil-ammar-00665a334/"],
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
   openGraph: { title: SITE_TITLE, description: SITE_DESCRIPTION, url: "/", siteName: "Khalil Ammar", type: "website" },
   twitter: { card: "summary_large_image", title: SITE_TITLE, description: SITE_DESCRIPTION },
 };
@@ -35,6 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" data-view="trace" suppressHydrationWarning className={`${display.variable} ${body.variable} ${mono.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: BOOT }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: PERSON_LD }} />
       </head>
       <body>
         <a className="skip" href="#main-content">Skip to content</a>
