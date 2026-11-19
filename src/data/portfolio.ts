@@ -241,7 +241,7 @@ export const projects: Project[] = [
     duration: "48-hour hackathon",
     architecture: "Two OpenCV streams feed MediaPipe (face and eye landmarks for the driver) and YOLOv8 (objects on the road). Detections are fused into a weighted driver score in a FastAPI backend and pushed to the Flutter app over WebSockets, which raises alerts and an emergency flow.",
     challenges: "Running two vision models side by side on one laptop fast enough to feel live, and keeping the app's state in sync with the backend over a flaky hackathon network.",
-    impact: "A working demo, built fast. Looking back at it as a security engineer, the prototype trusts too much (a hardcoded JWT secret and unauthenticated admin routes), which is the next thing to fix before anyone builds on it.",
+    impact: "A prototype built in 48 hours. Coming back to it later with a reviewer's eye, I moved the JWT secret out of the code, put the admin routes behind a token and stopped the device-pairing endpoint from returning drivers' emails. The app still talks plain HTTP on the local network, which is fine for a demo and not for real drivers.",
     mediaUrl: "https://www.youtube.com/embed/_sgmKvNFUe8",
     screenshots: [
       "/media/haniny-preview.jpg",
