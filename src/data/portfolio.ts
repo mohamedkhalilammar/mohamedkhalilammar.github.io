@@ -87,7 +87,7 @@ export const projects: Project[] = [
     role: "Challenge author",
     duration: "September 2026",
     architecture: "Seven small C programs, from doorman to debug-me-anyway, each with its source, a design note explaining the single idea it teaches, a reference solution, and a build.sh that compiles it and runs the solution against the result. If a change breaks the intended path, the build fails.",
-    challenges: "Making each level resistant to the previous level's trick. Doorman stores its code scrambled so strings finds nothing, but leaks it through strcmp to ltrace; the later levels close those shortcuts one by one, so every rung needs a technique the previous one did not.",
+    challenges: "Debug Me Anyway, the last rung, was broken by a 20-line static script in its first version. The rebuild encrypts the real unsealer with a key derived from a hash of the program's own .text section, adds four decoys, and ships a static_attack.py that runs in every build: if the cheap attack ever works again, the build fails.",
     impact: "Shipped at Friendly CTF 2026 alongside Water Run and its revenge (Godot game hacking), Straight Key and a malware analysis case. Writeups for every challenge are on the blog.",
     githubUrl: "https://github.com/khalilammarr/CTF/tree/main/re-track",
   },
