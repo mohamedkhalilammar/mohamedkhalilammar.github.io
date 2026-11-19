@@ -19,7 +19,7 @@ The obvious version of this, set the device clock, or hook `System.currentTimeMi
 
 The flow is entirely server-checked. `POST /clock/start` mints a session and returns five target times. As you hit each one, the app records it. When you have all five, `POST /clock/finish` sends the session and the recorded times back, and the server compares them against the targets it issued. Only an exact, complete match returns the flag. Faked local state does not score, because the app never decides, the server does.
 
-You need the backend running (see `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`), Frida attached to the app, and `frida-trace` to find your target. Read the challenge code in jadx alongside; the logic lives in a plain class, `ShiftRoster`, which is very readable.
+You need the backend running (see the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run)), Frida attached to the app, and `frida-trace` to find your target. Read the challenge code in jadx alongside; the logic lives in a plain class, `ShiftRoster`, which is very readable.
 
 ## Finding the way in
 
@@ -71,7 +71,7 @@ Press Start. The hook feeds each live target back into the exact call the checke
 
 The app does not judge the result, it says as much on screen — it just prints whatever the server sends. Get all five and the server sends the flag; anything short and it refuses, so there is no partial credit to fake.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

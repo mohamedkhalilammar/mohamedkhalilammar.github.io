@@ -17,7 +17,7 @@ A login form. Username, password, sign in. The instruction on screen is direct: 
 
 ![The L0gIn sign-in form](/media/friendly-ctf-2026/challenge-login-form.webp)
 
-You read the code with `jadx`, then interact with the running app on a device or emulator. The flag is confirmed by the backend, so the server needs to be up. Setup and backend details are in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`.
+You read the code with `jadx`, then interact with the running app on a device or emulator. The flag is confirmed by the backend, so the server needs to be up. Setup and backend details are in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run).
 
 The class is `tn.securinets.ctf.challenges.l0gin.L0gInActivity`, and the login logic is in `LoginGate`.
 
@@ -66,7 +66,7 @@ There is one more moving part. Reaching admin locally is not the finish line —
 Securinets{qu0t3_y0ur_w4y_1n_3b3a28f6}
 ```
 
-Source is in `tn.securinets.ctf.challenges.l0gin` inside the APK; the packaged challenge is `Writeups/Securinets-Friendly-CTF-2026/mobile/app0gin`.
+Source is in `tn.securinets.ctf.challenges.l0gin` inside the APK; the packaged challenge is [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

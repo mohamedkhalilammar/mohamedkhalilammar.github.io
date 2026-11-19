@@ -198,7 +198,7 @@ printf 'meridian-archive-1994\n' | ./paper_trail
 archive passphrase: Securinets{unp4ck_th3_pyth0n_4nd_r34d_1t_2d8b}
 ```
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/04-paper-trail/`.
+Source for this one is in [04-paper-trail](https://github.com/khalilammarr/CTF/tree/main/re-track/04-paper-trail).
 
 ## Why it works
 

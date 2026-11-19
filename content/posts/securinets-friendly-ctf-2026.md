@@ -82,11 +82,11 @@ Then the harder end, which is Windows-heavy:
 
 ## Running them yourself
 
-The source for everything is in `Writeups/Securinets-Friendly-CTF-2026/` in this site's repo,
-organised by track, with each RE challenge's build script, design notes and reference solver
-next to its source.
+The mobile track is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile), the reverse engineering
+ladder in [re-track](https://github.com/khalilammarr/CTF/tree/main/re-track), each challenge with its build script and
+reference solver, and the rest of the event in [Friendly-CTF-2026](https://github.com/securinets-insat/Friendly-CTF-2026).
 
 Most of the RE challenges are standalone binaries with nothing to set up. The Mobile track
-needs the backend, and `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md` walks through
+needs the backend, and the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run) walks through
 standing it up: creating your own flags file, the container permission trap that kills the
 services silently, TLS for the pinned challenge, and pointing the app at your own host.

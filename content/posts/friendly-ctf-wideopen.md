@@ -90,7 +90,7 @@ f3029a66c61b61b41b428963a2fc134154a5383096c776f3b4064733c5463d90:azerty123
 
 The password is `azerty123`, and the flag is that wrapped in the format: `Securinets{azerty123}`. AZERTY is the keyboard layout used in Tunisia, so `azerty123` is a keyboard-walk password a real person would actually pick, which is exactly why it cracks instantly.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

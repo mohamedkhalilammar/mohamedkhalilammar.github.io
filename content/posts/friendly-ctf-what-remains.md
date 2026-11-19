@@ -15,7 +15,7 @@ This screen has one button: save data to the device. Press it and it writes, tel
 
 ## What you're looking at
 
-You drive the app on a device or emulator, then read files off it with `adb`. The value that gets saved is fetched from the backend, so the server needs to be up. Setup and backend details are in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`.
+You drive the app on a device or emulator, then read files off it with `adb`. The value that gets saved is fetched from the backend, so the server needs to be up. Setup and backend details are in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run).
 
 The class is `tn.securinets.ctf.challenges.whatremains.WhatRemainsActivity`, and the storage lives in `LocalStore`.
 
@@ -73,7 +73,7 @@ There it is, in the `session_token` row.
 
 A note on the non-rooted route. This app sets `android:allowBackup="false"`, so the old `adb backup` trick will not pull the data directory. `adb shell run-as tn.securinets.ctf` reads the private files without root, but only when the build is debuggable. For a release build like this, the practical path is a rootable emulator (a plain, non-Google-Play system image lets `adb root` succeed). If `adb root` is refused, your image ships Google Play — make a new emulator with a plain image and try again.
 
-Source is in `tn.securinets.ctf.challenges.whatremains` inside the APK; the packaged challenge is `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source is in `tn.securinets.ctf.challenges.whatremains` inside the APK; the packaged challenge is [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

@@ -22,7 +22,7 @@ Two requests matter. `POST /login` gets you a token. Then `GET /profile/<id>` fe
 
 Because it is HTTPS, your proxy cannot read the traffic out of the box — the app checks the certificate and yours is not it. This particular app was built to trust user-installed certificates (a real app should never do this, which is part of the lesson), so you can slip your proxy's certificate onto the device and it will accept it.
 
-You need the shared track setup from `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`, plus the Burp CA installed on the device. The short version:
+You need the shared track setup from the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run), plus the Burp CA installed on the device. The short version:
 
 ```bash
 adb shell settings put global http_proxy 10.0.2.2:8080
@@ -82,7 +82,7 @@ Diana's `internal_ref` is not a reference code like yours — it is the flag: `S
 
 Walking the ids up and down is worth doing anyway; most return ordinary `REF-...` strings, and id `4` is the one holding the answer.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why this was the bug
 

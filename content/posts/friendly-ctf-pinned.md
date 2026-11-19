@@ -31,7 +31,7 @@ val pinnedClient: OkHttpClient = OkHttpClient.Builder()
 
 The `/audit` call uses the pinned client. That single `CertificatePinner` is what your proxy is running into.
 
-You need the DOR setup (proxy, CA installed — see `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`), plus Frida running against the app. `objection` sits on top of Frida and is the easy way in for this one.
+You need the DOR setup (proxy, CA installed — see the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run)), plus Frida running against the app. `objection` sits on top of Frida and is the easy way in for this one.
 
 ## Finding the way in
 
@@ -71,7 +71,7 @@ The `note` field is the flag: `Securinets{sealed_envelope_pin_bypassed}`.
 
 If you prefer a raw Frida script over objection, the universal-pinning-bypass scripts published for Frida do the same job — hook the pinner, force it to pass. objection just packages that so you do not have to.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

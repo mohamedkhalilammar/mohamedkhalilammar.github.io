@@ -22,7 +22,7 @@ The app makes one request here: a `POST /login` to its backend over plain `http:
 
 You need three things:
 
-- A running instance of the challenge backend. The shared setup for the whole track — how to start the server, the emulator, `adb` and the proxy — is written once in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`. Get that going before anything else.
+- A running instance of the challenge backend. The shared setup for the whole track — how to start the server, the emulator, `adb` and the proxy — is written once in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run). Get that going before anything else.
 - Burp Suite (Community is fine) or any intercepting proxy.
 - The device pointed at the proxy.
 
@@ -75,7 +75,7 @@ The `token` is what the app keeps and uses. The `session_note` is the field it t
 
 If you would rather not run the emulator, the exact same reply comes back to `curl`, because the request is just JSON over HTTP. You would need the request signature the app attaches, which is the one part that is not trivial to reproduce by hand — so the proxy route is the intended one and the easiest by far. Watch the app do the work and read what comes back.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

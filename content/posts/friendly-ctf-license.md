@@ -17,7 +17,7 @@ The screen gives you the plan directly: patch the check, not the button. That di
 
 ## What you're looking at
 
-This is a static patching exercise. You need the APK, `apktool` to unpack and repack it, and `apksigner` and `zipalign` (from the Android SDK build-tools) to sign your rebuilt version so a device will install it. The shared setup, including where those tools live, is in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`. You will also want an emulator or device to install onto.
+This is a static patching exercise. You need the APK, `apktool` to unpack and repack it, and `apksigner` and `zipalign` (from the Android SDK build-tools) to sign your rebuilt version so a device will install it. The shared setup, including where those tools live, is in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run). You will also want an emulator or device to install onto.
 
 Open the APK in jadx first to read the logic. The licence check is a plain Kotlin object:
 
@@ -95,7 +95,7 @@ Java.perform(function () {
 });
 ```
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

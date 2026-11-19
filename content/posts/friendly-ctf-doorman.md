@@ -105,7 +105,7 @@ badge code: hello
 0x7fffffffdac0:	"SHIFT-4C2A-NIGHT"
 ```
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/01-doorman/`.
+Source for this one is in [01-doorman](https://github.com/khalilammarr/CTF/tree/main/re-track/01-doorman).
 
 ## Why it works
 

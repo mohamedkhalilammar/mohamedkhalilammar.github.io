@@ -19,7 +19,7 @@ The routine that used to open that format did not get deleted when the feature d
 
 This challenge is about calling a function the app itself refuses to use. The unseal routine lives in `libvaultcrypto.so`, a native library bundled in the APK. Unlike most of the app's native code, this one is deliberately easy to find, the library exports the routine under a plain name.
 
-You need the APK (to read the library), Frida attached to the running app, and the challenge backend up for one small piece — a nonce the routine needs. The shared setup is in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`.
+You need the APK (to read the library), Frida attached to the running app, and the challenge backend up for one small piece — a nonce the routine needs. The shared setup is in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run).
 
 Pull the library out of the APK and list its exported symbols. The screen even hands you the command:
 
@@ -93,7 +93,7 @@ The console prints the flag: `Securinets{c4ll_1t_y0urs3lf_8b3f21}`.
 
 Because the call happens inside the app's own process, the package-name key derivation lands on the right value with no effort from you, and the nonce you fed it matches what the note was sealed under. Feed a wrong nonce and you get garbage back, there is no error, just noise, so if your output looks like mojibake, check the nonce first.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

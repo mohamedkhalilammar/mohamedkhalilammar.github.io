@@ -15,7 +15,7 @@ The button wants a fingerprint. The screen tells you to open the vault without g
 
 ## What you're looking at
 
-This is a runtime challenge. You need a device or emulator with fingerprint hardware, `frida` or `objection` attached to the app, and the backend up, because the vault contents come from the server. Setup and backend details are in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`.
+This is a runtime challenge. You need a device or emulator with fingerprint hardware, `frida` or `objection` attached to the app, and the backend up, because the vault contents come from the server. Setup and backend details are in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run).
 
 The class is `tn.securinets.ctf.challenges.facetoface.FaceToFaceActivity`. Read it in `jadx` first.
 
@@ -86,7 +86,7 @@ Securinets{n3v3r_ch3ck3d_y0ur_f4c3_2ebfa0af}
 
 A note on the emulator. If no fingerprint is enrolled, tapping the button shows a message and never builds the prompt, so enrol a fingerprint first (Settings, or `adb -e emu finger touch <id>` after enrolment) so the app reaches the biometric path — then the hook does the rest, and no real finger is ever needed.
 
-Source is in `tn.securinets.ctf.challenges.facetoface` inside the APK; the packaged challenge is `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source is in `tn.securinets.ctf.challenges.facetoface` inside the APK; the packaged challenge is [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

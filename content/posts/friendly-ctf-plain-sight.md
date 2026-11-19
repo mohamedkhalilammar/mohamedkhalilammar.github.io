@@ -30,7 +30,7 @@ You do not need an emulator or a device for this one. You need something that ca
 - `jadx` (or the GUI, `jadx-gui`) decompiles the whole thing and shows resources as readable files.
 - `apktool d fadigattack.apk` unpacks it and decodes the resources back into normal XML.
 
-If you have not set up a mobile toolkit yet, the shared setup for the whole track (emulator, `adb`, `jadx`) is written up once in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`. This challenge needs none of it beyond `jadx` or `apktool`.
+If you have not set up a mobile toolkit yet, the shared setup for the whole track (emulator, `adb`, `jadx`) is written up once in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run). This challenge needs none of it beyond `jadx` or `apktool`.
 
 ## Finding the way in
 
@@ -78,7 +78,7 @@ grep -rn "Securinets{" out/res/values/strings.xml
 
 The flag is `Securinets{r3s0urc3s_4r3_n0t_h1dd3n}`.
 
-Source for this one is the app resource file `res/values/strings.xml` inside the APK; the packaged challenge lives in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is the app resource file `res/values/strings.xml` inside the APK; the packaged challenge lives in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

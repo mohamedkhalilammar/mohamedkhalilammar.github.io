@@ -154,7 +154,7 @@ rotation key: Securinets{r0ll_1t_b4ck_0n3_byt3_4t_4_t1m3_5e02}
 
 If you undo the steps in the wrong order, you'll get mostly garbage but not total garbage. Bytes 0, 8 and 16 come out right (`o`, `t`, `o`), because those are the rounds where the rotation is zero and the order doesn't matter. If you see that pattern, you've got the pieces right and the order wrong.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/02-night-shift/`.
+Source for this one is in [02-night-shift](https://github.com/khalilammarr/CTF/tree/main/re-track/02-night-shift).
 
 ## Why it works
 

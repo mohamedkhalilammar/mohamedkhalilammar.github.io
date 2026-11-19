@@ -17,7 +17,7 @@ The skill here is not cracking anything. It is noticing that the app talks to mo
 
 ## What you're looking at
 
-Everything routes through your proxy, so you need the shared track setup — proxy, CA installed, device pointed at Burp, from `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`. You also want jadx open to confirm what you find.
+Everything routes through your proxy, so you need the shared track setup — proxy, CA installed, device pointed at Burp, from the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run). You also want jadx open to confirm what you find.
 
 There is a second moving part for this challenge: the rogue collector. It runs as its own service, on a different port from the main backend, and it has to be up or the request goes nowhere. HOSTING.md covers starting it alongside the main server.
 
@@ -82,7 +82,7 @@ curl -X POST http://20.199.16.42:29090/collect \
 
 An empty or malformed POST gets a plain ack with no `sync_token`, so probing it with junk teaches you nothing — you have to send the shape the SDK actually sends.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

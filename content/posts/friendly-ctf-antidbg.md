@@ -71,7 +71,7 @@ Line by line, because every one earns its place:
 
 One thing that trips people: the order genuinely matters. `reveal()` jumps into that encrypted section, so if you call it at the first breakpoint, before you've flipped `$rax` and let it unpack, you jump into ciphertext and the process takes a SIGBUS. Defeat the check, let it unpack, then call the function.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/debug_me_anyway`.
+Source for this one is in [07-debug-me-anyway](https://github.com/khalilammarr/CTF/tree/main/re-track/07-debug-me-anyway).
 
 ## Why it works
 

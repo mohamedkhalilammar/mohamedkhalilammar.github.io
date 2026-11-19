@@ -244,7 +244,7 @@ When you're done, take the line back out of your hosts file:
 sudo sed -i '/relay.meridian-fs.tn/d' /etc/hosts
 ```
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/05-dead-air/`.
+Source for this one is in [05-dead-air](https://github.com/khalilammarr/CTF/tree/main/re-track/05-dead-air).
 
 ## Why it works
 

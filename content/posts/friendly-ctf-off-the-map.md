@@ -15,7 +15,7 @@ Here is the odd one. There is a challenge in the menu, but no menu entry that re
 
 ## What you're looking at
 
-You read the manifest with `jadx` and launch the component with `adb`. The screen checks in with the backend when it opens, so the server needs to be up. Setup and backend details are in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`.
+You read the manifest with `jadx` and launch the component with `adb`. The screen checks in with the backend when it opens, so the server needs to be up. Setup and backend details are in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run).
 
 The component is `tn.securinets.ctf.challenges.offthemap.OffTheMapActivity`.
 
@@ -66,7 +66,7 @@ Either one opens the screen. It checks in with the server, redeems the token, an
 Securinets{br1dg3_t00_far_455c016c}
 ```
 
-Source is in `tn.securinets.ctf.challenges.offthemap` and the manifest inside the APK; the packaged challenge is `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source is in `tn.securinets.ctf.challenges.offthemap` and the manifest inside the APK; the packaged challenge is [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

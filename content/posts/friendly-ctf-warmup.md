@@ -66,7 +66,7 @@ Securinets{k3y_und3r_th3_d00rmat_ddf88982}
 
 The key and IV are both 16 bytes once decoded, which is what AES-128 wants, so nothing is malformed. It just works.
 
-Source is in `tn.securinets.ctf.challenges.warmup` inside the APK; the packaged challenge is `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source is in `tn.securinets.ctf.challenges.warmup` inside the APK; the packaged challenge is [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

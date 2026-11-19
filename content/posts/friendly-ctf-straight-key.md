@@ -114,7 +114,7 @@ Securinets{HELDNOTTYPED}
 
 There is no second layer. What you decode is the answer.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/straight-key`.
+Source for this one is in [straight_key](https://github.com/securinets-insat/Friendly-CTF-2026/tree/main/reverse-engineering/straight_key).
 
 ## Why it works
 

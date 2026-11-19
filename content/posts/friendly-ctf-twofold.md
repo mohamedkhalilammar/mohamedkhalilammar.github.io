@@ -93,7 +93,7 @@ Either way you get `KEY-K3PT4W4Y`. Feed that to the program and it unseals and p
   Securinets{w4tch_1t_bu1ld_th3_c0d3_6f4a}
 ```
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/decompile_me`.
+Source for this one is in [06-decompile-me](https://github.com/khalilammarr/CTF/tree/main/re-track/06-decompile-me).
 
 ## Why it works
 

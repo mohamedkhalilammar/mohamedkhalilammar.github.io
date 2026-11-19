@@ -48,7 +48,7 @@ Once you have the velocity address, the edit is the same shape as the first game
 Securinets{v3locity_is_gr4vity_with_attitude}
 ```
 
-Source for both variants is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/water-run/`; Revenge is compiled with `CG_VELOCITY_MODE`.
+Source for both variants is in [water_run](https://github.com/securinets-insat/Friendly-CTF-2026/tree/main/reverse-engineering/game-hacking/water_run); Revenge is compiled with `CG_VELOCITY_MODE`.
 
 ## Method 2: recover the flag offline
 

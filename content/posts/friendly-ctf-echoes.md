@@ -15,7 +15,7 @@ This screen has one button that says it writes to the system log. That is not a 
 
 ## What you're looking at
 
-This one is done on a running app, so you need a device or an emulator, `adb` connected to it, and the backend reachable, because the value that gets logged is fetched from the server first. Setup and backend details are in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`.
+This one is done on a running app, so you need a device or an emulator, `adb` connected to it, and the backend reachable, because the value that gets logged is fetched from the server first. Setup and backend details are in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run).
 
 The class behind the screen is `tn.securinets.ctf.challenges.echoes.EchoesActivity`, and the thing doing the logging is `BackupManager`.
 
@@ -68,7 +68,7 @@ Either way the flag is `Securinets{th3_app_t4lks_t00_much_9cd6e756}`.
 
 If nothing shows up: check `adb devices` first to be sure the device is actually attached, and make sure logcat was already running when you pressed the button.
 
-Source is in `tn.securinets.ctf.challenges.echoes` inside the APK; the packaged challenge is `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source is in `tn.securinets.ctf.challenges.echoes` inside the APK; the packaged challenge is [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

@@ -32,7 +32,7 @@ A JWT is three Base64 chunks joined by dots: a header, a payload, and a signatur
 
 There is `"role": "user"`. The signature at the end is the part that is supposed to stop you changing that.
 
-You need the challenge backend running (see `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`), a way to send HTTP requests (`curl` or Burp Repeater), `hashcat` or `john`, and a copy of `rockyou.txt`.
+You need the challenge backend running (see the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run)), a way to send HTTP requests (`curl` or Burp Repeater), `hashcat` or `john`, and a copy of `rockyou.txt`.
 
 ## Finding the way in
 
@@ -79,7 +79,7 @@ curl -H "Authorization: Bearer <your-forged-token>" \
 
 The flag is `Securinets{forged_papers_grant_admin}`. You can do the whole thing in Burp Repeater too — jwt.io will even re-sign the token for you once you type the secret into its "verify signature" box, and you paste the result into the request.
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source for this one is in [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

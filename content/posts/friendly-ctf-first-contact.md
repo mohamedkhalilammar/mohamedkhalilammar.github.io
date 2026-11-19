@@ -15,7 +15,7 @@ This screen asks for an account and an activation key, and rejects whatever you 
 
 ## What you're looking at
 
-You need `jadx` to read the compiled code, and the backend has to be reachable, because the final check happens server-side. The shared setup and the backend host details are in `Writeups/Securinets-Friendly-CTF-2026/HOSTING.md`.
+You need `jadx` to read the compiled code, and the backend has to be reachable, because the final check happens server-side. The shared setup and the backend host details are in the "Build and run" section of [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile#build-and-run).
 
 Open `fadigattack.apk` in `jadx-gui` and find the class that backs this screen. It sits under `tn.securinets.ctf.challenges.firstcontact`. The screen itself is `FirstContactActivity`, but the interesting one is right next to it, `ActivationGate`.
 
@@ -83,7 +83,7 @@ curl -s -X POST http://<backend>/activate \
 {"status":"active","notice":"Securinets{sh1pp3d_1n_th3_0p3n}"}
 ```
 
-Source is in `tn.securinets.ctf.challenges.firstcontact` inside the APK; the packaged challenge is `Writeups/Securinets-Friendly-CTF-2026/mobile/app`.
+Source is in `tn.securinets.ctf.challenges.firstcontact` inside the APK; the packaged challenge is [fadigattack-mobile](https://github.com/khalilammarr/fadigattack-mobile).
 
 ## Why it works
 

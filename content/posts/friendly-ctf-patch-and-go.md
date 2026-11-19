@@ -171,7 +171,7 @@ no licence at /etc/meridian/service.lic
 Securinets{0n3_byt3_1s_4ll_1t_t00k_c93f}
 ```
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/03-broken-lock/`.
+Source for this one is in [03-broken-lock](https://github.com/khalilammarr/CTF/tree/main/re-track/03-broken-lock).
 
 ## Why it works
 

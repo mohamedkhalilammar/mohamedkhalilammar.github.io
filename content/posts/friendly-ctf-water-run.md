@@ -47,7 +47,7 @@ Overshoot and fly off the map? Lower the number and try again. Nothing is lost.
 Securinets{1f_th3_g4me_w0nt_l3t_y0u_w1n_ch4nge_1t}
 ```
 
-Source for this one is in `Writeups/Securinets-Friendly-CTF-2026/reverse-engineering/water-run/`.
+Source for this one is in [water_run](https://github.com/securinets-insat/Friendly-CTF-2026/tree/main/reverse-engineering/game-hacking/water_run).
 
 ## Method 2: recover the flag with static reverse engineering
 
